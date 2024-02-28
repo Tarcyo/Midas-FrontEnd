@@ -51,7 +51,7 @@ class LoginScreen extends StatelessWidget {
                   color: mainColor,
                   elevation: 5, // Elevação para adicionar sombra
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
+                    borderRadius: BorderRadius.circular(64),
                     side: BorderSide(
                         color: Colors.white, width: 10), // Borda branca
                   ),

@@ -17,7 +17,7 @@ class RoundedDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 500, // Aumentando a largura
+      width: 285, // Aumentando a largura
       height: 20, // Ajustando a altura
       decoration: BoxDecoration(
         color: Colors.white,

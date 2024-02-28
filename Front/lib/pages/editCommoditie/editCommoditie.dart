@@ -8,12 +8,12 @@ import '../../reusableWidgets/tokenList.dart';
 
 import 'package:midas/constants.dart';
 
-class RegisterCommoditie extends StatefulWidget {
+class EditCommoditie extends StatefulWidget {
   @override
-  State<RegisterCommoditie> createState() => _RegisterCommoditieState();
+  State<EditCommoditie> createState() => _EditCommoditieState();
 }
 
-class _RegisterCommoditieState extends State<RegisterCommoditie> {
+class _EditCommoditieState extends State<EditCommoditie> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController strategyController = TextEditingController();
@@ -86,7 +86,7 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Nova comoditie',
+                                        'Editar comoditie',
                                         style: TextStyle(
                                           fontSize: 22,
                                           color: Colors.white,
@@ -244,10 +244,16 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                     ],
                                   ),
                                   SizedBox(height: 30,),
-                                  Center(
-                                    child: RoundedButton(onPressed: ()=>{
-                                  
-                                    }, text: "Cadastrar"),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      RoundedButton(onPressed: ()=>{
+                                      
+                                      }, text: "Salvar"),
+                                       RoundedButton(onPressed: ()=>{
+                                      
+                                      }, text: "Excluir"),
+                                    ],
                                   )
                                 ],
                               ),

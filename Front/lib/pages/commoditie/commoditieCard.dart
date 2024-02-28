@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
+import '../editCommoditie/editCommoditie.dart';
 
 class CommoditieCard extends StatelessWidget {
   final String commodityName;
@@ -25,11 +26,11 @@ class CommoditieCard extends StatelessWidget {
           10, 10, 19, 10), // Adiciona preenchimento à direita
       child: SingleChildScrollView(
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(15), // Define o raio dos cantos
+          borderRadius: BorderRadius.circular(32), // Define o raio dos cantos
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white, // Cor de fundo branca
-              borderRadius: BorderRadius.circular(32), // Retângulo arredondado
+              borderRadius: BorderRadius.circular(180), // Retângulo arredondado
               border: Border.all(
                 color: mainColor, // Cor da borda
                 width: 2, // Largura da borda
@@ -38,8 +39,7 @@ class CommoditieCard extends StatelessWidget {
             width: double.infinity, // Para preencher toda a largura da tela
             padding: EdgeInsets.all(25),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Column(
                   children: [
@@ -68,13 +68,45 @@ class CommoditieCard extends StatelessWidget {
                 _buildInfo("6 min", price6Minutes + "%"),
                 _buildInfo("3 min", price3Minutes + "%"),
                 _buildInfo("1 min", price1Minute + "%"),
-                IconButton(
-                  icon: Icon(
-                    Icons.note_alt,
-                    size: 40,
-                    color: secondaryColor,
-                  ),
-                  onPressed: () => {},
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        size: 40,
+                        color: mainColor,
+                      ),
+                      onPressed: () {
+                                        // Navegue para a RegisterScreen quando o botão for pressionado
+                                        Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                            transitionDuration:
+                                                Duration(milliseconds: 1200),
+                                            transitionsBuilder:
+                                                (BuildContext context,
+                                                    Animation<double> animation,
+                                                    Animation<double>
+                                                        secondaryAnimation,
+                                                    Widget child) {
+                                              return FadeTransition(
+                                                opacity: animation,
+                                                child: child,
+                                              );
+                                            },
+                                            pageBuilder: (BuildContext context,
+                                                Animation<double> animation,
+                                                Animation<double>
+                                                    secondaryAnimation) {
+                                              return EditCommoditie();
+                                            },
+                                          ),
+                                        );
+                                      },
+                    ),
+                  ],
                 ),
               ],
             ),
