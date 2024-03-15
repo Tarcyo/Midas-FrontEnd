@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
             Center(
               child: SizedBox(
                 width: 300, // Definindo largura máxima para o Card
-                height: 300, // Definindo altura máxima para o Card
+                height: 310, // Definindo altura máxima para o Card
                 child: Card(
                   color: mainColor,
                   elevation: 5, // Elevação para adicionar sombra

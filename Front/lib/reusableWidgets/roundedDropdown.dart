@@ -21,7 +21,7 @@ class RoundedDropdown extends StatelessWidget {
       height: 20, // Ajustando a altura
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20.0), // Ajustando o raio
+        borderRadius: BorderRadius.circular(180), // Ajustando o raio
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'tabBarController.dart';
 
 import 'pages/commoditie/commoditieScreen.dart';
+import 'pages/groups/groupsScreen.dart';
+
 
 import 'pages/dashboard/dashboard.dart';
 
@@ -23,7 +25,7 @@ class HomePage extends StatelessWidget {
         ),
         PersistentTabItem(
           title: 'Chat',
-          tab: const DashboardScreenTab(),
+          tab: const GroupsScreenTab(),
           icon: Icons.chat,
         ),
         PersistentTabItem(
@@ -74,16 +76,20 @@ class _DashboardScreenTabState extends State<DashboardScreenTab>
   bool get wantKeepAlive => true;
 }
 
-class LinkScreenTab extends StatefulWidget {
-  const LinkScreenTab({Key? key}) : super(key: key);
+class GroupsScreenTab extends StatefulWidget {
+  const GroupsScreenTab({Key? key}) : super(key: key);
 
   @override
-  _LinkScreenTabState createState() => _LinkScreenTabState();
+  _GroupsScreenTabState createState() => _GroupsScreenTabState();
 }
 
-class _LinkScreenTabState extends State<LinkScreenTab>
+class _GroupsScreenTabState extends State<GroupsScreenTab>
     with AutomaticKeepAliveClientMixin {
-
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return GroupsScreen();
+  }
 
   @override
   bool get wantKeepAlive => true;

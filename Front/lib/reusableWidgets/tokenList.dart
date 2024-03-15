@@ -68,7 +68,7 @@ class _TokenListState extends State<TokenList> {
         width: 410, // Altura fixa do contêiner branco
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
           padding: EdgeInsets.all(8.0),

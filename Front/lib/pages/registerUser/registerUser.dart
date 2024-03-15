@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import '../../reusableWidgets/insertCamp.dart';
 import '../../reusableWidgets/halfInsertCampPassword.dart';
 import '../../reusableWidgets/halfInsertCamp.dart';
-
 import '../../reusableWidgets/roundedButtom.dart';
-
 import 'package:midas/constants.dart';
+
 class RegisterUser extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -17,166 +16,187 @@ class RegisterUser extends StatelessWidget {
       body: Container(
         // Definindo a cor de fundo
         color: mainColor,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: Container(
-                height: 240, // ajuste conforme necessário
-                width: 240, // ajuste conforme necessário
-                child: Padding(
-                  padding: EdgeInsets.all(
-                    4, // ajuste conforme necessário para o tamanho da borda
-                  ),
-                  child: Container(
-                    color: Colors.transparent, // torna o fundo transparente
-                    child: Image.asset(
-                      'assets/images/logoMidas.png', // substitua com o caminho correto da sua imagem
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Center(
-              child: SizedBox(
-                width: 450, // Definindo largura máxima para o Card
-                height: 395, // Definindo altura máxima para o Card
-                child: Card(
-                  color: mainColor,
-                  elevation: 5, // Elevação para adicionar sombra
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                    side: BorderSide(
-                        color: Colors.white, width: 10), // Borda branca
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Row(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 40.0), // Ajuste aqui
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(width: 20),
+                  Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(180.0),
+                          ),
+                          minimumSize: Size(150, 50),
+                        ),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Icon(Icons.arrow_back_ios,
+                                color: mainColor, size: 20),
+                            SizedBox(width: 3),
                             Text(
-                              'Criar Conta',
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.white,
-                              ),
+                              "Voltar",
+                              style:
+                                  TextStyle(color: mainColor, fontSize: 20),
                             ),
                           ],
                         ),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
+                      )
+                    ],
+                  )
+                ],
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 20),
+                      Center(
+                        child: Container(
+                          height: 240,
+                          width: 240,
+                          child: Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Image.asset(
+                                'assets/images/logoMidas.png',
+                              ),
+                            ),
+                          ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Nome completo',
-                              style: TextStyle(
-                                fontSize: 20,
+                      ),
+                      SizedBox(height: 20),
+                      Center(
+                        child: SizedBox(
+                          width: 450,
+                          height: 420,
+                          child: Card(
+                            color: mainColor,
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                              side: BorderSide(
                                 color: Colors.white,
+                                width: 10,
                               ),
                             ),
-                            SizedBox(
-                                height:
-                                    3), // Espaçamento entre o texto e o campo de inserção
-                            RoundedTextField(controller: emailController),
-                          ],
+                            child: Container(
+                              padding: EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Criar Conta',
+                                        style: TextStyle(
+                                          fontSize: 22,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Nome completo',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(height: 3),
+                                      RoundedTextField(
+                                          controller: emailController),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Email',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(height: 3),
+                                      RoundedTextField(
+                                          controller: emailController),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Telefone',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(height: 3),
+                                      HalfroundedTextField(
+                                          controller: passwordController),
+                                      SizedBox(height: 5),
+                                      Text(
+                                        'Senha',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(height: 3),
+                                      HalfroundedTextFieldPassword(
+                                          controller: passwordController),
+                                      SizedBox(height: 5),
+                                      Text(
+                                        'Confirmar senha',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(height: 3),
+                                      HalfroundedTextFieldPassword(
+                                          controller: passwordController),
+                                      SizedBox(height: 15),
+                                      Center(
+                                        child: RoundedButton(
+                                          onPressed: () => {},
+                                          text: "Cadastrar",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                        SizedBox(
-                          height: 5,
-                          width: 5,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Email',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(
-                                height:
-                                    3), // Espaçamento entre o texto e o campo de inserção
-                            RoundedTextField(controller: emailController),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                          width: 5,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Telefone',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(
-                                height:
-                                    3), // Espaçamento entre o texto e o campo de inserção
-                            HalfroundedTextField(
-                                controller: passwordController),
-                            SizedBox(
-                              height: 5,
-                              width: 5,
-                            ),
-                            Text(
-                              'Senha',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(
-                                height:
-                                    3), // Espaçamento entre o texto e o campo de inserção
-                            HalfroundedTextFieldPassword(
-                                controller: passwordController),
-                            SizedBox(
-                              height: 5,
-                              width: 5,
-                            ),
-                             Text(
-                              'Confirmar senha',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(
-                                height:
-                                    3), // Espaçamento entre o texto e o campo de inserção
-                            HalfroundedTextFieldPassword(
-                                controller: passwordController),
-                            SizedBox(
-                              height: 15,
-                              width: 15,
-                            ),
-
-                            Center(
-                              child: RoundedButton(
-                                onPressed: () => {},
-                                text: "Cadastrar",
-                              ),
-                            ),
-                         
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        width: 1,
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

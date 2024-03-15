@@ -26,7 +26,7 @@ class CommoditieCard extends StatelessWidget {
           10, 10, 19, 10), // Adiciona preenchimento à direita
       child: SingleChildScrollView(
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(32), // Define o raio dos cantos
+          borderRadius: BorderRadius.circular(182), // Define o raio dos cantos
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white, // Cor de fundo branca
@@ -56,7 +56,7 @@ class CommoditieCard extends StatelessWidget {
                           50, // Defina o comprimento da linha conforme necessário
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(180),
-                          color: secondaryColor
+                          color: mainColor
                               .withOpacity(0.7) // Define o raio da borda
                           ),
                     ),
@@ -74,37 +74,33 @@ class CommoditieCard extends StatelessWidget {
                   children: [
                     IconButton(
                       icon: Icon(
-                        Icons.edit,
+                        Icons.edit_document,
                         size: 40,
                         color: mainColor,
                       ),
                       onPressed: () {
-                                        // Navegue para a RegisterScreen quando o botão for pressionado
-                                        Navigator.push(
-                                          context,
-                                          PageRouteBuilder(
-                                            transitionDuration:
-                                                Duration(milliseconds: 1200),
-                                            transitionsBuilder:
-                                                (BuildContext context,
-                                                    Animation<double> animation,
-                                                    Animation<double>
-                                                        secondaryAnimation,
-                                                    Widget child) {
-                                              return FadeTransition(
-                                                opacity: animation,
-                                                child: child,
-                                              );
-                                            },
-                                            pageBuilder: (BuildContext context,
-                                                Animation<double> animation,
-                                                Animation<double>
-                                                    secondaryAnimation) {
-                                              return EditCommoditie();
-                                            },
-                                          ),
-                                        );
-                                      },
+                        // Navegue para a RegisterScreen quando o botão for pressionado
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            transitionDuration: Duration(milliseconds: 1200),
+                            transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation,
+                                Widget child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                            pageBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation) {
+                              return EditCommoditie();
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -120,7 +116,7 @@ class CommoditieCard extends StatelessWidget {
     // Verifica se o preço é negativo
     bool isNegative = price.startsWith('-');
 
-    Color lineColor = isNegative == false ? secondaryColor : Colors.red[800]!;
+    Color lineColor = isNegative == false ? mainColor : Colors.red[800]!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

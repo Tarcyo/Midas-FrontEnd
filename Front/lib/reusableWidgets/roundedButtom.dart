@@ -14,7 +14,7 @@ class RoundedButton extends StatelessWidget {
       height: 30, // Reduzindo a altura do botão
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20), // Bordas arredondadas
+        borderRadius: BorderRadius.circular(180), // Bordas arredondadas
         boxShadow: [],
       ),
       child: TextButton(

@@ -8,12 +8,12 @@ import '../../reusableWidgets/tokenList.dart';
 
 import 'package:midas/constants.dart';
 
-class EditCommoditie extends StatefulWidget {
+class NewGroup extends StatefulWidget {
   @override
-  State<EditCommoditie> createState() => _EditCommoditieState();
+  State<NewGroup> createState() => _NewGroupState();
 }
 
-class _EditCommoditieState extends State<EditCommoditie> {
+class _NewGroupState extends State<NewGroup> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController strategyController = TextEditingController();
@@ -87,7 +87,7 @@ class _EditCommoditieState extends State<EditCommoditie> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Editar comoditie',
+                                        'Novo Grupo',
                                         style: TextStyle(
                                           fontSize: 22,
                                           color: Colors.white,
@@ -118,7 +118,7 @@ class _EditCommoditieState extends State<EditCommoditie> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Código',
+                                        'Descrição',
                                         style: TextStyle(
                                           fontSize: 20,
                                           color: Colors.white,
@@ -135,7 +135,7 @@ class _EditCommoditieState extends State<EditCommoditie> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'URL Site(s)',
+                                        'Participantes',
                                         style: TextStyle(
                                           fontSize: 20,
                                           color: Colors.white,
@@ -170,7 +170,7 @@ class _EditCommoditieState extends State<EditCommoditie> {
                                                   context: context,
                                                   builder:
                                                       (BuildContext context) {
-                                                    return AddURLDialog();
+                                                    return AddUSerDialog();
                                                   },
                                                 );
                                                 if (exit is String) {
@@ -250,7 +250,7 @@ class _EditCommoditieState extends State<EditCommoditie> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nome da estratégia',
+                                        'Foco',
                                         style: TextStyle(
                                           fontSize: 20,
                                           color: Colors.white,
@@ -406,7 +406,7 @@ class RemoveURlDialog extends StatelessWidget {
   }
 }
 
-class AddURLDialog extends StatelessWidget {
+class AddUSerDialog extends StatelessWidget {
   final TextEditingController _newUrlController = TextEditingController();
 
   @override
@@ -442,13 +442,13 @@ class AddURLDialog extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Icon(
-          Icons.link,
+          Icons.person,
           color: Colors.white,
           size: 50,
         ),
         SizedBox(height: 20),
         Text(
-          'Digite a URL do novo site',
+          'Digite o código do usuário',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20, // Definindo a cor do texto como branco
@@ -756,7 +756,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Text(
-          'Tem certeza que deseja  excluir a commoditie?',
+          'Tem certeza que deseja  excluir o Grupo?',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20, // Definindo a cor do texto como branco
