@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
 
 class Graphic extends StatelessWidget {
- 
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Container(
-      width: 550,
-      height: 290,
+      width: 1400,
+      height: 500,
       child: LineChart(
         LineChartData(
           minX: 0,

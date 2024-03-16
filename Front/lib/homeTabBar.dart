@@ -3,6 +3,7 @@ import 'tabBarController.dart';
 
 import 'pages/commoditie/commoditieScreen.dart';
 import 'pages/groups/groupsScreen.dart';
+import 'pages/settings/settings.dart';
 
 
 import 'pages/dashboard/dashboard.dart';
@@ -30,7 +31,7 @@ class HomePage extends StatelessWidget {
         ),
         PersistentTabItem(
           title: 'Settings',
-          tab: const DashboardScreenTab(),
+          tab: const SettingsScreenTab(),
           icon: Icons.settings,
         ),
       ],
@@ -70,6 +71,25 @@ class _DashboardScreenTabState extends State<DashboardScreenTab>
   Widget build(BuildContext context) {
     super.build(context);
     return Dashboard();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class SettingsScreenTab extends StatefulWidget {
+  const  SettingsScreenTab({Key? key}) : super(key: key);
+
+  @override
+  _SettingsScreenTabState createState() => _SettingsScreenTabState();
+}
+
+class _SettingsScreenTabState extends State<SettingsScreenTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Settings();
   }
 
   @override
