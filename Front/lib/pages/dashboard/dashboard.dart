@@ -72,7 +72,7 @@ class Dashboard extends StatelessWidget {
                               pageBuilder: (BuildContext context,
                                   Animation<double> animation,
                                   Animation<double> secondaryAnimation) {
-                                return AllSellActivitiesScreen();
+                                return AllBuyActivitiesScreen();
                               },
                             ),
                           );
@@ -124,7 +124,7 @@ class Dashboard extends StatelessWidget {
                               pageBuilder: (BuildContext context,
                                   Animation<double> animation,
                                   Animation<double> secondaryAnimation) {
-                                return AllBuyActivitiesScreen();
+                                return AllSellActivitiesScreen();
                               },
                             ),
                           );

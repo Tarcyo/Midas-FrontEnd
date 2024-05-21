@@ -9,7 +9,7 @@ class GroupScreen extends StatefulWidget {
   final String name;
   GroupScreen(this.name);
   @override
-  State<GroupScreen> createState() => _GroupScreenState();
+  State<GroupScreen> createState() => new _GroupScreenState();
 }
 
 List<Widget> _mensagens = [];
@@ -23,6 +23,9 @@ class _GroupScreenState extends State<GroupScreen> {
       key: _scaffoldKey,
       backgroundColor: secondaryColor,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.white), // Define a cor do ícone como branco
+
         backgroundColor: mainColor,
         title: Text(
           widget.name,

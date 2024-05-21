@@ -12,8 +12,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
     ]);
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -22,15 +22,15 @@ class App extends StatelessWidget {
       ),
     );
 
-    return  MaterialApp(
-        title: 'M.I.D.A.S',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.green, 
-          fontFamily: "Quicksand",
-        ),
-        home: LoginScreen(),
-      
+    return MaterialApp(
+      title: 'M.I.D.A.S',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.green,
+        fontFamily: "Quicksand",
+     
+      ),
+      home: LoginScreen(),
     );
   }
 }

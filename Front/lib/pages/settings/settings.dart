@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
 import 'package:midas/reusableWidgets/fixedCamp.dart';
-import 'package:midas/reusableWidgets/clicableBlackText.dart';
 
 class Settings extends StatefulWidget {
   @override

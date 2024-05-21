@@ -170,7 +170,7 @@ class _NewGroupState extends State<NewGroup> {
                                                   context: context,
                                                   builder:
                                                       (BuildContext context) {
-                                                    return AddUSerDialog();
+                                                    return AddUserDialog();
                                                   },
                                                 );
                                                 if (exit is String) {
@@ -268,25 +268,13 @@ class _NewGroupState extends State<NewGroup> {
                                   ),
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.center,
                                     children: [
                                       RoundedButton(
                                           onPressed: () =>
                                               {Navigator.of(context).pop()},
                                           text: "Salvar"),
-                                      RoundedButton(
-                                          onPressed: () async {
-                                            dynamic exit = await showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return DeleteConfirmationDialog();
-                                              },
-                                            );
-                                            if (exit) {
-                                              Navigator.of(context).pop();
-                                            }
-                                          },
-                                          text: "Excluir"),
+                                     
                                     ],
                                   )
                                 ],
@@ -313,8 +301,7 @@ class RemoveURlDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
+        borderRadius: BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -331,7 +318,11 @@ class RemoveURlDialog extends StatelessWidget {
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
+            maxWidth: 350, // Definindo o tamanho máximo do Container
+            minWidth: 150, // Definindo um tamanho mínimo opcional
+            maxHeight: 250, // Ajustando a altura máxima conforme necessário
+            minHeight: 250 // Definindo uma altura mínima opcional
+            ),// Reduzindo o tamanho máximo do Container
         child: contentBox(context),
       ),
     );
@@ -348,7 +339,7 @@ class RemoveURlDialog extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Text(
-          'Tem certeza que deseja sair excluir o site?',
+          'Tem certeza que deseja excluir o site?',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20, // Definindo a cor do texto como branco
@@ -357,8 +348,7 @@ class RemoveURlDialog extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhando os botões nos cantos opostos
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -386,8 +376,7 @@ class RemoveURlDialog extends StatelessWidget {
                       'Excluir',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors
-                            .white, // Definindo a cor do texto como branco
+                        color: Colors.white, // Definindo a cor do texto como branco
                       ),
                     ),
                     Icon(
@@ -406,7 +395,7 @@ class RemoveURlDialog extends StatelessWidget {
   }
 }
 
-class AddUSerDialog extends StatelessWidget {
+class AddUserDialog extends StatelessWidget {
   final TextEditingController _newUrlController = TextEditingController();
 
   @override
@@ -430,8 +419,12 @@ class AddUSerDialog extends StatelessWidget {
             width: 4.0, // Ajustando a largura da borda conforme necessário
           ),
         ),
-        constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
+       constraints: BoxConstraints(
+            maxWidth: 350, // Definindo o tamanho máximo do Container
+            minWidth: 150, // Definindo um tamanho mínimo opcional
+            maxHeight: 250, // Ajustando a altura máxima conforme necessário
+            minHeight: 250 // Definindo uma altura mínima opcional
+            ), // Reduzindo o tamanho máximo do Container
         child: contentBox(context),
       ),
     );
@@ -440,6 +433,7 @@ class AddUSerDialog extends StatelessWidget {
   Widget contentBox(context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Icon(
           Icons.person,
@@ -512,7 +506,6 @@ class AddUSerDialog extends StatelessWidget {
     );
   }
 }
-
 class RemoveTokenDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -536,7 +529,11 @@ class RemoveTokenDialog extends StatelessWidget {
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
+            maxWidth: 350, // Definindo o tamanho máximo do Container
+            minWidth: 150, // Definindo um tamanho mínimo opcional
+            maxHeight: 250, // Ajustando a altura máxima conforme necessário
+            minHeight: 250 // Definindo uma altura mínima opcional
+            ), // Reduzindo o tamanho máximo do Container
         child: contentBox(context),
       ),
     );
@@ -633,8 +630,12 @@ class AddTokenDialog extends StatelessWidget {
             width: 4.0, // Ajustando a largura da borda conforme necessário
           ),
         ),
-        constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
+      constraints: BoxConstraints(
+            maxWidth: 350, // Definindo o tamanho máximo do Container
+            minWidth: 150, // Definindo um tamanho mínimo opcional
+            maxHeight: 250, // Ajustando a altura máxima conforme necessário
+            minHeight: 250 // Definindo uma altura mínima opcional
+            ), // Reduzindo o tamanho máximo do Container
         child: contentBox(context),
       ),
     );
@@ -738,8 +739,12 @@ class DeleteConfirmationDialog extends StatelessWidget {
             width: 4.0, // Ajustando a largura da borda conforme necessário
           ),
         ),
-        constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
+       constraints: BoxConstraints(
+            maxWidth: 350, // Definindo o tamanho máximo do Container
+            minWidth: 150, // Definindo um tamanho mínimo opcional
+            maxHeight: 250, // Ajustando a altura máxima conforme necessário
+            minHeight: 250 // Definindo uma altura mínima opcional
+            ), // Reduzindo o tamanho máximo do Container
         child: contentBox(context),
       ),
     );

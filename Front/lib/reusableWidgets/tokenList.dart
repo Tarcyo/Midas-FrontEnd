@@ -73,10 +73,13 @@ class _TokenListState extends State<TokenList> {
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [...tokens],
+            scrollDirection: Axis.horizontal,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [...tokens],
+              ),
             ),
           ),
         ),

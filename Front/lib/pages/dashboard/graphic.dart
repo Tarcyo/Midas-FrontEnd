@@ -3,22 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
 
 class Graphic extends StatelessWidget {
- 
+  final List<Color> gradientColors = [mainColor, mainColor];
+
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Container(
       width: 550,
       height: 290,
       child: LineChart(
         LineChartData(
           minX: 0,
-          maxX: 11,
+          maxX: 10,
           minY: 0,
           maxY: 6,
           titlesData: FlTitlesData(
             bottomTitles: SideTitles(
               showTitles: true,
-              reservedSize: 5,
+              reservedSize: 22,
               getTitles: (value) {
                 switch (value.toInt()) {
                   case 0:
@@ -36,7 +37,7 @@ class Graphic extends StatelessWidget {
                 }
                 return '';
               },
-              margin: 8,
+              margin: 10,
             ),
             leftTitles: SideTitles(
               showTitles: true,
@@ -57,7 +58,7 @@ class Graphic extends StatelessWidget {
                 }
                 return '';
               },
-              reservedSize: 40,
+              reservedSize: 60,
               margin: 12,
             ),
           ),
@@ -90,7 +91,6 @@ class Graphic extends StatelessWidget {
                 FlSpot(6, 4),
                 FlSpot(8, 3),
                 FlSpot(10, 5),
-                FlSpot(11, 6),
               ],
               isCurved: true,
               colors: gradientColors,
@@ -111,6 +111,4 @@ class Graphic extends StatelessWidget {
       ),
     );
   }
-
-  List<Color> gradientColors = [mainColor, mainColor];
 }

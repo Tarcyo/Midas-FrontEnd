@@ -58,7 +58,8 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                     SizedBox(width: 3),
                                     Text(
                                       "Voltar",
-                                      style: TextStyle(color: Colors.white, fontSize: 20),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
                                     ),
                                   ],
                                 ),
@@ -96,7 +97,8 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                   ),
                                   SizedBox(width: 10, height: 15),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Nome',
@@ -106,12 +108,14 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                         ),
                                       ),
                                       SizedBox(width: 5, height: 5),
-                                      RoundedTextField(controller: emailController),
+                                      RoundedTextField(
+                                          controller: emailController),
                                     ],
                                   ),
                                   SizedBox(height: 15, width: 5),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Código',
@@ -121,12 +125,14 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                         ),
                                       ),
                                       SizedBox(height: 3),
-                                      RoundedTextField(controller: emailController),
+                                      RoundedTextField(
+                                          controller: emailController),
                                     ],
                                   ),
                                   SizedBox(height: 15, width: 5),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'URL Site(s)',
@@ -136,14 +142,16 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                         ),
                                       ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           TokenList(
                                             strings: _urls,
                                             onTokenRemoved: (token) async {
                                               dynamic exit = await showDialog(
                                                 context: context,
-                                                builder: (BuildContext context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   return RemoveURlDialog();
                                                 },
                                               );
@@ -159,7 +167,8 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                               onPressed: () async {
                                                 dynamic exit = await showDialog(
                                                   context: context,
-                                                  builder: (BuildContext context) {
+                                                  builder:
+                                                      (BuildContext context) {
                                                     return AddURLDialog();
                                                   },
                                                 );
@@ -177,7 +186,8 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                   ),
                                   SizedBox(height: 15, width: 5),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Tokens',
@@ -187,14 +197,16 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                         ),
                                       ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           TokenList(
                                             strings: _tokens,
                                             onTokenRemoved: (token) async {
                                               dynamic exit = await showDialog(
                                                 context: context,
-                                                builder: (BuildContext context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   return RemoveTokenDialog();
                                                 },
                                               );
@@ -210,7 +222,8 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                               onPressed: () async {
                                                 dynamic exit = await showDialog(
                                                   context: context,
-                                                  builder: (BuildContext context) {
+                                                  builder:
+                                                      (BuildContext context) {
                                                     return AddTokenDialog();
                                                   },
                                                 );
@@ -228,9 +241,12 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 10,),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Nome da estratégia',
@@ -239,15 +255,19 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                           color: Colors.white,
                                         ),
                                       ),
-                                      const SizedBox(height: 3,),
-                                      RoundedTextField(controller: strategyController)
+                                      const SizedBox(
+                                        height: 3,
+                                      ),
+                                      RoundedTextField(
+                                          controller: strategyController)
                                     ],
                                   ),
-                                  SizedBox(height: 30,),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
                                   Center(
-                                    child: RoundedButton(onPressed: ()=>{
-                                  
-                                    }, text: "Cadastrar"),
+                                    child: RoundedButton(
+                                        onPressed: () => {}, text: "Cadastrar"),
                                   )
                                 ],
                               ),
@@ -274,7 +294,7 @@ class RemoveURlDialog extends StatelessWidget {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
+            BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -286,18 +306,22 @@ class RemoveURlDialog extends StatelessWidget {
           borderRadius: BorderRadius.circular(20), // Raio da borda do Container
           border: Border.all(
             // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
+            color: Colors.white, // Definindo a cor da borda como branco
             width: 4.0, // Ajustando a largura da borda conforme necessário
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
+          maxWidth: 300, // Definindo o tamanho máximo do Container
+          minWidth: 100, // Definindo um tamanho mínimo opcional
+          maxHeight: 250, // Ajustando a altura máxima conforme necessário
+          minHeight: 250, // Definindo uma altura mínima opcional
+        ),
         child: contentBox(context),
       ),
     );
   }
 
-  Widget contentBox(context) {
+  Widget contentBox(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -308,7 +332,7 @@ class RemoveURlDialog extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Text(
-          'Tem certeza que deseja sair excluir o site?',
+          'Tem certeza que deseja excluir o site?',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20, // Definindo a cor do texto como branco
@@ -341,6 +365,7 @@ class RemoveURlDialog extends StatelessWidget {
                   Navigator.of(context).pop(true);
                 },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Excluir',
@@ -350,11 +375,12 @@ class RemoveURlDialog extends StatelessWidget {
                             .white, // Definindo a cor do texto como branco
                       ),
                     ),
+                    SizedBox(width: 5), // Espaçamento entre texto e ícone
                     Icon(
                       Icons.delete,
-                      color: Colors.white,
                       size: 30,
-                    )
+                      color: Colors.white,
+                    ),
                   ],
                 ),
               ),
@@ -365,7 +391,6 @@ class RemoveURlDialog extends StatelessWidget {
     );
   }
 }
-
 class AddURLDialog extends StatelessWidget {
   final TextEditingController _newUrlController = TextEditingController();
 
@@ -391,13 +416,17 @@ class AddURLDialog extends StatelessWidget {
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
+          maxWidth: 320, // Ajustando o tamanho máximo do Container
+          minWidth: 100, // Definindo um tamanho mínimo opcional
+          maxHeight: 250, // Ajustando a altura máxima conforme necessário
+          minHeight: 250, // Definindo uma altura mínima opcional
+        ),
         child: contentBox(context),
       ),
     );
   }
 
-  Widget contentBox(context) {
+  Widget contentBox(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -419,8 +448,7 @@ class AddURLDialog extends StatelessWidget {
         RoundedTextField(controller: _newUrlController),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhando os botões nos cantos opostos
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -430,9 +458,9 @@ class AddURLDialog extends StatelessWidget {
                 child: Text(
                   'Cancelar',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18 // Definindo a cor do texto como branco
-                      ),
+                    color: Colors.white,
+                    fontSize: 18, // Definindo a cor do texto como branco
+                  ),
                 ),
               ),
             ),
@@ -443,24 +471,19 @@ class AddURLDialog extends StatelessWidget {
                   Navigator.of(context).pop(_newUrlController.text);
                 },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Adicionar',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize:
-                                  18 // Definindo a cor do texto como branco
-                              // Definindo a cor do texto como branco
-                              ),
-                        ),
-                        Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 25,
-                        )
-                      ],
+                    Text(
+                      'Adicionar',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18, // Definindo a cor do texto como branco
+                      ),
+                    ),
+                    Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 25,
                     ),
                   ],
                 ),
@@ -496,13 +519,17 @@ class RemoveTokenDialog extends StatelessWidget {
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
+          maxWidth: 320, // Ajustando o tamanho máximo do Container
+          minWidth: 100, // Definindo um tamanho mínimo opcional
+          maxHeight: 250, // Ajustando a altura máxima conforme necessário
+          minHeight: 250, // Definindo uma altura mínima opcional
+        ),
         child: contentBox(context),
       ),
     );
   }
 
-  Widget contentBox(context) {
+  Widget contentBox(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -513,7 +540,7 @@ class RemoveTokenDialog extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Text(
-          'Tem certeza que deseja sair excluir o token?',
+          'Tem certeza que deseja excluir o token?',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20, // Definindo a cor do texto como branco
@@ -522,8 +549,7 @@ class RemoveTokenDialog extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhando os botões nos cantos opostos
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -533,6 +559,7 @@ class RemoveTokenDialog extends StatelessWidget {
                 child: Text(
                   'Cancelar',
                   style: TextStyle(
+                    fontSize: 18,
                     color: Colors.white, // Definindo a cor do texto como branco
                   ),
                 ),
@@ -549,8 +576,8 @@ class RemoveTokenDialog extends StatelessWidget {
                     Text(
                       'Excluir',
                       style: TextStyle(
-                        color: Colors
-                            .white, // Definindo a cor do texto como branco
+                        fontSize: 18,
+                        color: Colors.white, // Definindo a cor do texto como branco
                       ),
                     ),
                     Icon(
@@ -577,7 +604,7 @@ class AddTokenDialog extends StatelessWidget {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
+            BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -589,18 +616,22 @@ class AddTokenDialog extends StatelessWidget {
           borderRadius: BorderRadius.circular(20), // Raio da borda do Container
           border: Border.all(
             // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
+            color: Colors.white, // Definindo a cor da borda como branco
             width: 4.0, // Ajustando a largura da borda conforme necessário
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
+          maxWidth: 350, // Ajustando o tamanho máximo do Container
+          minWidth: 150, // Definindo um tamanho mínimo opcional
+          maxHeight: 250, // Ajustando a altura máxima conforme necessário
+          minHeight: 250, // Definindo uma altura mínima opcional
+        ),
         child: contentBox(context),
       ),
     );
   }
 
-  Widget contentBox(context) {
+  Widget contentBox(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -622,8 +653,7 @@ class AddTokenDialog extends StatelessWidget {
         RoundedTextField(controller: _newUrlController),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhando os botões nos cantos opostos
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -633,38 +663,34 @@ class AddTokenDialog extends StatelessWidget {
                 child: Text(
                   'Cancelar',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18 // Definindo a cor do texto como branco
-                      ),
+                    fontSize: 18,
+                    color: Colors.white, // Definindo a cor do texto como branco
+                  ),
                 ),
               ),
             ),
-            SizedBox(width: 5), // Adicionando um espaçamento entre os botões
+            SizedBox(width: 8), // Adicionando um espaçamento entre os botões
             Expanded(
               child: TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(_newUrlController.text);
                 },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Adicionar',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize:
-                                  18 // Definindo a cor do texto como branco
-                              // Definindo a cor do texto como branco
-                              ),
-                        ),
-                        Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 25,
-                        )
-                      ],
+                    Text(
+                      'Adicionar',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white, // Definindo a cor do texto como branco
+                      ),
                     ),
+                    SizedBox(width: 5), // Espaçamento entre o texto e o ícone
+                    Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 25,
+                    )
                   ],
                 ),
               ),

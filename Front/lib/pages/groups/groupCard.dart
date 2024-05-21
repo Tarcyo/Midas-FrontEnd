@@ -3,7 +3,6 @@ import 'package:midas/constants.dart';
 import 'package:midas/pages/group/groupScreen.dart';
 import 'package:midas/reusableWidgets/insertCamp.dart';
 
-
 class GroupCard extends StatelessWidget {
   final String groupName;
   final int newMessages;
@@ -305,7 +304,11 @@ class AddUserDialog extends StatelessWidget {
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
+            maxWidth: 350, // Definindo o tamanho máximo do Container
+            minWidth: 150, // Definindo um tamanho mínimo opcional
+            maxHeight: 250, // Ajustando a altura máxima conforme necessário
+            minHeight: 250 // Definindo uma altura mínima opcional
+            ), // Reduzindo o tamanho máximo do Container
         child: contentBox(context),
       ),
     );
