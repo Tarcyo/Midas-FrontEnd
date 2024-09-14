@@ -10,7 +10,7 @@ class RoundedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 120, // Reduzindo a largura do botão
+      width: 130, // Reduzindo a largura do botão
       height: 30, // Reduzindo a altura do botão
       decoration: BoxDecoration(
         color: Colors.white,

@@ -4,12 +4,13 @@ import '../../reusableWidgets/insertCamp.dart';
 
 import '../../reusableWidgets/insertCampPassword.dart';
 
-
+import 'package:midas/model/clienteModel.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/clicableWhiteText.dart';
 import '../../homeTabBar.dart';
-
-
+import 'package:provider/provider.dart';
+import 'package:midas/providers/clienteProvider.dart';
+import 'package:midas/services/cliente.dart';
 Color mainColor = Color(0xFF00C2A0);
 
 class LoginScreen extends StatelessWidget {
@@ -46,7 +47,7 @@ class LoginScreen extends StatelessWidget {
             Center(
               child: SizedBox(
                 width: 300, // Definindo largura máxima para o Card
-                height: 310, // Definindo altura máxima para o Card
+                height: 330, // Definindo altura máxima para o Card
                 child: Card(
                   color: mainColor,
                   elevation: 5, // Elevação para adicionar sombra
@@ -115,8 +116,16 @@ class LoginScreen extends StatelessWidget {
                             ),
                             Center(
                               child: RoundedButton(
-                                onPressed: () {
-                                        // Navegue para a RegisterScreen quando o botão for pressionado
+                                onPressed: () async{
+                                  final response= await fetchClientById(1);
+                                  Cliente novoCliente = Cliente.fromJson(response);
+ 
+
+                                     Provider.of<ClienteProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .setCliente(
+                                                      novoCliente);
                                         Navigator.push(
                                           context,
                                           PageRouteBuilder(

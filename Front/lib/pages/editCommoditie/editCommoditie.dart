@@ -5,21 +5,42 @@ import '../../reusableWidgets/roundedAddButtom.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 
 import '../../reusableWidgets/tokenList.dart';
+import 'package:provider/provider.dart';
+import 'package:midas/providers/clienteProvider.dart';
+import 'package:midas/services/commmodittie.dart';
+import 'package:midas/services/tokens.dart';
+import 'package:midas/services/sites.dart';
+import 'package:midas/reusableWidgets/URLList.dart';
 
 import 'package:midas/constants.dart';
+import 'package:midas/services/estrategia.dart';
 
 class EditCommoditie extends StatefulWidget {
+  final Map<String, dynamic> _data;
+  EditCommoditie(this._data);
   @override
-  State<EditCommoditie> createState() => _EditCommoditieState();
+  State<EditCommoditie> createState() => _EditCommoditieState(_data);
 }
 
 class _EditCommoditieState extends State<EditCommoditie> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController commoditieNameController =
+      TextEditingController();
   final TextEditingController strategyController = TextEditingController();
+  final TextEditingController codeController = TextEditingController();
 
   List<String> _urls = [];
   List<String> _tokens = [];
+  _EditCommoditieState(Map<String, dynamic> data) {
+    commoditieNameController.text = data['commodity']['name'];
+    codeController.text = data['commodity']['code'];
+    strategyController.text = data['name'];
+    for (final i in data['tokens']) {
+      _tokens.add(i["token"]);
+    }
+    for (final i in data['sites']) {
+      _urls.add(i["url"]);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +108,7 @@ class _EditCommoditieState extends State<EditCommoditie> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Editar comoditie',
+                                        'Editar commoditie',
                                         style: TextStyle(
                                           fontSize: 22,
                                           color: Colors.white,
@@ -109,7 +130,7 @@ class _EditCommoditieState extends State<EditCommoditie> {
                                       ),
                                       SizedBox(width: 5, height: 5),
                                       RoundedTextField(
-                                          controller: emailController),
+                                          controller: commoditieNameController),
                                     ],
                                   ),
                                   SizedBox(height: 15, width: 5),
@@ -126,7 +147,7 @@ class _EditCommoditieState extends State<EditCommoditie> {
                                       ),
                                       SizedBox(height: 3),
                                       RoundedTextField(
-                                          controller: emailController),
+                                          controller: codeController),
                                     ],
                                   ),
                                   SizedBox(height: 15, width: 5),
@@ -145,7 +166,7 @@ class _EditCommoditieState extends State<EditCommoditie> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          TokenList(
+                                          UrlList(
                                             strings: _urls,
                                             onTokenRemoved: (token) async {
                                               dynamic exit = await showDialog(
@@ -271,8 +292,33 @@ class _EditCommoditieState extends State<EditCommoditie> {
                                         MainAxisAlignment.spaceAround,
                                     children: [
                                       RoundedButton(
-                                          onPressed: () =>
-                                              {Navigator.of(context).pop()},
+                                          onPressed: () async {
+                                            String email =
+                                                Provider.of<ClienteProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .cliente!
+                                                    .email;
+
+                                            await registerCommodity(
+                                                commoditieNameController.text,
+                                                codeController.text,
+                                                email);
+
+                                            for (final i in _urls) {
+                                              await registerSite(i, i, email);
+                                            }
+
+                                            for (final i in _tokens) {
+                                              await registerToken(i, email);
+                                            }
+                                            await updateStrategy(
+                                                widget._data['id'],
+                                                strategyController.text,
+                                                codeController.text,
+                                                _tokens,
+                                                _urls);
+                                          },
                                           text: "Salvar"),
                                       RoundedButton(
                                           onPressed: () async {
@@ -524,7 +570,8 @@ class RemoveTokenDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
+        borderRadius:
+            BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -545,7 +592,7 @@ class RemoveTokenDialog extends StatelessWidget {
             minWidth: 100, // Definindo um tamanho mínimo opcional
             maxHeight: 250, // Ajustando a altura máxima conforme necessário
             minHeight: 250 // Definindo uma altura mínima opcional
-        ),
+            ),
         child: contentBox(context),
       ),
     );
@@ -571,7 +618,8 @@ class RemoveTokenDialog extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment
+              .spaceBetween, // Alinhando os botões nos cantos opostos
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -598,7 +646,8 @@ class RemoveTokenDialog extends StatelessWidget {
                     Text(
                       'Excluir',
                       style: TextStyle(
-                        color: Colors.white, // Definindo a cor do texto como branco
+                        color: Colors
+                            .white, // Definindo a cor do texto como branco
                       ),
                     ),
                     SizedBox(width: 5), // Espaçamento entre texto e ícone
@@ -617,6 +666,7 @@ class RemoveTokenDialog extends StatelessWidget {
     );
   }
 }
+
 class AddTokenDialog extends StatelessWidget {
   final TextEditingController _newUrlController = TextEditingController();
 
@@ -729,7 +779,8 @@ class DeleteConfirmationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
+        borderRadius:
+            BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -750,7 +801,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
             minWidth: 100, // Definindo um tamanho mínimo opcional
             maxHeight: 250, // Ajustando a altura máxima conforme necessário
             minHeight: 250 // Definindo uma altura mínima opcional
-        ),
+            ),
         child: contentBox(context),
       ),
     );
@@ -776,7 +827,8 @@ class DeleteConfirmationDialog extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment
+              .spaceBetween, // Alinhando os botões nos cantos opostos
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -805,7 +857,8 @@ class DeleteConfirmationDialog extends StatelessWidget {
                       'Excluir',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.white, // Definindo a cor do texto como branco
+                        color: Colors
+                            .white, // Definindo a cor do texto como branco
                       ),
                     ),
                     SizedBox(width: 5), // Espaçamento entre texto e ícone

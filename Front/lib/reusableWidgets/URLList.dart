@@ -1,64 +1,47 @@
 import 'package:flutter/material.dart';
-import 'tokenItem.dart';
+import 'UrlItem.dart';
 
-class TokenList extends StatefulWidget {
+class UrlList extends StatefulWidget {
   final List<String> strings;
   final ValueChanged<String> onTokenRemoved;
 
-  const TokenList({
+  const UrlList({
     Key? key,
     required this.strings,
     required this.onTokenRemoved,
   }) : super(key: key);
 
   @override
-  State<TokenList> createState() => _TokenListState();
+  State<UrlList> createState() => _UrlListState();
 }
 
-class _TokenListState extends State<TokenList> {
+class _UrlListState extends State<UrlList> {
   @override
   Widget build(BuildContext context) {
     List<Widget> tokens = [];
-    double tamanhoBarra = 25;
-    if (widget.strings.length > 0) {
-      tamanhoBarra = 50;
-    }
-    if (widget.strings.length > 3) {
-      tamanhoBarra = 100;
-    }
-    if (widget.strings.length > 6) {
-      tamanhoBarra = 150;
-    }
+    double tamanhoBarra = 250;
 
-    int cont = 0;
-    List<Widget> linha = [];
     for (int i = 0; i < widget.strings.length; i++) {
-      linha.add(
-        TokenItem(
-          token: widget.strings[i],
-          onTokenRemoved: (token) {
-            widget.onTokenRemoved(token);
-            setState(() {
-              widget.strings.remove("token");
-            });
-          },
-        ),
-      );
-      linha.add(const SizedBox(
-        width: 15,
+      tokens.add(Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              URLItem(
+                token: widget.strings[i],
+                onTokenRemoved: (token) {
+                  widget.onTokenRemoved(token);
+                  setState(() {
+                    widget.strings.remove("token");
+                  });
+                },
+              ),
+            ],
+          ),
+        ],
       ));
-      if (cont == 2 || i == widget.strings.length - 1) {
-        tokens.add(Row(
-          children: [...linha],
-        ));
-        tokens.add(SizedBox(
-          height: 15,
-        ));
-        linha = [];
-        cont = 0;
-      } else {
-        cont++;
-      }
     }
 
     return Padding(

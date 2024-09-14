@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:midas/services/estrategia.dart';
+import 'package:midas/services/tokens.dart';
 import '../../reusableWidgets/insertCamp.dart';
+import 'package:midas/services/sites.dart';
 
 import '../../reusableWidgets/roundedAddButtom.dart';
 import '../../reusableWidgets/roundedButtom.dart';
@@ -7,6 +10,13 @@ import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/tokenList.dart';
 
 import 'package:midas/constants.dart';
+import 'package:provider/provider.dart';
+
+import 'package:midas/providers/clienteProvider.dart';
+
+import 'package:midas/services/commmodittie.dart';
+
+import 'package:midas/reusableWidgets/URLList.dart';
 
 class RegisterCommoditie extends StatefulWidget {
   @override
@@ -14,12 +24,12 @@ class RegisterCommoditie extends StatefulWidget {
 }
 
 class _RegisterCommoditieState extends State<RegisterCommoditie> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nomeController = TextEditingController();
+  final TextEditingController codigoController = TextEditingController();
   final TextEditingController strategyController = TextEditingController();
 
-  List<String> _urls = [];
-  List<String> _tokens = [];
+  final List<String> _urls = [];
+  final List<String> _tokens = [];
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +73,8 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                     ),
                                   ],
                                 ),
-                              )
+                              ),
+                           
                             ],
                           )
                         ],
@@ -109,7 +120,8 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                       ),
                                       SizedBox(width: 5, height: 5),
                                       RoundedTextField(
-                                          controller: emailController),
+                                          controller:
+                                              nomeController), // Usando controlador 'nomeController'
                                     ],
                                   ),
                                   SizedBox(height: 15, width: 5),
@@ -126,7 +138,8 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                       ),
                                       SizedBox(height: 3),
                                       RoundedTextField(
-                                          controller: emailController),
+                                          controller:
+                                              codigoController), // Usando controlador 'codigoController'
                                     ],
                                   ),
                                   SizedBox(height: 15, width: 5),
@@ -145,7 +158,7 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          TokenList(
+                                          UrlList(
                                             strings: _urls,
                                             onTokenRemoved: (token) async {
                                               dynamic exit = await showDialog(
@@ -259,7 +272,7 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                         height: 3,
                                       ),
                                       RoundedTextField(
-                                          controller: strategyController)
+                                          controller: strategyController),
                                     ],
                                   ),
                                   SizedBox(
@@ -267,7 +280,35 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
                                   ),
                                   Center(
                                     child: RoundedButton(
-                                        onPressed: () => {}, text: "Cadastrar"),
+                                        onPressed: () async {
+
+                                          String email =
+                                              Provider.of<ClienteProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .cliente!.email;
+
+                                          await registerCommodity(
+                                              nomeController.text,
+                                              codigoController.text,
+                                              email);
+
+                                          for (final i in _urls) {
+                                            await registerSite(i, i, email);
+                                          }
+
+                                          for (final i in _tokens) {
+                                            await registerToken(i, email);
+                                          }
+
+                                          await registerStrategy(
+                                              strategyController.text,
+                                              email,
+                                              codigoController.text,
+                                              _tokens,
+                                              _urls);
+                                        },
+                                        text: "Cadastrar"),
                                   )
                                 ],
                               ),
@@ -285,6 +326,17 @@ class _RegisterCommoditieState extends State<RegisterCommoditie> {
         ),
       ),
     );
+  }
+
+  String getFirstPart(String input) {
+    // Verifica se a string contém um ponto
+    if (input.contains('.')) {
+      // Divide a string no ponto e retorna a primeira parte
+      return input.split('.').first;
+    } else {
+      // Se não houver ponto, retorna a string inteira
+      return input;
+    }
   }
 }
 
@@ -391,6 +443,7 @@ class RemoveURlDialog extends StatelessWidget {
     );
   }
 }
+
 class AddURLDialog extends StatelessWidget {
   final TextEditingController _newUrlController = TextEditingController();
 
@@ -448,7 +501,8 @@ class AddURLDialog extends StatelessWidget {
         RoundedTextField(controller: _newUrlController),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment
+              .spaceBetween, // Alinhando os botões nos cantos opostos
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -549,7 +603,8 @@ class RemoveTokenDialog extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment
+              .spaceBetween, // Alinhando os botões nos cantos opostos
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -577,7 +632,8 @@ class RemoveTokenDialog extends StatelessWidget {
                       'Excluir',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.white, // Definindo a cor do texto como branco
+                        color: Colors
+                            .white, // Definindo a cor do texto como branco
                       ),
                     ),
                     Icon(
@@ -653,7 +709,8 @@ class AddTokenDialog extends StatelessWidget {
         RoundedTextField(controller: _newUrlController),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment
+              .spaceBetween, // Alinhando os botões nos cantos opostos
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -682,7 +739,8 @@ class AddTokenDialog extends StatelessWidget {
                       'Adicionar',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.white, // Definindo a cor do texto como branco
+                        color: Colors
+                            .white, // Definindo a cor do texto como branco
                       ),
                     ),
                     SizedBox(width: 5), // Espaçamento entre o texto e o ícone

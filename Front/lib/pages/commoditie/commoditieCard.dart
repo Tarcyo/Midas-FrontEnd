@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
 import '../editCommoditie/editCommoditie.dart';
-
 class CommoditieCard extends StatelessWidget {
   final String commodityName;
   final String price1Week;
@@ -9,6 +8,7 @@ class CommoditieCard extends StatelessWidget {
   final String price6Minutes;
   final String price3Minutes;
   final String price1Minute;
+  final dynamic data;
 
   CommoditieCard({
     required this.commodityName,
@@ -17,6 +17,7 @@ class CommoditieCard extends StatelessWidget {
     required this.price6Minutes,
     required this.price3Minutes,
     required this.price1Minute,
+    required this.data
   });
 
   @override
@@ -78,7 +79,8 @@ class CommoditieCard extends StatelessWidget {
                         size: 40,
                         color: mainColor,
                       ),
-                      onPressed: () {
+                      onPressed: ()async {
+                        
                         // Navegue para a RegisterScreen quando o botão for pressionado
                         Navigator.push(
                           context,
@@ -96,7 +98,7 @@ class CommoditieCard extends StatelessWidget {
                             pageBuilder: (BuildContext context,
                                 Animation<double> animation,
                                 Animation<double> secondaryAnimation) {
-                              return EditCommoditie();
+                              return EditCommoditie(data);
                             },
                           ),
                         );
