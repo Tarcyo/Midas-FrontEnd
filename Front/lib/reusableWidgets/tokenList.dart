@@ -47,7 +47,7 @@ class _TokenListState extends State<TokenList> {
       linha.add(const SizedBox(
         width: 15,
       ));
-      if (cont == 2 || i == widget.strings.length - 1) {
+      if (cont == 4 || i == widget.strings.length - 1) {
         tokens.add(Row(
           children: [...linha],
         ));
