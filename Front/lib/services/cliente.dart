@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'estrategia.dart';
+
 final Uri url = Uri.parse('http://localhost:8080/clients');
 
-Future<bool> registerClient(final String firstName, final String lastName,final String email, final String phone) async {
-      
+Future<bool> registerClient(final String firstName, final String lastName,
+    final String email, final String phone, final String password) async {
   final body = jsonEncode({
     'firstName': firstName,
     'lastName': lastName,
     'email': email,
     'phone': phone,
+    "password": password
   });
 
   try {
@@ -28,7 +30,7 @@ Future<bool> registerClient(final String firstName, final String lastName,final 
     } else {
       print(
           'Falha ao registrar o cliente. Código de status: ${response.statusCode}');
-          print(response.body);
+      print(response.body);
       return false;
     }
   } catch (error) {
@@ -37,15 +39,14 @@ Future<bool> registerClient(final String firstName, final String lastName,final 
   }
 }
 
-
 Future<dynamic> fetchClientById(int id) async {
   // URL base da API, substitua com o endpoint correto
-  final url = Uri.parse('http://localhost:8080/clients/$id'); 
+  final url = Uri.parse('http://localhost:8080/clients/$id');
 
   try {
     // Faz a requisição GET
     final response = await http.get(url, headers: {
-      'Accept': 'application/json',  // Define o tipo de resposta esperado
+      'Accept': 'application/json', // Define o tipo de resposta esperado
     });
 
     // Verifica se a requisição foi bem-sucedida (status code 200)
@@ -64,7 +65,8 @@ Future<dynamic> fetchClientById(int id) async {
       final commodities = data['commodities'] as List;
       print('Commodities:');
       for (var commodity in commodities) {
-        print('  - ID: ${commodity['id']}, Nome: ${commodity['name']}, Código: ${commodity['code']}');
+        print(
+            '  - ID: ${commodity['id']}, Nome: ${commodity['name']}, Código: ${commodity['code']}');
       }
 
       // Exibe os tokens
@@ -78,7 +80,8 @@ Future<dynamic> fetchClientById(int id) async {
       final sites = data['sites'] as List;
       print('Sites:');
       for (var site in sites) {
-        print('  - ID: ${site['id']}, Nome: ${site['name']}, URL: ${site['url']}');
+        print(
+            '  - ID: ${site['id']}, Nome: ${site['name']}, URL: ${site['url']}');
       }
 
       // Exibe as estratégias e inclui 'strategyData' usando a função getEstrategiaPorId
@@ -86,10 +89,10 @@ Future<dynamic> fetchClientById(int id) async {
       print('Estratégias:');
       for (var strategy in strategies) {
         print('  - ID: ${strategy['id']}, Nome: ${strategy['name']}');
-        
+
         // Faz a requisição para obter os dados da estratégia
         final strategyData = await getEstrategiaPorId(strategy['id']);
-        
+
         // Adiciona 'strategyData' à estratégia original
         strategy['strategyData'] = strategyData;
 
@@ -103,17 +106,17 @@ Future<dynamic> fetchClientById(int id) async {
       final groups = data['groups'] as List;
       print('Grupos:');
       for (var group in groups) {
-        print('  - ID: ${group['id']}, Nome: ${group['name']}, Descrição: ${group['description']}');
+        print(
+            '  - ID: ${group['id']}, Nome: ${group['name']}, Descrição: ${group['description']}');
       }
       return data;
     } else {
       // Exibe uma mensagem de erro se o status code não for 200
-      print('Erro ao buscar o cliente. Código de status: ${response.statusCode}');
+      print(
+          'Erro ao buscar o cliente. Código de status: ${response.statusCode}');
     }
   } catch (e) {
     // Trata qualquer exceção que possa ocorrer durante a requisição
     print('Erro ao fazer a requisição: $e');
   }
 }
-
- 

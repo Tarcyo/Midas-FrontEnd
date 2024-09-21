@@ -235,7 +235,7 @@ class RegisterUser extends StatelessWidget {
     } else {
       final nomes = _obterPrimeiroUltimoNome(fullName);
       final bool response =
-          await registerClient(nomes[0], nomes[1], email, phone);
+          await registerClient(nomes[0], nomes[1], email, phone,password);
       if (response) {
         showDialog(
           context: context,
