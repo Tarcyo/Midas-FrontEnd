@@ -1,28 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:midas/services/estrategia.dart';
+import 'package:midas/services/tokens.dart';
 import '../../reusableWidgets/insertCamp.dart';
+import 'package:midas/services/sites.dart';
 
 import '../../reusableWidgets/roundedAddButtom.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 
 import '../../reusableWidgets/tokenList.dart';
-
+import 'package:midas/model/clienteModel.dart';
 import 'package:midas/constants.dart';
+import 'package:provider/provider.dart';
 
-class NewGroup extends StatefulWidget {
+import 'package:midas/providers/clienteProvider.dart';
+import 'package:midas/services/cliente.dart';
+import 'package:midas/services/commmodittie.dart';
+import 'package:midas/reusableWidgets/URLList.dart';
+import 'package:midas/providers/authProvider.dart';
+
+class RegisterStrategyScreen extends StatefulWidget {
   @override
-  State<NewGroup> createState() => _NewGroupState();
+  State<RegisterStrategyScreen> createState() => _RegisterStrategyScreenState();
 }
 
-class _NewGroupState extends State<NewGroup> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
+  final TextEditingController nomeController = TextEditingController();
+  final TextEditingController codigoController = TextEditingController();
   final TextEditingController strategyController = TextEditingController();
 
-  List<String> _urls = [];
-  List<String> _tokens = [];
+  final List<String> _urls = [];
+  final List<String> _tokens = [];
 
   @override
   Widget build(BuildContext context) {
+    final String authToken =
+        Provider.of<AuthProvider>(context, listen: false).token;
+
     return Scaffold(
       body: Container(
         color: secondaryColor,
@@ -65,6 +78,7 @@ class _NewGroupState extends State<NewGroup> {
                           ),
                         ],
                       ),
+                      SizedBox(height: 20),
                       Center(
                         child: SizedBox(
                           width: 600,
@@ -75,8 +89,9 @@ class _NewGroupState extends State<NewGroup> {
                               borderRadius: BorderRadius.circular(100),
                               side: BorderSide(color: mainColor, width: 10),
                             ),
-                            child: Container(
-                              padding: EdgeInsets.all(20),
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  30), // Padding ao redor do conteúdo
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -84,7 +99,7 @@ class _NewGroupState extends State<NewGroup> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Novo Grupo',
+                                        'Nova Estratégia',
                                         style: TextStyle(
                                           fontSize: 22,
                                           color: Colors.white,
@@ -92,57 +107,75 @@ class _NewGroupState extends State<NewGroup> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(width: 10, height: 15),
+                                  SizedBox(height: 15),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nome',
+                                        'Nome da estratégia',
                                         style: TextStyle(
                                           fontSize: 20,
                                           color: Colors.white,
                                         ),
                                       ),
-                                      SizedBox(width: 5, height: 5),
+                                      SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: emailController),
+                                          controller: nomeController),
                                     ],
                                   ),
-                                  SizedBox(height: 15, width: 5),
+                                  SizedBox(height: 15),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Descrição',
+                                        'Código da commodity',
                                         style: TextStyle(
                                           fontSize: 20,
                                           color: Colors.white,
                                         ),
                                       ),
-                                      SizedBox(height: 3),
+                                      SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: emailController),
+                                          controller: codigoController),
                                     ],
                                   ),
-                                  SizedBox(height: 15, width: 5),
+                                  SizedBox(height: 15),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Participantes',
+                                        'Email do usuário',
                                         style: TextStyle(
                                           fontSize: 20,
                                           color: Colors.white,
                                         ),
                                       ),
+                                      SizedBox(height: 5),
+                                      RoundedTextField(
+                                          controller: strategyController),
+                                    ],
+                                  ),
+                                  SizedBox(height: 15),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'URL Site(s)',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          TokenList(
+                                          UrlList(
                                             strings: _urls,
                                             onTokenRemoved: (token) async {
                                               dynamic exit = await showDialog(
@@ -162,12 +195,11 @@ class _NewGroupState extends State<NewGroup> {
                                           SizedBox(width: 15),
                                           RoundedAddButton(
                                               onPressed: () async {
-                                                final dynamic exit =
-                                                    await showDialog(
+                                                dynamic exit = await showDialog(
                                                   context: context,
                                                   builder:
                                                       (BuildContext context) {
-                                                    return AddUserDialog();
+                                                    return AddURLDialog();
                                                   },
                                                 );
                                                 if (exit is String) {
@@ -175,14 +207,13 @@ class _NewGroupState extends State<NewGroup> {
                                                     _urls.add(exit);
                                                   });
                                                 }
-                                                print(exit);
                                               },
                                               text: "Novo")
                                         ],
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 15, width: 5),
+                                  SizedBox(height: 15),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -194,6 +225,7 @@ class _NewGroupState extends State<NewGroup> {
                                           color: Colors.white,
                                         ),
                                       ),
+                                      SizedBox(height: 5),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
@@ -232,53 +264,65 @@ class _NewGroupState extends State<NewGroup> {
                                                     });
                                                   }
                                                 }
-                                                print(exit);
                                               },
                                               text: "Novo")
                                         ],
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 10,
+                                  SizedBox(height: 30),
+                                  Center(
+                                    child: RoundedButton(
+                                        onPressed: () async {
+                                          String email =
+                                              Provider.of<ClienteProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .cliente!
+                                                  .email;
+
+                                          await registerCommodity(
+                                              nomeController.text,
+                                              codigoController.text,
+                                              email,
+                                              authToken);
+
+                                          for (final i in _urls) {
+                                            await registerSite(
+                                                i, i, email, authToken);
+                                          }
+
+                                          for (final i in _tokens) {
+                                            await registerToken(
+                                                i, email, authToken);
+                                          }
+
+                                          await registerStrategy(
+                                              strategyController.text,
+                                              email,
+                                              codigoController.text,
+                                              _tokens,
+                                              _urls,
+                                              authToken);
+
+                                          final response =
+                                              await fetchClientById(
+                                                  1, authToken);
+                                          Cliente novoCliente =
+                                              Cliente.fromJson(response);
+                                          Provider.of<ClienteProvider>(context,
+                                                  listen: false)
+                                              .setCliente(novoCliente);
+                                        },
+                                        text: "Cadastrar"),
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Foco',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 3,
-                                      ),
-                                      RoundedTextField(
-                                          controller: strategyController)
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      RoundedButton(
-                                          onPressed: () =>
-                                              {Navigator.of(context).pop()},
-                                          text: "Salvar"),
-                                    ],
-                                  )
                                 ],
                               ),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(width: 1),
+                      SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -288,6 +332,17 @@ class _NewGroupState extends State<NewGroup> {
         ),
       ),
     );
+  }
+
+  String getFirstPart(String input) {
+    // Verifica se a string contém um ponto
+    if (input.contains('.')) {
+      // Divide a string no ponto e retorna a primeira parte
+      return input.split('.').first;
+    } else {
+      // Se não houver ponto, retorna a string inteira
+      return input;
+    }
   }
 }
 
@@ -309,22 +364,22 @@ class RemoveURlDialog extends StatelessWidget {
           borderRadius: BorderRadius.circular(20), // Raio da borda do Container
           border: Border.all(
             // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
+            color: Colors.white, // Definindo a cor da borda como branco
             width: 4.0, // Ajustando a largura da borda conforme necessário
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 350, // Definindo o tamanho máximo do Container
-            minWidth: 150, // Definindo um tamanho mínimo opcional
-            maxHeight: 250, // Ajustando a altura máxima conforme necessário
-            minHeight: 250 // Definindo uma altura mínima opcional
-            ), // Reduzindo o tamanho máximo do Container
+          maxWidth: 300, // Definindo o tamanho máximo do Container
+          minWidth: 100, // Definindo um tamanho mínimo opcional
+          maxHeight: 250, // Ajustando a altura máxima conforme necessário
+          minHeight: 250, // Definindo uma altura mínima opcional
+        ),
         child: contentBox(context),
       ),
     );
   }
 
-  Widget contentBox(context) {
+  Widget contentBox(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -368,6 +423,7 @@ class RemoveURlDialog extends StatelessWidget {
                   Navigator.of(context).pop(true);
                 },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Excluir',
@@ -377,11 +433,12 @@ class RemoveURlDialog extends StatelessWidget {
                             .white, // Definindo a cor do texto como branco
                       ),
                     ),
+                    SizedBox(width: 5), // Espaçamento entre texto e ícone
                     Icon(
                       Icons.delete,
-                      color: Colors.white,
                       size: 30,
-                    )
+                      color: Colors.white,
+                    ),
                   ],
                 ),
               ),
@@ -393,7 +450,7 @@ class RemoveURlDialog extends StatelessWidget {
   }
 }
 
-class AddUserDialog extends StatelessWidget {
+class AddURLDialog extends StatelessWidget {
   final TextEditingController _newUrlController = TextEditingController();
 
   @override
@@ -418,29 +475,28 @@ class AddUserDialog extends StatelessWidget {
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 350, // Definindo o tamanho máximo do Container
-            minWidth: 150, // Definindo um tamanho mínimo opcional
-            maxHeight: 250, // Ajustando a altura máxima conforme necessário
-            minHeight: 250 // Definindo uma altura mínima opcional
-            ), // Reduzindo o tamanho máximo do Container
+          maxWidth: 320, // Ajustando o tamanho máximo do Container
+          minWidth: 100, // Definindo um tamanho mínimo opcional
+          maxHeight: 250, // Ajustando a altura máxima conforme necessário
+          minHeight: 250, // Definindo uma altura mínima opcional
+        ),
         child: contentBox(context),
       ),
     );
   }
 
-  Widget contentBox(context) {
+  Widget contentBox(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Icon(
-          Icons.person,
+          Icons.link,
           color: Colors.white,
           size: 50,
         ),
         SizedBox(height: 20),
         Text(
-          'Digite o código do usuário',
+          'Digite a URL do novo site',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20, // Definindo a cor do texto como branco
@@ -462,9 +518,9 @@ class AddUserDialog extends StatelessWidget {
                 child: Text(
                   'Cancelar',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18 // Definindo a cor do texto como branco
-                      ),
+                    color: Colors.white,
+                    fontSize: 18, // Definindo a cor do texto como branco
+                  ),
                 ),
               ),
             ),
@@ -475,24 +531,19 @@ class AddUserDialog extends StatelessWidget {
                   Navigator.of(context).pop(_newUrlController.text);
                 },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Adicionar',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize:
-                                  18 // Definindo a cor do texto como branco
-                              // Definindo a cor do texto como branco
-                              ),
-                        ),
-                        Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 25,
-                        )
-                      ],
+                    Text(
+                      'Adicionar',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18, // Definindo a cor do texto como branco
+                      ),
+                    ),
+                    Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 25,
                     ),
                   ],
                 ),
@@ -528,17 +579,17 @@ class RemoveTokenDialog extends StatelessWidget {
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 350, // Definindo o tamanho máximo do Container
-            minWidth: 150, // Definindo um tamanho mínimo opcional
-            maxHeight: 250, // Ajustando a altura máxima conforme necessário
-            minHeight: 250 // Definindo uma altura mínima opcional
-            ), // Reduzindo o tamanho máximo do Container
+          maxWidth: 320, // Ajustando o tamanho máximo do Container
+          minWidth: 100, // Definindo um tamanho mínimo opcional
+          maxHeight: 250, // Ajustando a altura máxima conforme necessário
+          minHeight: 250, // Definindo uma altura mínima opcional
+        ),
         child: contentBox(context),
       ),
     );
   }
 
-  Widget contentBox(context) {
+  Widget contentBox(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -549,7 +600,7 @@ class RemoveTokenDialog extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Text(
-          'Tem certeza que deseja sair excluir o token?',
+          'Tem certeza que deseja excluir o token?',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20, // Definindo a cor do texto como branco
@@ -569,6 +620,7 @@ class RemoveTokenDialog extends StatelessWidget {
                 child: Text(
                   'Cancelar',
                   style: TextStyle(
+                    fontSize: 18,
                     color: Colors.white, // Definindo a cor do texto como branco
                   ),
                 ),
@@ -585,6 +637,7 @@ class RemoveTokenDialog extends StatelessWidget {
                     Text(
                       'Excluir',
                       style: TextStyle(
+                        fontSize: 18,
                         color: Colors
                             .white, // Definindo a cor do texto como branco
                       ),
@@ -613,7 +666,7 @@ class AddTokenDialog extends StatelessWidget {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
+            BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -625,22 +678,22 @@ class AddTokenDialog extends StatelessWidget {
           borderRadius: BorderRadius.circular(20), // Raio da borda do Container
           border: Border.all(
             // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
+            color: Colors.white, // Definindo a cor da borda como branco
             width: 4.0, // Ajustando a largura da borda conforme necessário
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 350, // Definindo o tamanho máximo do Container
-            minWidth: 150, // Definindo um tamanho mínimo opcional
-            maxHeight: 250, // Ajustando a altura máxima conforme necessário
-            minHeight: 250 // Definindo uma altura mínima opcional
-            ), // Reduzindo o tamanho máximo do Container
+          maxWidth: 350, // Ajustando o tamanho máximo do Container
+          minWidth: 150, // Definindo um tamanho mínimo opcional
+          maxHeight: 250, // Ajustando a altura máxima conforme necessário
+          minHeight: 250, // Definindo uma altura mínima opcional
+        ),
         child: contentBox(context),
       ),
     );
   }
 
-  Widget contentBox(context) {
+  Widget contentBox(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -673,142 +726,34 @@ class AddTokenDialog extends StatelessWidget {
                 child: Text(
                   'Cancelar',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18 // Definindo a cor do texto como branco
-                      ),
-                ),
-              ),
-            ),
-            SizedBox(width: 5), // Adicionando um espaçamento entre os botões
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(_newUrlController.text);
-                },
-                child: Row(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Adicionar',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize:
-                                  18 // Definindo a cor do texto como branco
-                              // Definindo a cor do texto como branco
-                              ),
-                        ),
-                        Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 25,
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class DeleteConfirmationDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: Container(
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Color(0xFF00C2A0), // Definindo a cor de fundo como verde
-          borderRadius: BorderRadius.circular(20), // Raio da borda do Container
-          border: Border.all(
-            // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
-            width: 4.0, // Ajustando a largura da borda conforme necessário
-          ),
-        ),
-        constraints: BoxConstraints(
-            maxWidth: 350, // Definindo o tamanho máximo do Container
-            minWidth: 150, // Definindo um tamanho mínimo opcional
-            maxHeight: 250, // Ajustando a altura máxima conforme necessário
-            minHeight: 250 // Definindo uma altura mínima opcional
-            ), // Reduzindo o tamanho máximo do Container
-        child: contentBox(context),
-      ),
-    );
-  }
-
-  Widget contentBox(context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Icon(
-          Icons.error,
-          color: Colors.white,
-          size: 50,
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Tem certeza que deseja  excluir o Grupo?',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20, // Definindo a cor do texto como branco
-          ),
-          textAlign: TextAlign.center, // Alinhando o texto centralmente
-        ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
-          children: <Widget>[
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(
-                  'Cancelar',
-                  style: TextStyle(
                     fontSize: 18,
                     color: Colors.white, // Definindo a cor do texto como branco
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 10), // Adicionando um espaçamento entre os botões
+            SizedBox(width: 8), // Adicionando um espaçamento entre os botões
             Expanded(
               child: TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(true);
+                  Navigator.of(context).pop(_newUrlController.text);
                 },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Excluir',
+                      'Adicionar',
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors
                             .white, // Definindo a cor do texto como branco
                       ),
                     ),
-                    SizedBox(
-                      width: 5,
-                    ),
+                    SizedBox(width: 5), // Espaçamento entre o texto e o ícone
                     Icon(
-                      Icons.delete,
-                      size: 35,
+                      Icons.add,
                       color: Colors.white,
+                      size: 25,
                     )
                   ],
                 ),

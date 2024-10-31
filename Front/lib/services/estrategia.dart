@@ -1,8 +1,42 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<void> registerStrategy(String name, String clientEmail,
-    String commodityCode, List<String> tokens, List<String> sites) async {
+Future<void> deleteEstrategia(int id, String token) async {
+  // Pegando o token do AuthProvider
+
+  final url = Uri.parse(
+      "http://localhost:8080/estrategia/$id"); // URL com o ID da estratégia
+
+  try {
+    final response = await http.delete(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token', // Incluindo o token de autenticação
+        'Accept': 'application/json', // Definindo o tipo de resposta esperado
+      },
+    );
+
+    if (response.statusCode == 204) {
+      // Estratégia deletada com sucesso
+      print('Estratégia deletada com sucesso');
+    } else {
+      // Erro ao deletar a estratégia
+      print(
+          'Falha ao deletar a estratégia. Código de status: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Tratamento de erro
+    print('Erro ao tentar deletar a estratégia: $e');
+  }
+}
+
+Future<void> registerStrategy(
+    String name,
+    String clientEmail,
+    String commodityCode,
+    List<String> tokens,
+    List<String> sites,
+    String token) async {
   final String url = 'http://localhost:8080/strategies';
 
   final Map<String, dynamic> requestBody = {
@@ -18,6 +52,7 @@ Future<void> registerStrategy(String name, String clientEmail,
       Uri.parse(url),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token'
       },
       body: jsonEncode(requestBody),
     );
@@ -37,12 +72,13 @@ Future<void> registerStrategy(String name, String clientEmail,
   }
 }
 
-Future<dynamic> getEstrategiaPorId(int id) async {
+Future<dynamic> getEstrategiaPorId(int id, String token) async {
   final url = Uri.parse(
       'http://localhost:8080/strategies/$id'); // Altere o endpoint conforme necessário
 
   try {
-    final response = await http.get(url);
+    final response =
+        await http.get(headers: {'Authorization': 'Bearer $token'}, url);
 
     if (response.statusCode == 200) {
       // Decodifica o corpo da resposta JSON
@@ -51,30 +87,6 @@ Future<dynamic> getEstrategiaPorId(int id) async {
 
       final estrategia = json.decode(decodedBody);
 
-      // Exibe os dados da estratégia
-      print('Estratégia encontrada:');
-      print('ID: ${estrategia['id']}');
-      print('Nome: ${estrategia['name']}');
-      print('Cliente:');
-      print('  ID: ${estrategia['client']['id']}');
-      print(
-          '  Nome: ${estrategia['client']['firstName']} ${estrategia['client']['lastName']}');
-      print('  Email: ${estrategia['client']['email']}');
-      print('Commodity:');
-      print('  Nome: ${estrategia['commodity']['name']}');
-      print('  Código: ${estrategia['commodity']['code']}');
-
-      // Lista os tokens
-      print('Tokens:');
-      for (var token in estrategia['tokens']) {
-        print('  ID: ${token['id']}, Token: ${token['token']}');
-      }
-
-      // Lista os sites
-      print('Sites:');
-      for (var site in estrategia['sites']) {
-        print('  Nome: ${site['name']}, URL: ${site['url']}');
-      }
       return estrategia;
     } else {
       print(
@@ -86,14 +98,15 @@ Future<dynamic> getEstrategiaPorId(int id) async {
   }
 }
 
-
-Future<void> updateStrategy(int id, String name, String commodityCode, List<String> tokens, List<String> sites) async {
+Future<void> updateStrategy(int id, String name, String commodityCode,
+    List<String> tokens, List<String> sites, String token) async {
   // URL da API
   final String url = 'http://localhost:8080/strategies/$id';
 
   // Cabeçalhos da requisição
   final Map<String, String> headers = {
     'Content-Type': 'application/json; charset=UTF-8',
+    'Authorization': 'Bearer $token'
   };
 
   // Corpo da requisição

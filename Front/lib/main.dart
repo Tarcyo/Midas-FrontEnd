@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart'; // Importe o pacote provider
 import 'pages/login/login.dart';
-import 'providers/clienteProvider.dart'; // Importe o provider
-
+import 'providers/clienteProvider.dart'; // Importe o ClienteProvider
+import 'providers/authProvider.dart'; // Importe o AuthProvider
 void main() {
   runApp(const App());
 }
@@ -24,9 +24,12 @@ class App extends StatelessWidget {
       ),
     );
 
-    // Aqui você envolve o MaterialApp com o ChangeNotifierProvider
-    return ChangeNotifierProvider(
-      create: (context) => ClienteProvider(), // Cria o provider de email
+    // Envolvendo o MaterialApp com MultiProvider para incluir o AuthProvider e ClienteProvider
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ClienteProvider()), // Cria o provider de cliente
+        ChangeNotifierProvider(create: (context) => AuthProvider()), // Cria o provider de autenticação
+      ],
       child: MaterialApp(
         title: 'M.I.D.A.S',
         debugShowCheckedModeBanner: false,
@@ -34,7 +37,7 @@ class App extends StatelessWidget {
           primaryColor: Colors.green,
           fontFamily: "Quicksand",
         ),
-        home: LoginScreen(),
+        home: LoginScreen(), // Sua tela de login
       ),
     );
   }

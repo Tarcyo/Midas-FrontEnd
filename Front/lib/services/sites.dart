@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<void> registerSite(String name, String siteUrl, String clientEmail) async {
+Future<void> registerSite(
+    String name, String siteUrl, String clientEmail, String token) async {
   // Defina a URL da API para a qual você vai fazer a requisição
   final String apiUrl = 'http://localhost:8080/sites';
 
@@ -18,6 +19,7 @@ Future<void> registerSite(String name, String siteUrl, String clientEmail) async
       Uri.parse(apiUrl),
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
       },
       body: jsonEncode(requestBody),
     );

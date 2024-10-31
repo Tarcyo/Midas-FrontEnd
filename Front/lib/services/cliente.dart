@@ -4,6 +4,42 @@ import 'estrategia.dart';
 
 final Uri url = Uri.parse('http://localhost:8080/clients');
 
+Future<dynamic> login(String email, String password) async {
+  final url = Uri.parse('http://localhost:8080/auth/login'); // Substitua pela URL correta
+
+  // Corpo da requisição
+  final body = jsonEncode({
+    'email': email,
+    'password': password,
+  });
+
+  try {
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json', // Define o tipo do conteúdo
+        'Accept': '*/*',
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      // Sucesso, tratamento da resposta
+      print('Login realizado com sucesso');
+      print('Resposta: ${response.body}');
+      final body=json.decode(response.body);
+      return body['token'];
+    } else {
+      // Tratamento de erro
+      print('Falha no login. Código de status: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Erro de conexão ou outro erro
+    print('Erro na requisição: $e');
+  }
+}
+
+
 Future<bool> registerClient(final String firstName, final String lastName,
     final String email, final String phone, final String password) async {
   final body = jsonEncode({
@@ -39,7 +75,7 @@ Future<bool> registerClient(final String firstName, final String lastName,
   }
 }
 
-Future<dynamic> fetchClientById(int id) async {
+Future<dynamic> fetchClientById(int id,String token) async {
   // URL base da API, substitua com o endpoint correto
   final url = Uri.parse('http://localhost:8080/clients/$id');
 
@@ -47,6 +83,7 @@ Future<dynamic> fetchClientById(int id) async {
     // Faz a requisição GET
     final response = await http.get(url, headers: {
       'Accept': 'application/json', // Define o tipo de resposta esperado
+      'Authorization': 'Bearer $token'
     });
 
     // Verifica se a requisição foi bem-sucedida (status code 200)
@@ -91,7 +128,7 @@ Future<dynamic> fetchClientById(int id) async {
         print('  - ID: ${strategy['id']}, Nome: ${strategy['name']}');
 
         // Faz a requisição para obter os dados da estratégia
-        final strategyData = await getEstrategiaPorId(strategy['id']);
+        final strategyData = await getEstrategiaPorId(strategy['id'],token);
 
         // Adiciona 'strategyData' à estratégia original
         strategy['strategyData'] = strategyData;

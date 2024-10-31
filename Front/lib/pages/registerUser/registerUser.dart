@@ -26,32 +26,30 @@ class RegisterUser extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(width: 20),
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(180.0),
-                          ),
-                          minimumSize: Size(150, 50),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.arrow_back_ios,
-                                color: mainColor, size: 20),
-                            SizedBox(width: 3),
-                            Text(
-                              "Voltar",
-                              style: TextStyle(color: mainColor, fontSize: 20),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  )
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: TextButton.styleFrom(
+                      side: BorderSide(color: Colors.white, width: 2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    ),
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    label: Text(
+                      "Voltar",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
                 ],
               ),
               Expanded(
@@ -210,7 +208,6 @@ class RegisterUser extends StatelessWidget {
     );
   }
 
-  // Função para validar e mostrar o modal de alerta se necessário
   Future<void> _validateAndSubmit(BuildContext context) async {
     String fullName = fullNameController.text.trim();
     String email = emailController.text.trim();
@@ -235,7 +232,7 @@ class RegisterUser extends StatelessWidget {
     } else {
       final nomes = _obterPrimeiroUltimoNome(fullName);
       final bool response =
-          await registerClient(nomes[0], nomes[1], email, phone,password);
+          await registerClient(nomes[0], nomes[1], email, phone, password);
       if (response) {
         showDialog(
           context: context,

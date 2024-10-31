@@ -10,7 +10,7 @@ class RoundedTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 500, // Aumentando a largura
-      height: 30, // Ajustando a altura
+      height: 20, // Ajustando a altura
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20.0), // Ajustando o raio

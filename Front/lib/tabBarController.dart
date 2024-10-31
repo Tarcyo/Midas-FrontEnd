@@ -14,7 +14,7 @@ class _TabBarControllerState extends State<TabBarController> {
   late List<GlobalKey<NavigatorState>> _navigatorKeys;
   late PageController _pageController;
   int _selectedTab = 0;
-  bool _menuExpanded = false;
+  bool _menuExpanded = true;
 
   void _toggleMenu() {
     setState(() {
@@ -50,7 +50,7 @@ class _TabBarControllerState extends State<TabBarController> {
               }
             },
             child: Container(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(8),
               margin: EdgeInsets.symmetric(
                   vertical: 8), // Aumenta a distância vertical entre os botões
               decoration: BoxDecoration(
@@ -119,51 +119,6 @@ class _TabBarControllerState extends State<TabBarController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height: 40),
-                    GestureDetector(
-                      onTap: () => {_toggleMenu()},
-                      child: Container(
-                        padding: EdgeInsets.all(16),
-                        margin: EdgeInsets.symmetric(
-                            vertical:
-                                8), // Aumenta a distância vertical entre os botões
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(
-                              180), // Define bordas arredondadas para o quadrado branco
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 56, // Diminui o tamanho da bola branca
-                              height: 56, // Diminui o tamanho da bola branca
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.transparent,
-                              ),
-                              child: Icon(
-                                Icons.menu,
-                                size: 40, // Ajusta o tamanho do ícone
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: Visibility(
-                                visible: _menuExpanded,
-                                child: Text(
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25),
-                                  "Menu",
-                                  overflow: TextOverflow
-                                      .ellipsis, // Define o comportamento de overflow
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                     ...items,
                     GestureDetector(
                       onTap: () async {
@@ -173,9 +128,9 @@ class _TabBarControllerState extends State<TabBarController> {
                             return ExitConfirmationDialog();
                           },
                         );
-                
+
                         print(exit);
-                
+
                         if (exit != null && exit) {
                           Navigator.of(context).pop();
                         }

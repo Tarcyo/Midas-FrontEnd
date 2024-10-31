@@ -7,12 +7,13 @@ import 'package:midas/providers/clienteProvider.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
-class EditCommoditieScreen extends StatefulWidget {
+class RegisterCommoditieScreen extends StatefulWidget {
   @override
-  State<EditCommoditieScreen> createState() => _EditCommoditieScreenState();
+  State<RegisterCommoditieScreen> createState() =>
+      _RegisterCommoditieScreenState();
 }
 
-class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
+class _RegisterCommoditieScreenState extends State<RegisterCommoditieScreen> {
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController codigoController = TextEditingController();
 
@@ -43,7 +44,7 @@ class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
                             style: TextButton.styleFrom(
                               side: BorderSide(color: mainColor, width: 2),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(180),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
@@ -76,7 +77,7 @@ class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Editar Commodity',
+                                        'Registrar Commodity',
                                         style: TextStyle(
                                             fontSize: 22, color: Colors.white),
                                       ),
@@ -128,51 +129,25 @@ class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
                                     ],
                                   ),
                                   SizedBox(height: 25),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Center(
-                                        child: RoundedButton(
-                                          onPressed: () async {
-                                            String email =
-                                                Provider.of<ClienteProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .cliente!
-                                                    .email;
+                                  Center(
+                                    child: RoundedButton(
+                                      onPressed: () async {
+                                        String email =
+                                            Provider.of<ClienteProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .cliente!
+                                                .email;
 
-                                            await registerCommodity(
-                                              nomeController.text,
-                                              codigoController.text,
-                                              email,
-                                              authToken,
-                                            );
-                                          },
-                                          text: "Salvar",
-                                        ),
-                                      ),
-                                      Center(
-                                        child: RoundedButton(
-                                          onPressed: () async {
-                                            String email =
-                                                Provider.of<ClienteProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .cliente!
-                                                    .email;
-
-                                            await registerCommodity(
-                                              nomeController.text,
-                                              codigoController.text,
-                                              email,
-                                              authToken,
-                                            );
-                                          },
-                                          text: "Excluir",
-                                        ),
-                                      ),
-                                    ],
+                                        await registerCommodity(
+                                          nomeController.text,
+                                          codigoController.text,
+                                          email,
+                                          authToken,
+                                        );
+                                      },
+                                      text: "Cadastrar",
+                                    ),
                                   ),
                                 ],
                               ),
@@ -188,6 +163,121 @@ class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  String getFirstPart(String input) {
+    // Verifica se a string contém um ponto
+    if (input.contains('.')) {
+      // Divide a string no ponto e retorna a primeira parte
+      return input.split('.').first;
+    } else {
+      // Se não houver ponto, retorna a string inteira
+      return input;
+    }
+  }
+}
+
+class RemoveURlDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Container(
+        margin: EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Color(0xFF00C2A0), // Definindo a cor de fundo como verde
+          borderRadius: BorderRadius.circular(20), // Raio da borda do Container
+          border: Border.all(
+            // Adicionando uma borda ao redor do conteúdo
+            color: Colors.white, // Definindo a cor da borda como branco
+            width: 4.0, // Ajustando a largura da borda conforme necessário
+          ),
+        ),
+        constraints: BoxConstraints(
+          maxWidth: 300, // Definindo o tamanho máximo do Container
+          minWidth: 100, // Definindo um tamanho mínimo opcional
+          maxHeight: 250, // Ajustando a altura máxima conforme necessário
+          minHeight: 250, // Definindo uma altura mínima opcional
+        ),
+        child: contentBox(context),
+      ),
+    );
+  }
+
+  Widget contentBox(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Icon(
+          Icons.error,
+          color: Colors.white,
+          size: 50,
+        ),
+        SizedBox(height: 20),
+        Text(
+          'Tem certeza que deseja excluir o site?',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20, // Definindo a cor do texto como branco
+          ),
+          textAlign: TextAlign.center, // Alinhando o texto centralmente
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment
+              .spaceBetween, // Alinhando os botões nos cantos opostos
+          children: <Widget>[
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(
+                  'Cancelar',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white, // Definindo a cor do texto como branco
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 8), // Adicionando um espaçamento entre os botões
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Excluir',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors
+                            .white, // Definindo a cor do texto como branco
+                      ),
+                    ),
+                    SizedBox(width: 5), // Espaçamento entre texto e ícone
+                    Icon(
+                      Icons.delete,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

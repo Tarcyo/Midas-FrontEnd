@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 final String apiUrl = 'http://localhost:8080/tokens';
 
-Future<void> registerToken(String token, String clientEmail) async {
+Future<void> registerToken(String token, String clientEmail,String auth) async {
   // Defina a URL da API para a qual você vai fazer a requisição
 
   // Crie o corpo da requisição com os parâmetros recebidos
@@ -18,6 +18,7 @@ Future<void> registerToken(String token, String clientEmail) async {
       Uri.parse(apiUrl),
       headers: {
         'Content-Type': 'application/json',
+         'Authorization': 'Bearer $auth'
       },
       body: jsonEncode(requestBody),
     );

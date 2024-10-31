@@ -3,7 +3,7 @@ import 'package:midas/pages/registerUser/registerUser.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
 import '../../reusableWidgets/insertCampPassword.dart';
-
+import 'package:midas/providers/authProvider.dart';
 import 'package:midas/model/clienteModel.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/clicableWhiteText.dart';
@@ -11,7 +11,7 @@ import '../../homeTabBar.dart';
 import 'package:provider/provider.dart';
 import 'package:midas/providers/clienteProvider.dart';
 import 'package:midas/services/cliente.dart';
-Color mainColor = Color(0xFF00C2A0);
+import 'package:midas/pages/resetPassword/resetPassword.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -109,28 +109,72 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(
                                 height:
                                     3), // Espaçamento entre o texto e o campo de inserção
-                            RoundedTextFieldPassword(controller: passwordController),
+                            RoundedTextFieldPassword(
+                                controller: passwordController),
                             SizedBox(
                               height: 10,
                               width: 10,
                             ),
                             Center(
                               child: RoundedButton(
-                                onPressed: () async{
-                                  final response= await fetchClientById(1);
-                                  Cliente novoCliente = Cliente.fromJson(response);
- 
+                                onPressed: () async {
+                                 // final token = await login(
+                                 ///     emailController.text,
+                                 //     passwordController.text);
+                               //   Provider.of<AuthProvider>(context,
+                                  //        listen: false)
+                                 //     .setToken(token);
 
-                                     Provider.of<ClienteProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .setCliente(
-                                                      novoCliente);
+                                //  final response =
+                                  //    await fetchClientById(1, token);
+                                 // Cliente novoCliente =
+                                  //    Cliente.fromJson(response);
+
+                              //    Provider.of<ClienteProvider>(context,
+                                  //        listen: false)
+                                  //    .setCliente(novoCliente);
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          Duration(milliseconds: 1000),
+                                      transitionsBuilder: (BuildContext context,
+                                          Animation<double> animation,
+                                          Animation<double> secondaryAnimation,
+                                          Widget child) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: child,
+                                        );
+                                      },
+                                      pageBuilder: (BuildContext context,
+                                          Animation<double> animation,
+                                          Animation<double>
+                                              secondaryAnimation) {
+                                        return HomePage();
+                                      },
+                                    ),
+                                  );
+                                },
+                                text: "Entrar",
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                              height: 10,
+                            ),
+
+                            Center(
+                              child: Column(
+                                children: [
+                                  ClickableWhiteText(
+                                   onPressed: () {
+                                        // Navegue para a RegisterScreen quando o botão for pressionado
                                         Navigator.push(
                                           context,
                                           PageRouteBuilder(
                                             transitionDuration:
-                                                Duration(milliseconds: 1000),
+                                                Duration(milliseconds: 1200),
                                             transitionsBuilder:
                                                 (BuildContext context,
                                                     Animation<double> animation,
@@ -146,24 +190,11 @@ class LoginScreen extends StatelessWidget {
                                                 Animation<double> animation,
                                                 Animation<double>
                                                     secondaryAnimation) {
-                                              return HomePage();
+                                              return ResetPasswordScreen();
                                             },
                                           ),
                                         );
                                       },
-                                text: "Entrar",
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                              height: 10,
-                            ),
-
-                            Center(
-                              child: Column(
-                                children: [
-                                  ClickableWhiteText(
-                                      onPressed: () => {},
                                       text: "Não consegue fazer Login?"),
                                   SizedBox(
                                     width: 5,

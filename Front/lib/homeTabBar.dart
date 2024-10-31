@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'tabBarController.dart';
-
-import 'pages/commoditie/commoditieScreen.dart';
+import 'pages/site/SiteScreen.dart';
+import 'pages/strategy/strategyScreen.dart';
 import 'pages/groups/groupsScreen.dart';
 import 'pages/settings/settings.dart';
-
-
+import 'pages/commoditie/commoditieScreen.dart';
 import 'pages/dashboard/dashboard.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,16 +12,25 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return TabBarController(
       items: [
-     
         PersistentTabItem(
           title: 'Dashboard',
           tab: const DashboardScreenTab(),
           icon: Icons.home,
         ),
         PersistentTabItem(
+          title: 'Estratégias',
+          tab: const StrategyScreenTab(),
+          icon: Icons.show_chart,
+        ),
+        PersistentTabItem(
           title: 'Commodities',
           tab: const CommoditieScreenTab(),
           icon: Icons.wallet,
+        ),
+        PersistentTabItem(
+          title: 'Sites',
+          tab: const SiteScreenTab(),
+          icon: Icons.link,
         ),
         PersistentTabItem(
           title: 'Chat',
@@ -78,7 +86,7 @@ class _DashboardScreenTabState extends State<DashboardScreenTab>
 }
 
 class SettingsScreenTab extends StatefulWidget {
-  const  SettingsScreenTab({Key? key}) : super(key: key);
+  const SettingsScreenTab({Key? key}) : super(key: key);
 
   @override
   _SettingsScreenTabState createState() => _SettingsScreenTabState();
@@ -115,6 +123,25 @@ class _GroupsScreenTabState extends State<GroupsScreenTab>
   bool get wantKeepAlive => true;
 }
 
+class StrategyScreenTab extends StatefulWidget {
+  const StrategyScreenTab({Key? key}) : super(key: key);
+
+  @override
+  _StrategyScreenTabState createState() => _StrategyScreenTabState();
+}
+
+class _StrategyScreenTabState extends State<StrategyScreenTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return StrategyScreen();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
 class CommoditieScreenTab extends StatefulWidget {
   const CommoditieScreenTab({Key? key}) : super(key: key);
 
@@ -127,7 +154,26 @@ class _CommoditieScreenTabState extends State<CommoditieScreenTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return CommoditiesScreen();
+    return CommoditieScreen();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class SiteScreenTab extends StatefulWidget {
+  const SiteScreenTab({Key? key}) : super(key: key);
+
+  @override
+  _SiteScreenTabState createState() => _SiteScreenTabState();
+}
+
+class _SiteScreenTabState extends State<SiteScreenTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return SiteScreen();
   }
 
   @override

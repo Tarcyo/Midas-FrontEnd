@@ -12,7 +12,7 @@ class NewsCard extends StatelessWidget {
  Widget build(BuildContext context) {
     return Container(
       width: 170, // Adjust width as necessary
-      height: 280, // Adjust height as necessary
+      height: 230, // Adjust height as necessary
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20), // Rounded border for the container
         color: Colors.white, // Background color set to white

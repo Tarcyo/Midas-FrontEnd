@@ -23,7 +23,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 160,
-      height: 95,
+      height: 80,
       decoration: BoxDecoration(
         color: backgroundColor, // Define a cor de fundo como cinza
         border: Border.all(color: color, width: 2), // Define a borda verde e aumenta a espessura para 2 pixels
@@ -45,7 +45,7 @@ class ProductCard extends StatelessWidget {
           Text(
           price, // Formata o preço com duas casas decimais
             style: TextStyle(
-              fontSize: 26,
+              fontSize: 12,
               color: textColor, // Define a cor do texto do preço
             ),
           ),

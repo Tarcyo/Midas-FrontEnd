@@ -1,12 +1,13 @@
 import 'dart:convert'; // para usar jsonEncode
 import 'package:http/http.dart' as http;
 
-Future<void> fetchCommodity(int id) async {
+Future<void> fetchCommodity(int id, String token) async {
   final localUrl = Uri.parse('http://localhost:8080/commodities/$id');
 
   try {
     final response = await http.get(localUrl, headers: {
       'Accept': '*/*', // Define o cabeçalho Accept
+      'Authorization': 'Bearer $token'
     });
 
     if (response.statusCode == 200) {
@@ -24,15 +25,42 @@ Future<void> fetchCommodity(int id) async {
     } else {
       print(
           'Erro ao buscar o commodity. Código de status: ${response.statusCode}');
-          print(response.body);
+      print(response.body);
     }
   } catch (e) {
     print('Erro ao fazer a requisição: $e');
   }
 }
 
+Future<void> deleteCommodity(int id, String token) async {
+  final url = Uri.parse(
+      'http://localhost:8080/commodities/$id'); // URL com o ID do commodity
+
+  try {
+    final response = await http.delete(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token', // Incluindo o token no header
+        'Accept': 'application/json', // Define o tipo de resposta esperado
+      },
+    );
+
+    if (response.statusCode == 204) {
+      // Commodity deletado com sucesso
+      print('Commodity deletado com sucesso');
+    } else {
+      // Falha ao deletar o commodity
+      print(
+          'Falha ao deletar o commodity. Código de status: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Tratamento de erro
+    print('Erro ao tentar deletar o commodity: $e');
+  }
+}
+
 Future<void> registerCommodity(
-    String name, String code, String clientEmail) async {
+    String name, String code, String clientEmail, String token) async {
   final requestBody = {
     "name": name,
     "code": code,
@@ -45,6 +73,7 @@ Future<void> registerCommodity(
       url,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
       },
       body: jsonEncode(requestBody), // Convertendo o corpo para JSON
     );
