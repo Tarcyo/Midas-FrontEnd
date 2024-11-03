@@ -1,14 +1,57 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:midas/pages/newPassword/NewPasswordScreen.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 
-Color mainColor = Color(0xFF00C2A0);
 
-class ResetPasswordScreen extends StatelessWidget {
+class ResetPasswordScreen extends StatefulWidget {
+  @override
+  _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
+}
+
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController codeController1 = TextEditingController();
   final TextEditingController codeController2 = TextEditingController();
   final TextEditingController codeController3 = TextEditingController();
   final TextEditingController codeController4 = TextEditingController();
+
+  Timer? _timer;
+  int _secondsRemaining = 120; // 1 minuto em segundos
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    codeController1.dispose();
+    codeController2.dispose();
+    codeController3.dispose();
+    codeController4.dispose();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_secondsRemaining > 0) {
+        setState(() {
+          _secondsRemaining--;
+        });
+      } else {
+        print("Acabou o tempo!");
+        timer.cancel();
+      }
+    });
+  }
+
+  String _formatTime(int seconds) {
+    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    final secondsStr = (seconds % 60).toString().padLeft(2, '0');
+    return "$minutes:$secondsStr";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +60,6 @@ class ResetPasswordScreen extends StatelessWidget {
         color: mainColor,
         child: Column(
           children: [
-            // Botão Voltar no canto superior esquerdo
             Padding(
               padding: EdgeInsets.only(top: 40, left: 16),
               child: Align(
@@ -64,7 +106,6 @@ class ResetPasswordScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Campos de código na parte superior
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -75,9 +116,8 @@ class ResetPasswordScreen extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 20),
-                          // Cronômetro no centro
                           Text(
-                            "01:00",
+                            _formatTime(_secondsRemaining),
                             style: TextStyle(
                               fontSize: 24,
                               color: Colors.white,
@@ -85,7 +125,6 @@ class ResetPasswordScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 20),
-                          // Texto explicativo na parte inferior
                           Text(
                             'Um código foi enviado para o email cadastrado. Insira-o no campo acima',
                             textAlign: TextAlign.center,
@@ -95,14 +134,12 @@ class ResetPasswordScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 20),
-                          // Botão "Verificar" sem ação
                           RoundedButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 PageRouteBuilder(
-                                  transitionDuration:
-                                      Duration(milliseconds: 1200),
+                                  transitionDuration: Duration(milliseconds: 1200),
                                   transitionsBuilder: (BuildContext context,
                                       Animation<double> animation,
                                       Animation<double> secondaryAnimation,

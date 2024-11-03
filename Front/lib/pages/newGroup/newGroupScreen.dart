@@ -33,7 +33,7 @@ class _NewGroupState extends State<NewGroup> {
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         children: [
@@ -50,17 +50,11 @@ class _NewGroupState extends State<NewGroup> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
                             ),
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: mainColor,
-                              size: 20,
-                            ),
+                            icon: Icon(Icons.arrow_back,
+                                color: mainColor, size: 20),
                             label: Text(
                               "Voltar",
-                              style: TextStyle(
-                                color: mainColor,
-                                fontSize: 16,
-                              ),
+                              style: TextStyle(color: mainColor, fontSize: 16),
                             ),
                           ),
                         ],
@@ -72,11 +66,11 @@ class _NewGroupState extends State<NewGroup> {
                             color: mainColor,
                             elevation: 5,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
+                              borderRadius: BorderRadius.circular(20),
                               side: BorderSide(color: mainColor, width: 10),
                             ),
-                            child: Container(
-                              padding: EdgeInsets.all(20),
+                            child: Padding(
+                              padding: const EdgeInsets.all(30),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -84,201 +78,60 @@ class _NewGroupState extends State<NewGroup> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Novo Grupo',
+                                        'Registrar Grupo',
                                         style: TextStyle(
-                                          fontSize: 22,
-                                          color: Colors.white,
-                                        ),
+                                            fontSize: 22, color: Colors.white),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(width: 10, height: 15),
+                                  SizedBox(height: 15),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nome',
+                                        'Nome do grupo',
                                         style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                        ),
+                                            fontSize: 20, color: Colors.white),
                                       ),
-                                      SizedBox(width: 5, height: 5),
+                                      SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: emailController),
+                                          controller: strategyController),
                                     ],
                                   ),
-                                  SizedBox(height: 15, width: 5),
+                                  SizedBox(height: 15),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Descrição',
+                                        'Link de convite',
                                         style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                        ),
+                                            fontSize: 20, color: Colors.white),
                                       ),
-                                      SizedBox(height: 3),
+                                      SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: emailController),
+                                          controller: strategyController),
                                     ],
                                   ),
-                                  SizedBox(height: 15, width: 5),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Participantes',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          TokenList(
-                                            strings: _urls,
-                                            onTokenRemoved: (token) async {
-                                              dynamic exit = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return RemoveURlDialog();
-                                                },
-                                              );
-                                              if (exit != null && exit) {
-                                                setState(() {
-                                                  _urls.remove(token);
-                                                });
-                                              }
-                                            },
-                                          ),
-                                          SizedBox(width: 15),
-                                          RoundedAddButton(
-                                              onPressed: () async {
-                                                final dynamic exit =
-                                                    await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AddUserDialog();
-                                                  },
-                                                );
-                                                if (exit is String) {
-                                                  setState(() {
-                                                    _urls.add(exit);
-                                                  });
-                                                }
-                                                print(exit);
-                                              },
-                                              text: "Novo")
-                                        ],
-                                      ),
-                                    ],
+                                  SizedBox(height: 15),
+                                 
+                                  Center(
+                                    child: RoundedButton(
+                                      onPressed: () async {
+                                        String email ="";
+                                           
+                                    
+                                      },
+                                      text: "Cadastrar",
+                                    ),
                                   ),
-                                  SizedBox(height: 15, width: 5),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Tokens',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          TokenList(
-                                            strings: _tokens,
-                                            onTokenRemoved: (token) async {
-                                              dynamic exit = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return RemoveTokenDialog();
-                                                },
-                                              );
-                                              if (exit != null && exit) {
-                                                setState(() {
-                                                  _tokens.remove(token);
-                                                });
-                                              }
-                                            },
-                                          ),
-                                          SizedBox(width: 15),
-                                          RoundedAddButton(
-                                              onPressed: () async {
-                                                dynamic exit = await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AddTokenDialog();
-                                                  },
-                                                );
-                                                if (exit is String) {
-                                                  if (exit != "") {
-                                                    setState(() {
-                                                      _tokens.add(exit);
-                                                    });
-                                                  }
-                                                }
-                                                print(exit);
-                                              },
-                                              text: "Novo")
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Foco',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 3,
-                                      ),
-                                      RoundedTextField(
-                                          controller: strategyController)
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      RoundedButton(
-                                          onPressed: () =>
-                                              {Navigator.of(context).pop()},
-                                          text: "Salvar"),
-                                    ],
-                                  )
                                 ],
                               ),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(width: 1),
                     ],
                   ),
                 ),

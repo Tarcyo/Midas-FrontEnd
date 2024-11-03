@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:midas/providers/clienteProvider.dart';
 import 'package:midas/services/cliente.dart';
 import 'package:midas/pages/resetPassword/resetPassword.dart';
-
+import 'package:midas/constants.dart';
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();

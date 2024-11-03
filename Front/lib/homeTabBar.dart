@@ -6,6 +6,7 @@ import 'pages/groups/groupsScreen.dart';
 import 'pages/settings/settings.dart';
 import 'pages/commoditie/commoditieScreen.dart';
 import 'pages/dashboard/dashboard.dart';
+import 'pages/TokenScreen/TokenScreen.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -31,6 +32,11 @@ class HomePage extends StatelessWidget {
           title: 'Sites',
           tab: const SiteScreenTab(),
           icon: Icons.link,
+        ),
+        PersistentTabItem(
+          title: 'Tokens',
+          tab: const TokenScreenTab(),
+          icon: Icons.label_important,
         ),
         PersistentTabItem(
           title: 'Chat',
@@ -174,6 +180,25 @@ class _SiteScreenTabState extends State<SiteScreenTab>
   Widget build(BuildContext context) {
     super.build(context);
     return SiteScreen();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class TokenScreenTab extends StatefulWidget {
+  const TokenScreenTab({Key? key}) : super(key: key);
+
+  @override
+  _TokenScreenTabState createState() => _TokenScreenTabState();
+}
+
+class _TokenScreenTabState extends State<TokenScreenTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return TokenScreen();
   }
 
   @override

@@ -1,36 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:midas/pages/editStrategy/editStrategy.dart';
-import 'package:midas/services/estrategia.dart';
-import 'package:midas/services/tokens.dart';
-import '../../reusableWidgets/insertCamp.dart';
-import 'package:midas/services/sites.dart';
-
-import '../../reusableWidgets/roundedAddButtom.dart';
-import '../../reusableWidgets/roundedButtom.dart';
-
-import '../../reusableWidgets/tokenList.dart';
-import 'package:midas/model/clienteModel.dart';
 import 'package:midas/constants.dart';
-import 'package:provider/provider.dart';
-
-import 'package:midas/providers/clienteProvider.dart';
-import 'package:midas/services/cliente.dart';
 import 'package:midas/services/commmodittie.dart';
-import 'package:midas/reusableWidgets/URLList.dart';
+import 'package:provider/provider.dart';
 import 'package:midas/providers/authProvider.dart';
+import 'package:midas/providers/clienteProvider.dart';
+import '../../reusableWidgets/roundedButtom.dart';
+import '../../reusableWidgets/insertCamp.dart';
 
-class RegisterStrategyScreen extends StatefulWidget {
+class EditTokenScreen extends StatefulWidget {
   @override
-  State<RegisterStrategyScreen> createState() => _RegisterStrategyScreenState();
+  State<EditTokenScreen> createState() => _EditTokenScreenState();
 }
 
-class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
+class _EditTokenScreenState extends State<EditTokenScreen> {
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController codigoController = TextEditingController();
-  final TextEditingController strategyController = TextEditingController();
-
-  final List<String> _urls = [];
-  final List<String> _tokens = [];
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +31,15 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         children: [
                           SizedBox(width: 20),
                           TextButton.icon(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                             style: TextButton.styleFrom(
                               side: BorderSide(color: mainColor, width: 2),
                               shape: RoundedRectangleBorder(
@@ -71,10 +57,9 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
                       Center(
                         child: SizedBox(
-                          width: 650,
+                          width: 600,
                           child: Card(
                             color: mainColor,
                             elevation: 5,
@@ -83,7 +68,7 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                               side: BorderSide(color: mainColor, width: 10),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.all(30),
+                              padding: const EdgeInsets.all(30),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -91,11 +76,9 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        'Criar Estratégia',
+                                        'Editar Token',
                                         style: TextStyle(
-                                          fontSize: 22,
-                                          color: Colors.white,
-                                        ),
+                                            fontSize: 22, color: Colors.white),
                                       ),
                                     ],
                                   ),
@@ -105,7 +88,7 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nome',
+                                        'Email do usuário',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       ),
@@ -120,173 +103,59 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Código',
+                                        'Token',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       ),
                                       SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: nomeController),
+                                          controller: codigoController),
                                     ],
                                   ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'URL Site(s)',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          UrlList(
-                                            strings: _urls,
-                                            onTokenRemoved: (token) async {
-                                              dynamic exit = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return RemoveURLDialog();
-                                                },
-                                              );
-                                              if (exit != null && exit) {
-                                                setState(() {
-                                                  _urls.remove(token);
-                                                });
-                                              }
-                                            },
-                                          ),
-                                          SizedBox(width: 15),
-                                          RoundedAddButton(
-                                            onPressed: () async {
-                                              final dynamic exit =
-                                                  await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AddURLDialog();
-                                                },
-                                              );
-                                              if (exit is String) {
-                                                setState(() {
-                                                  _urls.add(exit);
-                                                });
-                                              }
-                                            },
-                                            text: "Novo",
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Tokens',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          TokenList(
-                                            strings: _tokens,
-                                            onTokenRemoved: (token) async {
-                                              dynamic exit = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return RemoveTokenDialog();
-                                                },
-                                              );
-                                              if (exit != null && exit) {
-                                                setState(() {
-                                                  _tokens.remove(token);
-                                                });
-                                              }
-                                            },
-                                          ),
-                                          SizedBox(width: 15),
-                                          RoundedAddButton(
-                                            onPressed: () async {
-                                              dynamic exit = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AddTokenDialog();
-                                                },
-                                              );
-                                              if (exit is String &&
-                                                  exit != "") {
-                                                setState(() {
-                                                  _tokens.add(exit);
-                                                });
-                                              }
-                                            },
-                                            text: "Novo",
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Nome da estratégia',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      RoundedTextField(
-                                          controller: strategyController),
-                                    ],
-                                  ),
-                                  SizedBox(height: 30),
+                                  SizedBox(height: 25),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      RoundedButton(
-                                        onPressed: () async {
-                                          String email =
-                                              Provider.of<ClienteProvider>(
-                                            context,
-                                            listen: false,
-                                          ).cliente!.email;
+                                      Center(
+                                        child: RoundedButton(
+                                          onPressed: () async {
+                                            String email =
+                                                Provider.of<ClienteProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .cliente!
+                                                    .email;
 
-                                          for (final i in _urls) {
-                                            await registerSite(
-                                                i, i, email, authToken);
-                                          }
+                                            await registerCommodity(
+                                              nomeController.text,
+                                              codigoController.text,
+                                              email,
+                                              authToken,
+                                            );
+                                          },
+                                          text: "Cadastrar",
+                                        ),
+                                      ),
+                                      Center(
+                                        child: RoundedButton(
+                                          onPressed: () async {
+                                            String email =
+                                                Provider.of<ClienteProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .cliente!
+                                                    .email;
 
-                                          for (final i in _tokens) {
-                                            await registerToken(
-                                                i, email, authToken);
-                                          }
-
-                                          final response =
-                                              await fetchClientById(
-                                                  1, authToken);
-                                          Cliente novoCliente =
-                                              Cliente.fromJson(response);
-                                          Provider.of<ClienteProvider>(context,
-                                                  listen: false)
-                                              .setCliente(novoCliente);
-                                        },
-                                        text: "Salvar",
+                                            await registerCommodity(
+                                              nomeController.text,
+                                              codigoController.text,
+                                              email,
+                                              authToken,
+                                            );
+                                          },
+                                          text: "Excluir",
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -296,7 +165,6 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
                     ],
                   ),
                 ),

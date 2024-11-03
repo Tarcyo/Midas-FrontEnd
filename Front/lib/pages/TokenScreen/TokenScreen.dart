@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:midas/pages/RegisterSite/RegisterSite.dart';
-import 'siteCard.dart'; // Presumindo que você tem um widget para exibir a commodity
+import 'TokenCard.dart'; // Presumindo que você tem um widget para exibir a commodity
 import 'package:midas/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:midas/providers/clienteProvider.dart';
-import 'package:midas/pages/EditSite/EditSite.dart';
-class SiteScreen extends StatelessWidget {
+import 'package:midas/pages/RegisterToken/RegisterToken.dart';
+class TokenScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final clienteProvider = Provider.of<ClienteProvider>(context);
@@ -18,7 +17,7 @@ class SiteScreen extends StatelessWidget {
       {'code': 'CORN', 'name': 'Milho'},
       {'code': 'RICE', 'name': 'Arroz'},
       {'code': 'SUGAR', 'name': 'Açúcar'},
-      {'code': 'COFFEE', 'name': 'Café'},
+      {'code': 'COFFsdadsEE', 'name': 'Café'},
       {'code': 'COTTON', 'name': 'Algodão'},
       {'code': 'BARLEY', 'name': 'Cevada'},
       {'code': 'OATS', 'name': 'Aveia'},
@@ -40,7 +39,7 @@ class SiteScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Novo Site',
+                        'Novo Token',
                         style: TextStyle(
                           color: mainColor,
                           fontSize: 25.0,
@@ -65,7 +64,7 @@ class SiteScreen extends StatelessWidget {
                               pageBuilder: (BuildContext context,
                                   Animation<double> animation,
                                   Animation<double> secondaryAnimation) {
-                                return RegisterSiteScreen();
+                                return RegisterToken();
                               },
                             ),
                           );
@@ -100,8 +99,8 @@ class SiteScreen extends StatelessWidget {
                           children:
                               List.generate(endIndex - startIndex, (index) {
                             int commodityIndex = startIndex + index;
-                            return SiteCard(
-                              name: "Site"
+                            return TokenCard.TokenCard(
+                              name: "Token"
                             );
                           }),
                         ),

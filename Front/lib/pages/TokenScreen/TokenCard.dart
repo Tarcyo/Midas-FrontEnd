@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:midas/pages/EditSite/EditSite.dart';
-class SiteCard extends StatelessWidget {
+import 'package:midas/pages/EditToken/EditToken.dart';
+class TokenCard extends StatelessWidget {
   final String name; // Nome do site
 
-  SiteCard({required this.name});
+  TokenCard.TokenCard({required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class SiteCard extends StatelessWidget {
                           pageBuilder: (BuildContext context,
                               Animation<double> animation,
                               Animation<double> secondaryAnimation) {
-                            return EditSiteScreen();
+                            return EditTokenScreen();
                           },
                         ),
                       );

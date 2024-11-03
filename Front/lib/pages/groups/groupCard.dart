@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
 import 'package:midas/pages/group/groupScreen.dart';
 import 'package:midas/reusableWidgets/insertCamp.dart';
+import 'package:midas/pages/editGroup/editGroup.dart';
 
 class GroupCard extends StatelessWidget {
   final String groupName;
@@ -91,6 +92,16 @@ class GroupCard extends StatelessWidget {
                                         fontSize: 24.0,
                                       ),
                                     ),
+                                    Container(
+                                      height: 2,
+                                      width: 100,
+                                      margin: EdgeInsets.only(top: 5),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [mainColor, secondaryColor],
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 SizedBox(width: 3),
@@ -99,9 +110,24 @@ class GroupCard extends StatelessWidget {
                             WidgetRow(
                                 nomeGrupo: this.groupName,
                                 widgets: [...members]),
-                            Text(
-                              "5 novas mensagens",
-                              style: TextStyle(fontSize: 20, color: mainColor),
+                            Column(
+                              children: [
+                                Text(
+                                  "$newMessages novas mensagens",
+                                  style:
+                                      TextStyle(fontSize: 20, color: mainColor),
+                                ),
+                                Container(
+                                  height: 2,
+                                  width: 160,
+                                  margin: EdgeInsets.only(top: 5),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [mainColor, secondaryColor],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -144,6 +170,41 @@ class GroupCard extends StatelessWidget {
                                                 Animation<double>
                                                     secondaryAnimation) {
                                               return GroupScreen(groupName);
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 40,
+                                        color: mainColor,
+                                      ),
+                                      onPressed: () {
+                                        // Adicione aqui o comportamento de edição, como abrir um diálogo
+
+                                        Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                            transitionDuration:
+                                                Duration(milliseconds: 1200),
+                                            transitionsBuilder:
+                                                (BuildContext context,
+                                                    Animation<double> animation,
+                                                    Animation<double>
+                                                        secondaryAnimation,
+                                                    Widget child) {
+                                              return FadeTransition(
+                                                opacity: animation,
+                                                child: child,
+                                              );
+                                            },
+                                            pageBuilder: (BuildContext context,
+                                                Animation<double> animation,
+                                                Animation<double>
+                                                    secondaryAnimation) {
+                                              return EditGroup();
                                             },
                                           ),
                                         );
