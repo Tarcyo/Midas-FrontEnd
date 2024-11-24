@@ -1,16 +1,68 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 import 'package:midas/constants.dart';
-import 'package:midas/reusableWidgets/product%20card.dart';
+import 'package:midas/reusableWidgets/product card.dart';
 import 'package:midas/pages/allActivitiesScreens/allBuyActicities.dart';
 import 'package:midas/pages/allActivitiesScreens/allSellActivities.dart';
-
 import 'package:midas/reusableWidgets/fixedCamp.dart';
 import 'package:midas/reusableWidgets/newsCard.dart';
 import 'graphic.dart';
 import 'package:midas/pages/expandedGraphic/expandedGraphic.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
+  @override
+  _DashboardState createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  Timer? _timer;
+  List<String> _newsTitles = [];
+  List<dynamic> _urls = [];
+  List<dynamic> _images = [];
+  final String apiUrl = "http://localhost:5001/get-news";
+
+  @override
+  void initState() {
+    super.initState();
+    fetchNews(); // Faz a primeira requisição
+    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+      fetchNews(); // Requisição periódica a cada 30 segundos
+    });
+  }
+
+  Future<void> fetchNews() async {
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(
+            ["Rain"]), // Tópicos de exemplo
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          print(response.body.toString());
+          _newsTitles = List<String>.from(data['titles']);
+          _urls = List<dynamic>.from(data['url']);
+          _images = List<dynamic>.from(data['urlToImage']);
+        });
+      } else {
+        print("Erro ao buscar notícias: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Erro ao conectar à API: $e");
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // Cancela o timer ao sair da tela
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,8 +70,7 @@ class Dashboard extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(left: 35, top: 20, right: 40),
         child: SingleChildScrollView(
-          scrollDirection:
-              Axis.horizontal, // Definindo o scroll na direção horizontal
+          scrollDirection: Axis.horizontal,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -55,23 +106,19 @@ class Dashboard extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () {
-                          // Navegue para a RegisterScreen quando o botão for pressionado
                           Navigator.push(
                             context,
                             PageRouteBuilder(
                               transitionDuration: Duration(milliseconds: 1200),
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
                                 return FadeTransition(
                                   opacity: animation,
                                   child: child,
                                 );
                               },
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
                                 return AllBuyActivitiesScreen();
                               },
                             ),
@@ -106,24 +153,20 @@ class Dashboard extends StatelessWidget {
                         backgroundColor: Colors.white,
                       ),
                       IconButton(
-                     onPressed: () {
-                          // Navegue para a RegisterScreen quando o botão for pressionado
+                        onPressed: () {
                           Navigator.push(
                             context,
                             PageRouteBuilder(
                               transitionDuration: Duration(milliseconds: 1200),
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
                                 return FadeTransition(
                                   opacity: animation,
                                   child: child,
                                 );
                               },
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
                                 return AllSellActivitiesScreen();
                               },
                             ),
@@ -143,7 +186,7 @@ class Dashboard extends StatelessWidget {
                   Row(
                     children: [
                       ProductCard(
-                        productName: "Açucar",
+                        productName: "Açúcar",
                         price: "+36%",
                         backgroundColor: mainColor,
                         textColor: Colors.white,
@@ -192,30 +235,25 @@ class Dashboard extends StatelessWidget {
                           ),
                         ],
                         onChanged: (String? value) {
-                          // Handle dropdown changes here
                           print('Selected: $value');
                         },
                       ),
                       GestureDetector(
                         child: Graphic(),
                         onTap: () {
-                          // Navegue para a RegisterScreen quando o botão for pressionado
                           Navigator.push(
                             context,
                             PageRouteBuilder(
                               transitionDuration: Duration(milliseconds: 1200),
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
                                 return FadeTransition(
                                   opacity: animation,
                                   child: child,
                                 );
                               },
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
                                 return ExpandedGraphic();
                               },
                             ),
@@ -234,9 +272,7 @@ class Dashboard extends StatelessWidget {
                                 child: Text((index + 1).toString()),
                               );
                             }),
-                            onChanged: (value) {
-                              // Handle dropdown changes here
-                            },
+                            onChanged: (value) {},
                           ),
                           SizedBox(width: 20),
                           DropdownButton<String>(
@@ -256,7 +292,6 @@ class Dashboard extends StatelessWidget {
                               ),
                             ],
                             onChanged: (String? value) {
-                              // Handle dropdown changes here
                               print('Selected: $value');
                             },
                           ),
@@ -265,13 +300,21 @@ class Dashboard extends StatelessWidget {
                     ],
                   ),
                   Row(
-                    children: [
-                      NewsCard('assets/images/image.jpg'),
-                      SizedBox(width: 20),
-                      NewsCard('assets/images/soja.jpg'),
-                      SizedBox(width: 20),
-                      NewsCard('assets/images/senado.jpg'),
-                    ],
+                    children: _newsTitles.isEmpty
+                        ? [
+                            Center(child: CircularProgressIndicator()),
+                          ]
+                        : _newsTitles.take(3).map((title) {
+                            int index = _newsTitles.indexOf(title);
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: NewsCard(
+                                title,
+                                _images[index],
+                                _urls[index],
+                              ),
+                            );
+                          }).toList(),
                   ),
                   SizedBox(height: 30)
                 ],

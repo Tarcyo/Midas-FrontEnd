@@ -7,9 +7,13 @@ class Graphic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Obtém a largura e a altura da tela
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
-      width: 550,
-      height: 290,
+      width: screenWidth * 0.4, // Reduzido para 40% da largura da tela
+      height: screenHeight * 0.4, // Mantido em 40% da altura da tela
       child: LineChart(
         LineChartData(
           minX: 0,

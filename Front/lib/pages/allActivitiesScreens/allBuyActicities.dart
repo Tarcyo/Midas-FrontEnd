@@ -5,20 +5,30 @@ import 'package:midas/reusableWidgets/product card.dart';
 class AllBuyActivitiesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Obter o tamanho da tela usando MediaQuery
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
+    // Definir tamanhos responsivos com base no tamanho da tela
+    final double cardSpacing = screenWidth * 0.02; // Espaçamento entre os cards
+    final double topPadding = screenHeight * 0.05; // Espaçamento superior da coluna
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mainColor,
-        iconTheme: IconThemeData(color: Colors.white), // Define a cor do ícone como branco
-        title: Center(child: Text('Compra', style: TextStyle(color: Colors.white))), // Define a cor do texto como branco
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Center(child: Text('Compra', style: TextStyle(color: Colors.white))),
       ),
       body: Container(
-        color: secondaryColor, // Define a cor de fundo como verde
+        color: secondaryColor,
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: 50),
+              SizedBox(height: topPadding),
               Wrap(
                 alignment: WrapAlignment.center,
+                spacing: cardSpacing,
+                runSpacing: cardSpacing,
                 children: [
                   ProductCard(
                     productName: "CCMU24",
@@ -27,7 +37,6 @@ class AllBuyActivitiesScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     color: mainColor,
                   ),
-                  SizedBox(width: 10),
                   ProductCard(
                     productName: "CCMU24",
                     textColor: Colors.black,
@@ -35,7 +44,6 @@ class AllBuyActivitiesScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     color: mainColor,
                   ),
-                  SizedBox(width: 10),
                   ProductCard(
                     productName: "CCMU24",
                     textColor: Colors.black,
@@ -43,7 +51,6 @@ class AllBuyActivitiesScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     color: mainColor,
                   ),
-                  SizedBox(width: 10),
                   ProductCard(
                     productName: "CCMU24",
                     textColor: Colors.black,
@@ -51,7 +58,6 @@ class AllBuyActivitiesScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     color: mainColor,
                   ),
-                  SizedBox(width: 10),
                   ProductCard(
                     productName: "CCMU24",
                     textColor: Colors.black,
@@ -59,7 +65,6 @@ class AllBuyActivitiesScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     color: mainColor,
                   ),
-                  SizedBox(width: 10),
                   ProductCard(
                     productName: "CCMU24",
                     textColor: Colors.black,
@@ -67,7 +72,6 @@ class AllBuyActivitiesScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     color: mainColor,
                   ),
-                  SizedBox(width: 10),
                   ProductCard(
                     productName: "CCMU24",
                     textColor: Colors.black,
