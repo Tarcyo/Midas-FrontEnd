@@ -61,7 +61,7 @@ class _GroupScreenState extends State<GroupScreen> {
                 Flexible(
                   flex: 3,
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
+                    padding: const EdgeInsets.only(left: 16.0,right: 8.0),
                     child: VeryLargeInsertCamp(controller: textController),
                   ),
                 ),

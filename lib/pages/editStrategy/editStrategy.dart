@@ -7,14 +7,12 @@ import 'package:midas/model/clienteModel.dart';
 import '../../reusableWidgets/tokenList.dart';
 import 'package:provider/provider.dart';
 import 'package:midas/providers/clienteProvider.dart';
-import 'package:midas/services/commmodittie.dart';
-import 'package:midas/services/tokens.dart';
-import 'package:midas/services/sites.dart';
+
 import 'package:midas/reusableWidgets/URLList.dart';
 import 'package:midas/providers/authProvider.dart';
 import 'package:midas/constants.dart';
-import 'package:midas/services/estrategia.dart';
-import 'package:midas/services/cliente.dart';
+
+
 class EditStrategy extends StatefulWidget {
   final dynamic _data;
   EditStrategy(this._data);
@@ -23,7 +21,8 @@ class EditStrategy extends StatefulWidget {
 }
 
 class _EditStrategyState extends State<EditStrategy> {
-  final TextEditingController commoditieNameController = TextEditingController();
+  final TextEditingController commoditieNameController =
+      TextEditingController();
   final TextEditingController strategyController = TextEditingController();
   final TextEditingController codeController = TextEditingController();
 
@@ -36,7 +35,8 @@ class _EditStrategyState extends State<EditStrategy> {
 
   @override
   Widget build(BuildContext context) {
-    final String authToken = Provider.of<AuthProvider>(context, listen: false).token;
+    final String authToken =
+        Provider.of<AuthProvider>(context, listen: false).token;
 
     return Scaffold(
       body: Container(
@@ -60,9 +60,11 @@ class _EditStrategyState extends State<EditStrategy> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
                             ),
-                            icon: Icon(Icons.arrow_back, color: mainColor, size: 20),
+                            icon: Icon(Icons.arrow_back,
+                                color: mainColor, size: 20),
                             label: Text(
                               "Voltar",
                               style: TextStyle(color: mainColor, fontSize: 16),
@@ -100,46 +102,56 @@ class _EditStrategyState extends State<EditStrategy> {
                                   ),
                                   SizedBox(height: 15),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nome',
-                                        style: TextStyle(fontSize: 20, color: Colors.white),
+                                        'Nome da estratégia',
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
                                       ),
                                       SizedBox(height: 5),
-                                      RoundedTextField(controller: commoditieNameController),
+                                      RoundedTextField(
+                                          controller: commoditieNameController),
                                     ],
                                   ),
                                   SizedBox(height: 15),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Código',
-                                        style: TextStyle(fontSize: 20, color: Colors.white),
+                                        'Código da Commodity',
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
                                       ),
                                       SizedBox(height: 5),
-                                      RoundedTextField(controller: codeController),
+                                      RoundedTextField(
+                                          controller: codeController),
                                     ],
                                   ),
                                   SizedBox(height: 15),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'URL Site(s)',
-                                        style: TextStyle(fontSize: 20, color: Colors.white),
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
                                       ),
                                       SizedBox(height: 5),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           UrlList(
                                             strings: _urls,
                                             onTokenRemoved: (token) async {
                                               dynamic exit = await showDialog(
                                                 context: context,
-                                                builder: (BuildContext context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   return RemoveURLDialog();
                                                 },
                                               );
@@ -153,9 +165,11 @@ class _EditStrategyState extends State<EditStrategy> {
                                           SizedBox(width: 15),
                                           RoundedAddButton(
                                             onPressed: () async {
-                                              final dynamic exit = await showDialog(
+                                              final dynamic exit =
+                                                  await showDialog(
                                                 context: context,
-                                                builder: (BuildContext context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   return AddURLDialog();
                                                 },
                                               );
@@ -173,22 +187,26 @@ class _EditStrategyState extends State<EditStrategy> {
                                   ),
                                   SizedBox(height: 15),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Tokens',
-                                        style: TextStyle(fontSize: 20, color: Colors.white),
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
                                       ),
                                       SizedBox(height: 5),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           TokenList(
                                             strings: _tokens,
                                             onTokenRemoved: (token) async {
                                               dynamic exit = await showDialog(
                                                 context: context,
-                                                builder: (BuildContext context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   return RemoveTokenDialog();
                                                 },
                                               );
@@ -204,11 +222,13 @@ class _EditStrategyState extends State<EditStrategy> {
                                             onPressed: () async {
                                               dynamic exit = await showDialog(
                                                 context: context,
-                                                builder: (BuildContext context) {
+                                                builder:
+                                                    (BuildContext context) {
                                                   return AddTokenDialog();
                                                 },
                                               );
-                                              if (exit is String && exit != "") {
+                                              if (exit is String &&
+                                                  exit != "") {
                                                 setState(() {
                                                   _tokens.add(exit);
                                                 });
@@ -220,56 +240,27 @@ class _EditStrategyState extends State<EditStrategy> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Nome da estratégia',
-                                        style: TextStyle(fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      RoundedTextField(controller: strategyController),
-                                    ],
-                                  ),
                                   SizedBox(height: 30),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
                                       RoundedButton(
                                         onPressed: () async {
-                                          String email = Provider.of<ClienteProvider>(
-                                                context,
-                                                listen: false,
-                                              ).cliente!.email;
-                                          await registerCommodity(
-                                            commoditieNameController.text,
-                                            codeController.text,
-                                            email,
-                                            authToken,
-                                          );
+                                          String email =
+                                              Provider.of<ClienteProvider>(
+                                            context,
+                                            listen: false,
+                                          ).cliente!.email;
+                                        
 
-                                          for (final i in _urls) {
-                                            await registerSite(i, i, email, authToken);
-                                          }
+                                         
 
-                                          for (final i in _tokens) {
-                                            await registerToken(i, email, authToken);
-                                          }
+                                        
 
-                                          await updateStrategy(
-                                            widget._data['id'],
-                                            strategyController.text,
-                                            codeController.text,
-                                            _tokens,
-                                            _urls,
-                                            authToken,
-                                          );
+                                         
 
-                                          final response = await fetchClientById(1, authToken);
-                                          Cliente novoCliente = Cliente.fromJson(response);
-                                          Provider.of<ClienteProvider>(context, listen: false)
-                                              .setCliente(novoCliente);
+                                        
                                         },
                                         text: "Salvar",
                                       ),
@@ -282,23 +273,7 @@ class _EditStrategyState extends State<EditStrategy> {
                                             },
                                           );
                                           if (exit == true) {
-                                            final estrategia = await getEstrategiaPorId(
-                                              widget._data['id'],
-                                              authToken,
-                                            );
-                                            await deleteCommodity(
-                                              estrategia['commodity']['id'],
-                                              authToken,
-                                            );
-                                            await deleteEstrategia(
-                                              widget._data['id'],
-                                              authToken,
-                                            );
-
-                                            final response = await fetchClientById(1, authToken);
-                                            Cliente novoCliente = Cliente.fromJson(response);
-                                            Provider.of<ClienteProvider>(context, listen: false)
-                                                .setCliente(novoCliente);
+                                           
                                             Navigator.of(context).pop();
                                           }
                                         },
@@ -324,6 +299,7 @@ class _EditStrategyState extends State<EditStrategy> {
     );
   }
 }
+
 class RemoveURLDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

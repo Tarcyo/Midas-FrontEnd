@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
-import 'package:midas/services/commmodittie.dart';
+import 'package:midas/providers/userDataProvider.dart';
+import 'package:midas/services/commodity/getComodity.dart';
+import 'package:midas/services/commodity/updateCommodity.dart';
 import 'package:provider/provider.dart';
 import 'package:midas/providers/authProvider.dart';
 import 'package:midas/providers/clienteProvider.dart';
@@ -8,6 +10,16 @@ import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
 class EditCommoditieScreen extends StatefulWidget {
+  final String nome;
+  final String codigo;
+  final String id;
+
+  EditCommoditieScreen({
+    required this.id,
+    required this.nome,
+    required this.codigo,
+  });
+
   @override
   State<EditCommoditieScreen> createState() => _EditCommoditieScreenState();
 }
@@ -15,6 +27,13 @@ class EditCommoditieScreen extends StatefulWidget {
 class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController codigoController = TextEditingController();
+
+  @override
+  void initState() {
+    nomeController.text = widget.nome;
+    codigoController.text = widget.codigo;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,21 +131,6 @@ class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
                                           controller: codigoController),
                                     ],
                                   ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Email do usuário',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      RoundedTextField(
-                                          controller: codigoController),
-                                    ],
-                                  ),
                                   SizedBox(height: 25),
                                   Row(
                                     mainAxisAlignment:
@@ -135,41 +139,27 @@ class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
                                       Center(
                                         child: RoundedButton(
                                           onPressed: () async {
-                                            String email =
-                                                Provider.of<ClienteProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .cliente!
-                                                    .email;
+                                            final userData =
+                                                Provider.of<UserDataProvider>(
+                                                    context,listen: false);
+                                            final auth =
+                                                Provider.of<AuthProvider>(
+                                                    context,listen: false);
+                                            await updateCommodity(
+                                                id: widget.id,
+                                                userId: auth.id,
+                                                name: nomeController.text,
+                                                code: codigoController.text,
+                                                token: auth.token);
+                                            final commoditiesAtualizadas =
+                                                await getCommodities(
+                                                    auth.id, auth.token);
 
-                                            await registerCommodity(
-                                              nomeController.text,
-                                              codigoController.text,
-                                              email,
-                                              authToken,
-                                            );
+                                            userData.commodities =
+                                                commoditiesAtualizadas[
+                                                    'commodities'];
                                           },
                                           text: "Salvar",
-                                        ),
-                                      ),
-                                      Center(
-                                        child: RoundedButton(
-                                          onPressed: () async {
-                                            String email =
-                                                Provider.of<ClienteProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .cliente!
-                                                    .email;
-
-                                            await registerCommodity(
-                                              nomeController.text,
-                                              codigoController.text,
-                                              email,
-                                              authToken,
-                                            );
-                                          },
-                                          text: "Excluir",
                                         ),
                                       ),
                                     ],

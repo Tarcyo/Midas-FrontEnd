@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:midas/pages/editStrategy/editStrategy.dart';
-import 'package:midas/services/estrategia.dart';
-import 'package:midas/services/tokens.dart';
+
 import '../../reusableWidgets/insertCamp.dart';
-import 'package:midas/services/sites.dart';
 
 import '../../reusableWidgets/roundedAddButtom.dart';
 import '../../reusableWidgets/roundedButtom.dart';
@@ -14,8 +12,7 @@ import 'package:midas/constants.dart';
 import 'package:provider/provider.dart';
 
 import 'package:midas/providers/clienteProvider.dart';
-import 'package:midas/services/cliente.dart';
-import 'package:midas/services/commmodittie.dart';
+
 import 'package:midas/reusableWidgets/URLList.dart';
 import 'package:midas/providers/authProvider.dart';
 
@@ -105,7 +102,7 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nome',
+                                        'Nome da estratégia ',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       ),
@@ -120,7 +117,7 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Código',
+                                        'Código da commodity',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       ),
@@ -239,21 +236,7 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Nome da estratégia',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      RoundedTextField(
-                                          controller: strategyController),
-                                    ],
-                                  ),
+                                  
                                   SizedBox(height: 30),
                                   Row(
                                     mainAxisAlignment:
@@ -267,24 +250,11 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                             listen: false,
                                           ).cliente!.email;
 
-                                          for (final i in _urls) {
-                                            await registerSite(
-                                                i, i, email, authToken);
-                                          }
+                                        
 
-                                          for (final i in _tokens) {
-                                            await registerToken(
-                                                i, email, authToken);
-                                          }
-
-                                          final response =
-                                              await fetchClientById(
-                                                  1, authToken);
-                                          Cliente novoCliente =
-                                              Cliente.fromJson(response);
-                                          Provider.of<ClienteProvider>(context,
-                                                  listen: false)
-                                              .setCliente(novoCliente);
+                                         
+                                       
+                                         
                                         },
                                         text: "Salvar",
                                       ),

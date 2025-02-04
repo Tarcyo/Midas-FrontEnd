@@ -9,13 +9,12 @@ class VeryLargeInsertCamp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 0, // Define a posição superior
-      left: 0, // Define a posição esquerda
+      top: 0,
+      left: 0,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-        
           return Container(
-            width: double.infinity, // Largura adaptativa
+            width: double.infinity,
             height: 40,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -33,10 +32,14 @@ class VeryLargeInsertCamp extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 textAlignVertical: TextAlignVertical.center,
-                textAlign: TextAlign.start,
+                textAlign: TextAlign.justify,
+                textInputAction: TextInputAction.newline,
+                
                 decoration: InputDecoration(
                   border: InputBorder.none,
+                  
                   hintText: '',
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 15.0), 
                 ),
                 keyboardType: TextInputType.multiline,
                 style: TextStyle(fontSize: 18, color: Colors.grey[900]),

@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:midas/pages/RegisterCommoditie/RegisterCommoditie.dart';
+import 'package:midas/providers/userDataProvider.dart';
 import 'commoditieCard.dart'; // Presumindo que você tem um widget para exibir a commodity
 import 'package:midas/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:midas/providers/clienteProvider.dart';
 
 class CommoditieScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final clienteProvider = Provider.of<ClienteProvider>(context);
-    
-    // Aqui você deve obter suas commodities de algum lugar, usando a lógica do seu app.
-    // Para o exemplo, vou criar uma lista fictícia de commodities.
-    List<Map<String, String>> commodities = [
-      {'code': 'SOY3', 'name': 'Soja'},
-      {'code': 'WHEAT', 'name': 'Trigo'},
-      {'code': 'CORN', 'name': 'Milho'},
-      {'code': 'RICE', 'name': 'Arroz'},
-      {'code': 'SUGAR', 'name': 'Açúcar'},
-      {'code': 'COFFEE', 'name': 'Café'},
-      {'code': 'COTTON', 'name': 'Algodão'},
-      {'code': 'BARLEY', 'name': 'Cevada'},
-      {'code': 'OATS', 'name': 'Aveia'},
-      // Adicione mais commodities conforme necessário
-    ];
+    final p = Provider.of<UserDataProvider>(context);
+
+    final List<Map<String, String>> commodities = [];
+
+    for (final i in p.commodities) {
+      commodities.add(
+        {
+          'code': i['code'],
+          'name': i['name'],
+          'id': i['id'],
+        },
+      );
+      print("Exemplo de commodities:" + i.toString());
+    }
 
     return Scaffold(
       body: Container(
@@ -83,31 +81,50 @@ class CommoditieScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Expanded(
-                child: ListView.builder(
-                  itemCount: (commodities.length / 4).ceil(), // Número de linhas
-                  itemBuilder: (context, rowIndex) {
-                    // Calcula os índices dos commodities para a linha atual
-                    int startIndex = rowIndex * 4;
-                    int endIndex = (startIndex + 4 < commodities.length) ? startIndex + 4 : commodities.length;
-
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: List.generate(endIndex - startIndex, (index) {
-                            int commodityIndex = startIndex + index;
-                            return CommoditieCard(
-                              code: commodities[commodityIndex]['code'] ?? '',
-                              name: commodities[commodityIndex]['name'] ?? '',
-                            );
-                          }),
+                child: commodities.isEmpty
+                    ? Center(
+                        child: Text(
+                          "Nenhuma commodity encontrada",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 20), // Espaço entre linhas
-                      ],
-                    );
-                  },
-                ),
-              ),
+                      )
+                    : ListView.builder(
+                        itemCount:
+                            (commodities.length / 4).ceil(), // Número de linhas
+                        itemBuilder: (context, rowIndex) {
+                          // Calcula os índices dos commodities para a linha atual
+                          int startIndex = rowIndex * 4;
+                          int endIndex = (startIndex + 4 < commodities.length)
+                              ? startIndex + 4
+                              : commodities.length;
+
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: List.generate(endIndex - startIndex,
+                                    (index) {
+                                  int commodityIndex = startIndex + index;
+                                  return CommoditieCard(
+                                    code: commodities[commodityIndex]['code'] ??
+                                        '',
+                                    name: commodities[commodityIndex]['name'] ??
+                                        '',
+                                    id: commodities[commodityIndex]['id'] ?? '',
+                                  );
+                                }),
+                              ),
+                              const SizedBox(height: 20), // Espaço entre linhas
+                            ],
+                          );
+                        },
+                      ),
+              )
             ],
           ),
         ),

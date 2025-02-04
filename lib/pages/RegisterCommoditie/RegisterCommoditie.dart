@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
-import 'package:midas/services/commmodittie.dart';
+import 'package:midas/providers/userDataProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:midas/providers/authProvider.dart';
-import 'package:midas/providers/clienteProvider.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/insertCamp.dart';
+import 'package:midas/services/commodity/registerCommodity.dart';
+import 'package:midas/services/commodity/getComodity.dart';
+
 
 class RegisterCommoditieScreen extends StatefulWidget {
   @override
@@ -113,38 +115,25 @@ class _RegisterCommoditieScreenState extends State<RegisterCommoditieScreen> {
                                           controller: codigoController),
                                     ],
                                   ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Email do usuário',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      RoundedTextField(
-                                          controller: codigoController),
-                                    ],
-                                  ),
                                   SizedBox(height: 25),
                                   Center(
                                     child: RoundedButton(
                                       onPressed: () async {
-                                        String email =
-                                            Provider.of<ClienteProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .cliente!
-                                                .email;
-
-                                        await registerCommodity(
-                                          nomeController.text,
-                                          codigoController.text,
-                                          email,
-                                          authToken,
-                                        );
+                                        final bool r = await createCommodity(
+                                            nomeController.text,
+                                            codigoController.text,
+                                            Provider.of<AuthProvider>(context,listen: false)
+                                                .id,Provider.of<AuthProvider>(context,listen: false)
+                                                .token  );
+                                        if (r) {
+                                          _showAlertDialog(context, "Sucesso",
+                                              "Commoditie Registrada");
+                                        } else {
+                                          _showAlertDialog(context, "Erro",
+                                              "Erro ao registrar a commoditie");
+                                        }
+                                        final f= await getCommodities(Provider.of<AuthProvider>(context,listen: false).id, Provider.of<AuthProvider>(context,listen: false).token );
+                                        Provider.of<UserDataProvider>(context,listen: false).commodities=f['commodities'];
                                       },
                                       text: "Cadastrar",
                                     ),
@@ -163,6 +152,44 @@ class _RegisterCommoditieScreenState extends State<RegisterCommoditieScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showAlertDialog(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            side: BorderSide(color: mainColor, width: 5),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  message,
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(height: 20),
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Fechar o diálogo
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

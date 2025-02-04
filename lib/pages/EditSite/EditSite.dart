@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
-import 'package:midas/services/commmodittie.dart';
+import 'package:midas/providers/userDataProvider.dart';
+import 'package:midas/services/site/getSite.dart';
+import 'package:midas/services/site/updateSite.dart';
 import 'package:provider/provider.dart';
 import 'package:midas/providers/authProvider.dart';
-import 'package:midas/providers/clienteProvider.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
 class EditSiteScreen extends StatefulWidget {
+  final String nome;
+  final String url;
+  final String id;
+  const EditSiteScreen({Key? key,required this.id, required this.nome, required this.url})
+      : super(key: key);
+
   @override
   State<EditSiteScreen> createState() => _EditSiteScreenState();
 }
 
 class _EditSiteScreenState extends State<EditSiteScreen> {
   final TextEditingController nomeController = TextEditingController();
-  final TextEditingController codigoController = TextEditingController();
+  final TextEditingController urlController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    nomeController.text = widget.nome;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +102,7 @@ class _EditSiteScreenState extends State<EditSiteScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Email do usuário',
+                                        'Nome do site',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       ),
@@ -103,28 +117,13 @@ class _EditSiteScreenState extends State<EditSiteScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nome do site',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      RoundedTextField(
-                                          controller: codigoController),
-                                    ],
-                                  ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
                                         'URL',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       ),
                                       SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: codigoController),
+                                          controller: urlController),
                                     ],
                                   ),
                                   SizedBox(height: 25),
@@ -135,41 +134,25 @@ class _EditSiteScreenState extends State<EditSiteScreen> {
                                       Center(
                                         child: RoundedButton(
                                           onPressed: () async {
-                                            String email =
-                                                Provider.of<ClienteProvider>(
+                                            final p= Provider.of<AuthProvider>(context,listen: false);
+
+                                            await updateSite(siteId: widget.id, userId: p.id, name:nomeController.text, urlAddress: urlController.text, token: p.token);
+                                            final sites = await getUserSites(
+                                                Provider.of<AuthProvider>(
                                                         context,
                                                         listen: false)
-                                                    .cliente!
-                                                    .email;
+                                                    .id,
+                                                Provider.of<AuthProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .token);
 
-                                            await registerCommodity(
-                                              nomeController.text,
-                                              codigoController.text,
-                                              email,
-                                              authToken,
-                                            );
+                                            Provider.of<UserDataProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .sites = sites['sites'];
                                           },
                                           text: "Cadastrar",
-                                        ),
-                                      ),
-                                      Center(
-                                        child: RoundedButton(
-                                          onPressed: () async {
-                                            String email =
-                                                Provider.of<ClienteProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .cliente!
-                                                    .email;
-
-                                            await registerCommodity(
-                                              nomeController.text,
-                                              codigoController.text,
-                                              email,
-                                              authToken,
-                                            );
-                                          },
-                                          text: "Excluir",
                                         ),
                                       ),
                                     ],

@@ -2,22 +2,47 @@ import 'package:flutter/material.dart';
 
 class AuthProvider with ChangeNotifier {
   String _token = '';
-
+  String _id = "";
+  String _email = "";
   // Getter para o token
   String get token => _token;
-
-  // Função para definir o token
+  String get id => _id;
+  String get email => _email;
   void setToken(String newToken) {
     _token = newToken;
-    notifyListeners(); // Notifica os ouvintes sobre a mudança
+    notifyListeners();
   }
 
-  // Função para limpar o token
+  void setEmail(String newEmail) {
+    _email = newEmail;
+    notifyListeners();
+  }
+
+  void setId(String newId) {
+    _id = newId;
+    notifyListeners();
+  }
+
   void clearToken() {
     _token = '';
     notifyListeners();
   }
 
-  // Função para verificar se o usuário está autenticado
+  void clearEmail() {
+    _email = '';
+    notifyListeners();
+  }
+
+  void clearId() {
+    _id = '';
+    notifyListeners();
+  }
+
+  void cleanAll() {
+    clearEmail();
+    clearId();
+    clearToken();
+  }
+
   bool get isAuthenticated => _token.isNotEmpty;
 }

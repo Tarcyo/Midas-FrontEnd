@@ -4,7 +4,7 @@ import '../../reusableWidgets/halfInsertCampPassword.dart';
 import '../../reusableWidgets/halfInsertCamp.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import 'package:midas/constants.dart';
-import 'package:midas/services/cliente.dart';
+import 'package:midas/services/user/userRegister.dart';
 
 class RegisterUser extends StatelessWidget {
   final TextEditingController fullNameController = TextEditingController();
@@ -35,7 +35,8 @@ class RegisterUser extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     ),
                     icon: Icon(
                       Icons.arrow_back,
@@ -230,48 +231,18 @@ class RegisterUser extends StatelessWidget {
     } else if (password != confirmPassword) {
       _showAlertDialog(context, "Erro", "As senhas não coincidem.");
     } else {
-      final nomes = _obterPrimeiroUltimoNome(fullName);
-      final bool response =
-          await registerClient(nomes[0], nomes[1], email, phone, password);
-      if (response) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                side: BorderSide(color: mainColor, width: 5),
-              ),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Sucesso!",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "O usuário foi registrado!",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    SizedBox(height: 20),
-                    TextButton(
-                      child: Text("OK"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+      dynamic registrou = await registerUser(
+          _obterPrimeiroUltimoNome(fullNameController.text)[0],
+          _obterPrimeiroUltimoNome(fullNameController.text).last,
+          emailController.text,
+          phoneController.text,
+          passwordController.text);
+
+      if (registrou==true) {
+        _showAlertDialog(context, "Sucesso!", "O usuário foi registrado!");
       } else {
-        _showAlertDialog(context, "Erro", "Falha ao registrar o usuário.");
+        _showAlertDialog(context, "Erro!",
+            registrou);
       }
     }
   }

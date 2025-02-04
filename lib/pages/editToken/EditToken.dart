@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
-import 'package:midas/services/commmodittie.dart';
 import 'package:provider/provider.dart';
 import 'package:midas/providers/authProvider.dart';
 import 'package:midas/providers/clienteProvider.dart';
@@ -88,21 +87,6 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Email do usuário',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      RoundedTextField(
-                                          controller: nomeController),
-                                    ],
-                                  ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
                                         'Token',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
@@ -127,12 +111,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
                                                     .cliente!
                                                     .email;
 
-                                            await registerCommodity(
-                                              nomeController.text,
-                                              codigoController.text,
-                                              email,
-                                              authToken,
-                                            );
+                                           
                                           },
                                           text: "Cadastrar",
                                         ),
@@ -147,12 +126,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
                                                     .cliente!
                                                     .email;
 
-                                            await registerCommodity(
-                                              nomeController.text,
-                                              codigoController.text,
-                                              email,
-                                              authToken,
-                                            );
+                                           
                                           },
                                           text: "Excluir",
                                         ),

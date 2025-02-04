@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:midas/constants.dart';
+import 'package:midas/providers/authProvider.dart';
 import 'package:midas/reusableWidgets/product card.dart';
 import 'package:midas/pages/allActivitiesScreens/allBuyActicities.dart';
 import 'package:midas/pages/allActivitiesScreens/allSellActivities.dart';
@@ -10,7 +11,7 @@ import 'package:midas/reusableWidgets/fixedCamp.dart';
 import 'package:midas/reusableWidgets/newsCard.dart';
 import 'graphic.dart';
 import 'package:midas/pages/expandedGraphic/expandedGraphic.dart';
-
+import 'package:provider/provider.dart';
 class Dashboard extends StatefulWidget {
   @override
   _DashboardState createState() => _DashboardState();
@@ -65,6 +66,8 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: "+Provider.of<AuthProvider>(context,listen: false).email)  ;
+
     return Scaffold(
       backgroundColor: secondaryColor,
       body: Padding(
@@ -185,6 +188,7 @@ class _DashboardState extends State<Dashboard> {
                   SizedBox(height: 10),
                   Row(
                     children: [
+                      
                       ProductCard(
                         productName: "Açúcar",
                         price: "+36%",

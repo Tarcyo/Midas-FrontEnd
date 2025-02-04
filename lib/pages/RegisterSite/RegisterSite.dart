@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
-import 'package:midas/services/commmodittie.dart';
+import 'package:midas/providers/userDataProvider.dart';
+import 'package:midas/services/site/createSite.dart';
+import 'package:midas/services/site/getSite.dart';
 import 'package:provider/provider.dart';
 import 'package:midas/providers/authProvider.dart';
-import 'package:midas/providers/clienteProvider.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
 class RegisterSiteScreen extends StatefulWidget {
   @override
-  State<RegisterSiteScreen> createState() =>
-      _RegisterSiteScreenState();
+  State<RegisterSiteScreen> createState() => _RegisterSiteScreenState();
 }
 
 class _RegisterSiteScreenState extends State<RegisterSiteScreen> {
   final TextEditingController nomeController = TextEditingController();
-  final TextEditingController codigoController = TextEditingController();
+  final TextEditingController urlController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final String authToken =
-        Provider.of<AuthProvider>(context, listen: false).token;
-
     return Scaffold(
       body: Container(
         color: secondaryColor,
@@ -89,7 +86,7 @@ class _RegisterSiteScreenState extends State<RegisterSiteScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Email do usuário',
+                                        'Nome do site',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       ),
@@ -104,47 +101,39 @@ class _RegisterSiteScreenState extends State<RegisterSiteScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nome do site',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      RoundedTextField(
-                                          controller: codigoController),
-                                    ],
-                                  ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
                                         'URL',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       ),
                                       SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: codigoController),
+                                          controller: urlController),
                                     ],
                                   ),
                                   SizedBox(height: 25),
                                   Center(
                                     child: RoundedButton(
                                       onPressed: () async {
-                                        String email =
-                                            Provider.of<ClienteProvider>(
-                                                    context,
+                                        await createSite(
+                                            nomeController.text,
+                                            urlController.text,
+                                            Provider.of<AuthProvider>(context,
                                                     listen: false)
-                                                .cliente!
-                                                .email;
+                                                .id,
+                                            Provider.of<AuthProvider>(context,
+                                                    listen: false)
+                                                .token);
+                                        final sites = await getUserSites(
+                                            Provider.of<AuthProvider>(context,
+                                                    listen: false)
+                                                .id,
+                                            Provider.of<AuthProvider>(context,
+                                                    listen: false)
+                                                .token);
 
-                                        await registerCommodity(
-                                          nomeController.text,
-                                          codigoController.text,
-                                          email,
-                                          authToken,
-                                        );
+                                        Provider.of<UserDataProvider>(context,
+                                                listen: false)
+                                            .sites = sites['sites'];
                                       },
                                       text: "Cadastrar",
                                     ),

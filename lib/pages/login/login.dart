@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:midas/pages/registerUser/registerUser.dart';
+import 'package:midas/services/site/getSite.dart';
 import '../../reusableWidgets/insertCamp.dart';
-
+import 'package:midas/services/auth/login.dart';
 import '../../reusableWidgets/insertCampPassword.dart';
 import 'package:midas/providers/authProvider.dart';
-import 'package:midas/model/clienteModel.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/clicableWhiteText.dart';
 import '../../homeTabBar.dart';
 import 'package:provider/provider.dart';
-import 'package:midas/providers/clienteProvider.dart';
-import 'package:midas/services/cliente.dart';
 import 'package:midas/pages/resetPassword/resetPassword.dart';
 import 'package:midas/constants.dart';
+import 'package:midas/services/commodity/getComodity.dart';
+import 'package:midas/providers/userDataProvider.dart';
+
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -29,8 +30,8 @@ class LoginScreen extends StatelessWidget {
           children: [
             Center(
               child: Container(
-                height: 240, // ajuste conforme necessário
-                width: 240, // ajuste conforme necessário
+                height: 360, // ajuste conforme necessário
+                width: 360, // ajuste conforme necessário
                 child: Padding(
                   padding: EdgeInsets.all(
                     4, // ajuste conforme necessário para o tamanho da borda
@@ -118,21 +119,56 @@ class LoginScreen extends StatelessWidget {
                             Center(
                               child: RoundedButton(
                                 onPressed: () async {
-                                 // final token = await login(
-                                 ///     emailController.text,
-                                 //     passwordController.text);
-                               //   Provider.of<AuthProvider>(context,
-                                  //        listen: false)
-                                 //     .setToken(token);
+                                  final result = await loginUser(
+                                      emailController.text,
+                                      passwordController.text);
 
-                                //  final response =
-                                  //    await fetchClientById(1, token);
-                                 // Cliente novoCliente =
-                                  //    Cliente.fromJson(response);
+                                  if (result == null) {
+                                    _showAlertDialog(context, "Erro",
+                                        "Verifique os seus dados e tente novamente");
+                                    return;
+                                  }
 
-                              //    Provider.of<ClienteProvider>(context,
-                                  //        listen: false)
-                                  //    .setCliente(novoCliente);
+                                  print(
+                                      "os resultados são:" + result.toString());
+
+                                  Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                      .setEmail(
+                                    result["user_email"],
+                                  );
+                                  Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                      .setToken(result["token"]);
+
+                                  Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                      .setId(result["user_id"]);
+
+                                  final commoodity = await getCommodities(
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .id,
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .token);
+
+                                  final sites = await getUserSites(
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .id,
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .token);
+
+                                  Provider.of<UserDataProvider>(context,
+                                          listen: false)
+                                      .sites = sites['sites'];
+
+                                  Provider.of<UserDataProvider>(context,
+                                          listen: false)
+                                      .commodities = commoodity['commodities'];
+
                                   Navigator.push(
                                     context,
                                     PageRouteBuilder(
@@ -168,7 +204,7 @@ class LoginScreen extends StatelessWidget {
                               child: Column(
                                 children: [
                                   ClickableWhiteText(
-                                   onPressed: () {
+                                      onPressed: () {
                                         // Navegue para a RegisterScreen quando o botão for pressionado
                                         Navigator.push(
                                           context,
@@ -243,6 +279,44 @@ class LoginScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showAlertDialog(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            side: BorderSide(color: mainColor, width: 5),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  message,
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(height: 20),
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Fechar o diálogo
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
