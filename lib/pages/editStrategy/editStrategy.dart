@@ -3,15 +3,9 @@ import '../../reusableWidgets/insertCamp.dart';
 
 import '../../reusableWidgets/roundedAddButtom.dart';
 import '../../reusableWidgets/roundedButtom.dart';
-import 'package:midas/model/clienteModel.dart';
 import '../../reusableWidgets/tokenList.dart';
-import 'package:provider/provider.dart';
-import 'package:midas/providers/clienteProvider.dart';
 
-import 'package:midas/reusableWidgets/URLList.dart';
-import 'package:midas/providers/authProvider.dart';
 import 'package:midas/constants.dart';
-
 
 class EditStrategy extends StatefulWidget {
   final dynamic _data;
@@ -35,9 +29,6 @@ class _EditStrategyState extends State<EditStrategy> {
 
   @override
   Widget build(BuildContext context) {
-    final String authToken =
-        Provider.of<AuthProvider>(context, listen: false).token;
-
     return Scaffold(
       body: Container(
         color: secondaryColor,
@@ -145,23 +136,6 @@ class _EditStrategyState extends State<EditStrategy> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          UrlList(
-                                            strings: _urls,
-                                            onTokenRemoved: (token) async {
-                                              dynamic exit = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return RemoveURLDialog();
-                                                },
-                                              );
-                                              if (exit != null && exit) {
-                                                setState(() {
-                                                  _urls.remove(token);
-                                                });
-                                              }
-                                            },
-                                          ),
                                           SizedBox(width: 15),
                                           RoundedAddButton(
                                             onPressed: () async {
@@ -246,22 +220,7 @@ class _EditStrategyState extends State<EditStrategy> {
                                         MainAxisAlignment.spaceAround,
                                     children: [
                                       RoundedButton(
-                                        onPressed: () async {
-                                          String email =
-                                              Provider.of<ClienteProvider>(
-                                            context,
-                                            listen: false,
-                                          ).cliente!.email;
-                                        
-
-                                         
-
-                                        
-
-                                         
-
-                                        
-                                        },
+                                        onPressed: () async {},
                                         text: "Salvar",
                                       ),
                                       RoundedButton(
@@ -273,7 +232,6 @@ class _EditStrategyState extends State<EditStrategy> {
                                             },
                                           );
                                           if (exit == true) {
-                                           
                                             Navigator.of(context).pop();
                                           }
                                         },

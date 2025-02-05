@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
+import 'package:midas/providers/userDataProvider.dart';
+import 'package:midas/services/token/registerToken.dart';
 import 'package:provider/provider.dart';
 import 'package:midas/providers/authProvider.dart';
-import 'package:midas/providers/clienteProvider.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/insertCamp.dart';
+import 'package:midas/services/token/getTokens.dart';
 
 class RegisterToken extends StatefulWidget {
   @override
@@ -13,13 +15,9 @@ class RegisterToken extends StatefulWidget {
 
 class _RegisterTokenState extends State<RegisterToken> {
   final TextEditingController nomeController = TextEditingController();
-  final TextEditingController codigoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final String authToken =
-        Provider.of<AuthProvider>(context, listen: false).token;
-
     return Scaffold(
       body: Container(
         color: secondaryColor,
@@ -93,21 +91,33 @@ class _RegisterTokenState extends State<RegisterToken> {
                                       ),
                                       SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: codigoController),
+                                          controller: nomeController),
                                     ],
                                   ),
                                   SizedBox(height: 25),
                                   Center(
                                     child: RoundedButton(
                                       onPressed: () async {
-                                        String email =
-                                            Provider.of<ClienteProvider>(
-                                                    context,
+                                        await createToken(
+                                            Provider.of<AuthProvider>(context,
                                                     listen: false)
-                                                .cliente!
-                                                .email;
+                                                .id,
+                                            nomeController.text,
+                                            Provider.of<AuthProvider>(context,
+                                                    listen: false)
+                                                .token);
 
-                                       
+                                        final tokens = await getTokens(
+                                            Provider.of<AuthProvider>(context,
+                                                    listen: false)
+                                                .id,
+                                            Provider.of<AuthProvider>(context,
+                                                    listen: false)
+                                                .token);
+
+                                        Provider.of<UserDataProvider>(context,
+                                                listen: false)
+                                            .tokens = tokens['tokens'];
                                       },
                                       text: "Cadastrar",
                                     ),

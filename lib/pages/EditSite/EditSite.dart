@@ -12,7 +12,8 @@ class EditSiteScreen extends StatefulWidget {
   final String nome;
   final String url;
   final String id;
-  const EditSiteScreen({Key? key,required this.id, required this.nome, required this.url})
+  const EditSiteScreen(
+      {Key? key, required this.id, required this.nome, required this.url})
       : super(key: key);
 
   @override
@@ -32,9 +33,6 @@ class _EditSiteScreenState extends State<EditSiteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String authToken =
-        Provider.of<AuthProvider>(context, listen: false).token;
-
     return Scaffold(
       body: Container(
         color: secondaryColor,
@@ -134,9 +132,18 @@ class _EditSiteScreenState extends State<EditSiteScreen> {
                                       Center(
                                         child: RoundedButton(
                                           onPressed: () async {
-                                            final p= Provider.of<AuthProvider>(context,listen: false);
 
-                                            await updateSite(siteId: widget.id, userId: p.id, name:nomeController.text, urlAddress: urlController.text, token: p.token);
+                                            
+                                            final p = Provider.of<AuthProvider>(
+                                                context,
+                                                listen: false);
+
+                                            await updateSite(
+                                                siteId: widget.id,
+                                                userId: p.id,
+                                                name: nomeController.text,
+                                                urlAddress: urlController.text,
+                                                token: p.token);
                                             final sites = await getUserSites(
                                                 Provider.of<AuthProvider>(
                                                         context,

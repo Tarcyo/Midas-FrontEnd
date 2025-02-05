@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:midas/pages/editStrategy/editStrategy.dart';
+import 'package:midas/model/token.dart';
+import 'package:midas/providers/userDataProvider.dart';
 
 import '../../reusableWidgets/insertCamp.dart';
 
 import '../../reusableWidgets/roundedAddButtom.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 
-import '../../reusableWidgets/tokenList.dart';
-import 'package:midas/model/clienteModel.dart';
 import 'package:midas/constants.dart';
 import 'package:provider/provider.dart';
 
-import 'package:midas/providers/clienteProvider.dart';
-
 import 'package:midas/reusableWidgets/URLList.dart';
-import 'package:midas/providers/authProvider.dart';
 
 class RegisterStrategyScreen extends StatefulWidget {
   @override
@@ -27,12 +23,15 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
   final TextEditingController strategyController = TextEditingController();
 
   final List<String> _urls = [];
-  final List<String> _tokens = [];
+  final List<Token> _tokens = [];
 
   @override
   Widget build(BuildContext context) {
-    final String authToken =
-        Provider.of<AuthProvider>(context, listen: false).token;
+    final List<String> tokens = [];
+
+    for (final i in _tokens) {
+      tokens.add(i.token);
+    }
 
     return Scaffold(
       body: Container(
@@ -132,61 +131,6 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'URL Site(s)',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          UrlList(
-                                            strings: _urls,
-                                            onTokenRemoved: (token) async {
-                                              dynamic exit = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return RemoveURLDialog();
-                                                },
-                                              );
-                                              if (exit != null && exit) {
-                                                setState(() {
-                                                  _urls.remove(token);
-                                                });
-                                              }
-                                            },
-                                          ),
-                                          SizedBox(width: 15),
-                                          RoundedAddButton(
-                                            onPressed: () async {
-                                              final dynamic exit =
-                                                  await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AddURLDialog();
-                                                },
-                                              );
-                                              if (exit is String) {
-                                                setState(() {
-                                                  _urls.add(exit);
-                                                });
-                                              }
-                                            },
-                                            text: "Novo",
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
                                         'Tokens',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
@@ -196,38 +140,60 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          TokenList(
+                                          UrlList(
                                             strings: _tokens,
-                                            onTokenRemoved: (token) async {
-                                              dynamic exit = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return RemoveTokenDialog();
-                                                },
-                                              );
-                                              if (exit != null && exit) {
-                                                setState(() {
-                                                  _tokens.remove(token);
-                                                });
-                                              }
-                                            },
                                           ),
                                           SizedBox(width: 15),
                                           RoundedAddButton(
                                             onPressed: () async {
-                                              dynamic exit = await showDialog(
+                                              // Exemplo
+                                              final List<Token> tokenList = [];
+                                              for (final i in Provider.of<
+                                                          UserDataProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .tokens) {
+                                                print("Tentando adicionar " +
+                                                    i.toString());
+                                                tokenList.add(
+                                                  Token(
+                                                      id: i['id'],
+                                                      token: i['token']),
+                                                );
+                                              }
+
+                                              // Chama o pop-up e aguarda o retorno dos tokens selecionados
+                                              final selectedTokens =
+                                                  await showDialog<List<Token>>(
                                                 context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AddTokenDialog();
-                                                },
+                                                builder: (context) =>
+                                                    TokenSelectionPopup(
+                                                        tokens: tokenList),
                                               );
-                                              if (exit is String &&
-                                                  exit != "") {
+
+                                              // Faça algo com os tokens selecionados (por exemplo, exibir em um SnackBar)
+                                              if (selectedTokens != null &&
+                                                  selectedTokens.isNotEmpty) {
                                                 setState(() {
-                                                  _tokens.add(exit);
+                                                  _tokens
+                                                      .addAll(selectedTokens);
                                                 });
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                        "Tokens selecionados: ${selectedTokens.map((t) => t.token).join(', ')}"),
+                                                  ),
+                                                );
+                                              } else if (selectedTokens !=
+                                                      null &&
+                                                  selectedTokens.isEmpty) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                      content: Text(
+                                                          "Nenhum token selecionado.")),
+                                                );
                                               }
                                             },
                                             text: "Novo",
@@ -236,26 +202,13 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                       ),
                                     ],
                                   ),
-                                  
                                   SizedBox(height: 30),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
                                       RoundedButton(
-                                        onPressed: () async {
-                                          String email =
-                                              Provider.of<ClienteProvider>(
-                                            context,
-                                            listen: false,
-                                          ).cliente!.email;
-
-                                        
-
-                                         
-                                       
-                                         
-                                        },
+                                        onPressed: () async {},
                                         text: "Salvar",
                                       ),
                                     ],
@@ -287,6 +240,82 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
       // Se não houver ponto, retorna a string inteira
       return input;
     }
+  }
+}
+
+// Classe do pop-up
+class TokenSelectionPopup extends StatefulWidget {
+  final List<Token> tokens;
+
+  const TokenSelectionPopup({Key? key, required this.tokens}) : super(key: key);
+
+  @override
+  _TokenSelectionPopupState createState() => _TokenSelectionPopupState();
+}
+
+class _TokenSelectionPopupState extends State<TokenSelectionPopup> {
+  // Lista para controlar quais tokens foram selecionados (usando os ids)
+  final List<String> selectedTokenIds = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: const Text("Selecione os Tokens",
+          style: TextStyle(fontWeight: FontWeight.bold)),
+      content: Container(
+        constraints: const BoxConstraints(maxHeight: 300),
+        width: double.maxFinite,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: widget.tokens.length,
+          itemBuilder: (context, index) {
+            final tokenItem = widget.tokens[index];
+            final isSelected = selectedTokenIds.contains(tokenItem.id);
+            return CheckboxListTile(
+              title: Text(tokenItem.token),
+              value: isSelected,
+              activeColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              onChanged: (bool? value) {
+                setState(() {
+                  if (value == true) {
+                    selectedTokenIds.add(tokenItem.id);
+                  } else {
+                    selectedTokenIds.remove(tokenItem.id);
+                  }
+                });
+              },
+            );
+          },
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Envia null se o usuário cancelar
+            Navigator.of(context).pop(null);
+          },
+          child: const Text("Cancelar"),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+          onPressed: () {
+            // Filtra os tokens selecionados e retorna-os
+            final selectedTokens = widget.tokens
+                .where((token) => selectedTokenIds.contains(token.id))
+                .toList();
+            Navigator.of(context).pop(selectedTokens);
+          },
+          child: const Text("Ok"),
+        ),
+      ],
+    );
   }
 }
 
@@ -591,6 +620,110 @@ class RemoveTokenDialog extends StatelessWidget {
                       color: Colors.white,
                       size: 30,
                     )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class RemoveURLDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Container(
+        margin: EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Color(0xFF00C2A0), // Definindo a cor de fundo como verde
+          borderRadius: BorderRadius.circular(20), // Raio da borda do Container
+          border: Border.all(
+            // Adicionando uma borda ao redor do conteúdo
+            color: Colors.white, // Definindo a cor da borda como azul
+            width: 4.0, // Ajustando a largura da borda conforme necessário
+          ),
+        ),
+        constraints: BoxConstraints(
+            maxWidth: 320, // Definindo o tamanho máximo do Container
+            minWidth: 100, // Definindo um tamanho mínimo opcional
+            maxHeight: 250, // Ajustando a altura máxima conforme necessário
+            minHeight: 250 // Definindo uma altura mínima opcional
+            ),
+        child: contentBox(context),
+      ),
+    );
+  }
+
+  Widget contentBox(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Icon(
+          Icons.error,
+          color: Colors.white,
+          size: 50,
+        ),
+        SizedBox(height: 20),
+        Text(
+          'Tem certeza que deseja excluir o site?',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20, // Definindo a cor do texto como branco
+          ),
+          textAlign: TextAlign.center, // Alinhando o texto centralmente
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment
+              .spaceBetween, // Alinhando os botões nos cantos opostos
+          children: <Widget>[
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(
+                  'Cancelar',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white, // Definindo a cor do texto como branco
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 8), // Adicionando um espaçamento entre os botões
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Excluir',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors
+                            .white, // Definindo a cor do texto como branco
+                      ),
+                    ),
+                    SizedBox(width: 5), // Espaçamento entre texto e ícone
+                    Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ],
                 ),
               ),

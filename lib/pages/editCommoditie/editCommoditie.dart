@@ -5,7 +5,6 @@ import 'package:midas/services/commodity/getComodity.dart';
 import 'package:midas/services/commodity/updateCommodity.dart';
 import 'package:provider/provider.dart';
 import 'package:midas/providers/authProvider.dart';
-import 'package:midas/providers/clienteProvider.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
@@ -37,8 +36,7 @@ class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String authToken =
-        Provider.of<AuthProvider>(context, listen: false).token;
+    
 
     return Scaffold(
       body: Container(

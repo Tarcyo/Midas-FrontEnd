@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
-import 'package:provider/provider.dart';
 import 'package:midas/providers/authProvider.dart';
-import 'package:midas/providers/clienteProvider.dart';
+import 'package:midas/providers/userDataProvider.dart';
+import 'package:midas/services/token/getTokens.dart';
+import 'package:midas/services/token/updateToken.dart';
+import 'package:provider/provider.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/insertCamp.dart';
-
 class EditTokenScreen extends StatefulWidget {
+  final String nome;
+  final String id;
+
+  EditTokenScreen({required this.nome, required this.id});
+
   @override
   State<EditTokenScreen> createState() => _EditTokenScreenState();
 }
 
+
 class _EditTokenScreenState extends State<EditTokenScreen> {
+
+  @override
+  void initState() {
+    nomeController.text=widget.nome;
+    super.initState();
+  }
+
   final TextEditingController nomeController = TextEditingController();
-  final TextEditingController codigoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final String authToken =
-        Provider.of<AuthProvider>(context, listen: false).token;
-
     return Scaffold(
       body: Container(
         color: secondaryColor,
@@ -93,7 +103,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
                                       ),
                                       SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: codigoController),
+                                          controller: nomeController),
                                     ],
                                   ),
                                   SizedBox(height: 25),
@@ -104,31 +114,26 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
                                       Center(
                                         child: RoundedButton(
                                           onPressed: () async {
-                                            String email =
-                                                Provider.of<ClienteProvider>(
+
+                                            print("Estou tentando da update em: "+widget.id);
+
+                                           await updateToken(widget.id, Provider.of<AuthProvider>(context,listen: false).id, nomeController.text, Provider.of<AuthProvider>(context,listen: false).token);
+                                            final tokens = await getTokens(
+                                                Provider.of<AuthProvider>(
                                                         context,
                                                         listen: false)
-                                                    .cliente!
-                                                    .email;
+                                                    .id,
+                                                Provider.of<AuthProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .token);
 
-                                           
+                                            Provider.of<UserDataProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .tokens = tokens['tokens'];
                                           },
                                           text: "Cadastrar",
-                                        ),
-                                      ),
-                                      Center(
-                                        child: RoundedButton(
-                                          onPressed: () async {
-                                            String email =
-                                                Provider.of<ClienteProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .cliente!
-                                                    .email;
-
-                                           
-                                          },
-                                          text: "Excluir",
                                         ),
                                       ),
                                     ],
@@ -580,4 +585,6 @@ class AddTokenDialog extends StatelessWidget {
       ],
     );
   }
+  
 }
+

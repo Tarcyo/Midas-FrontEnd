@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
+import 'package:midas/model/token.dart';
 
 class URLItem extends StatefulWidget {
-  final String token;
-  final ValueChanged<String> onTokenRemoved;
+  final Token token;
+  final ValueChanged<Token> onTokenRemoved;
 
   const URLItem({
     Key? key,
@@ -45,7 +46,7 @@ class _URLItemState extends State<URLItem> {
                   width: 2,
                 ),
                 Text(
-                  widget.token,
+                  widget.token.token,
                   style: TextStyle(color: Colors.white, fontSize: 11),
                 ),
               ],

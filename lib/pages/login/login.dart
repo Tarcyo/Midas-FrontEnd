@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:midas/pages/registerUser/registerUser.dart';
 import 'package:midas/services/site/getSite.dart';
+import 'package:midas/services/token/getTokens.dart';
 import '../../reusableWidgets/insertCamp.dart';
 import 'package:midas/services/auth/login.dart';
 import '../../reusableWidgets/insertCampPassword.dart';
@@ -169,6 +170,17 @@ class LoginScreen extends StatelessWidget {
                                           listen: false)
                                       .commodities = commoodity['commodities'];
 
+                                  final tokens = await getTokens(
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .id,
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .token);
+
+                                  Provider.of<UserDataProvider>(context,
+                                          listen: false)
+                                      .tokens = tokens['tokens'];
                                   Navigator.push(
                                     context,
                                     PageRouteBuilder(

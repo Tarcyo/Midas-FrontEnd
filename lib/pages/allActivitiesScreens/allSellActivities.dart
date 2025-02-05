@@ -10,7 +10,7 @@ class AllSellActivitiesScreen extends StatelessWidget {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     // Definir tamanhos responsivos com base no tamanho da tela
-    final double cardWidth = screenWidth * 0.4; // Largura dos cards
+    //final double cardWidth = screenWidth * 0.4; // Largura dos cards
     final double cardSpacing = screenWidth * 0.02; // Espaçamento entre os cards
     final double topPadding = screenHeight * 0.05; // Espaçamento superior da coluna
 

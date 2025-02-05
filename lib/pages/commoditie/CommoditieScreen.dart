@@ -15,9 +15,9 @@ class CommoditieScreen extends StatelessWidget {
     for (final i in p.commodities) {
       commodities.add(
         {
-          'code': i['code'],
-          'name': i['name'],
-          'id': i['id'],
+          'code': i['code'] ??'',
+          'name': i['name'] ?? '',
+          'id': i['id'] ?? "",
         },
       );
       print("Exemplo de commodities:" + i.toString());

@@ -4,8 +4,6 @@ import 'package:midas/providers/userDataProvider.dart';
 import 'siteCard.dart'; // Presumindo que você tem um widget para exibir a commodity
 import 'package:midas/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:midas/providers/clienteProvider.dart';
-import 'package:midas/pages/EditSite/EditSite.dart';
 
 class SiteScreen extends StatelessWidget {
   @override

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
-import '../../reusableWidgets/roundedAddButtom.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 
-import '../../reusableWidgets/tokenList.dart';
 
 import 'package:midas/constants.dart';
 
@@ -18,8 +16,8 @@ class _NewGroupState extends State<NewGroup> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController strategyController = TextEditingController();
 
-  List<String> _urls = [];
-  List<String> _tokens = [];
+ // List<String> _urls = [];
+  //List<String> _tokens = [];
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +117,7 @@ class _NewGroupState extends State<NewGroup> {
                                   Center(
                                     child: RoundedButton(
                                       onPressed: () async {
-                                        String email ="";
+                                       
                                            
                                     
                                       },

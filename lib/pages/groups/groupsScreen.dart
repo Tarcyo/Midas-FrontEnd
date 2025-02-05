@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'groupCard.dart';
 import '../newGroup/newGroupScreen.dart';
 import 'package:midas/constants.dart';
-import 'package:provider/provider.dart';
-import 'package:midas/providers/clienteProvider.dart';
 
 class GroupsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final clienteProvider = Provider.of<ClienteProvider>(context);
+    
    // final strategies = clienteProvider.cliente!.strategies;
     
     final listaWidget= [];

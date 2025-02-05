@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart'; // Importe o pacote provider
 import 'pages/login/login.dart';
-import 'providers/clienteProvider.dart'; // Importe o ClienteProvider
 import 'providers/authProvider.dart'; // Importe o AuthProvider
 import 'providers/userDataProvider.dart'; // Importe o AuthProvider
 
@@ -30,7 +29,6 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserDataProvider()),
-        ChangeNotifierProvider(create: (context) => ClienteProvider()),
         ChangeNotifierProvider(
             create: (context) =>
                 AuthProvider()), // Cria o provider de autenticação

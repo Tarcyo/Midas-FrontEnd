@@ -21,8 +21,7 @@ class _RegisterCommoditieScreenState extends State<RegisterCommoditieScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String authToken =
-        Provider.of<AuthProvider>(context, listen: false).token;
+  
 
     return Scaffold(
       body: Container(

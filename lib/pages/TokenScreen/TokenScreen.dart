@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:midas/providers/userDataProvider.dart';
 import 'TokenCard.dart'; // Presumindo que você tem um widget para exibir a commodity
 import 'package:midas/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:midas/providers/clienteProvider.dart';
+
 import 'package:midas/pages/RegisterToken/RegisterToken.dart';
+
 class TokenScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final clienteProvider = Provider.of<ClienteProvider>(context);
+    final p = Provider.of<UserDataProvider>(context);
 
-    // Aqui você deve obter suas commodities de algum lugar, usando a lógica do seu app.
-    // Para o exemplo, vou criar uma lista fictícia de commodities.
-    List<Map<String, String>> commodities = [
-      {'code': 'SOY3', 'name': 'Soja'},
-      {'code': 'WHEAT', 'name': 'Trigo'},
-      {'code': 'CORN', 'name': 'Milho'},
-      {'code': 'RICE', 'name': 'Arroz'},
-      {'code': 'SUGAR', 'name': 'Açúcar'},
-      {'code': 'COFFsdadsEE', 'name': 'Café'},
-      {'code': 'COTTON', 'name': 'Algodão'},
-      {'code': 'BARLEY', 'name': 'Cevada'},
-      {'code': 'OATS', 'name': 'Aveia'},
-      // Adicione mais commodities conforme necessário
-    ];
+    //
+
+    final List<Map<String, String>> tokens = [];
+
+    for (final i in p.tokens) {
+      tokens.add(
+        {'code': i['id'], 'name': i['token']},
+      );
+    }
 
     return Scaffold(
       body: Container(
@@ -82,33 +79,42 @@ class TokenScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Expanded(
-                child: ListView.builder(
-                  itemCount:
-                      (commodities.length / 4).ceil(), // Número de linhas
-                  itemBuilder: (context, rowIndex) {
-                    // Calcula os índices dos commodities para a linha atual
-                    int startIndex = rowIndex * 4;
-                    int endIndex = (startIndex + 4 < commodities.length)
-                        ? startIndex + 4
-                        : commodities.length;
-
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children:
-                              List.generate(endIndex - startIndex, (index) {
-                            int commodityIndex = startIndex + index;
-                            return TokenCard.TokenCard(
-                              name: "Token"
-                            );
-                          }),
+                child: tokens.isEmpty
+                    ? Center(
+                        child: Text(
+                          'Nenhum token encontrado',
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 20), // Espaço entre linhas
-                      ],
-                    );
-                  },
-                ),
+                      )
+                    : ListView.builder(
+                        itemCount:
+                            (tokens.length / 4).ceil(), // Número de linhas
+                        itemBuilder: (context, rowIndex) {
+                          int startIndex = rowIndex * 4;
+                          int endIndex = (startIndex + 4 < tokens.length)
+                              ? startIndex + 4
+                              : tokens.length;
+
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: List.generate(endIndex - startIndex,
+                                    (index) {
+                                  int commodityIndex = startIndex + index;
+                                  return TokenCard(
+                                    name: tokens[commodityIndex]['name'] ?? "",
+                                    id: tokens[commodityIndex]['code'] ?? "",
+                                  );
+                                }),
+                              ),
+                              const SizedBox(height: 20), // Espaço entre linhas
+                            ],
+                          );
+                        },
+                      ),
               ),
             ],
           ),
