@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:midas/pages/registerUser/registerUser.dart';
 import 'package:midas/services/site/getSite.dart';
+import 'package:midas/services/strategy/getStategy.dart';
 import 'package:midas/services/token/getTokens.dart';
 import '../../reusableWidgets/insertCamp.dart';
 import 'package:midas/services/auth/login.dart';
@@ -181,6 +182,25 @@ class LoginScreen extends StatelessWidget {
                                   Provider.of<UserDataProvider>(context,
                                           listen: false)
                                       .tokens = tokens['tokens'];
+
+                                  final estrategias = await getStrategies(
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .id,
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .token);
+
+
+                                   Provider.of<UserDataProvider>(context,
+                                          listen: false)
+                                      .estrategias=estrategias['strategies'];
+
+
+
+
+
+
                                   Navigator.push(
                                     context,
                                     PageRouteBuilder(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:midas/model/token.dart';
+import 'package:midas/providers/authProvider.dart';
 import 'package:midas/providers/userDataProvider.dart';
+import 'package:midas/services/strategy/createstrategy.dart';
+import 'package:midas/services/strategy/getStategy.dart';
 
 import '../../reusableWidgets/insertCamp.dart';
 
@@ -19,20 +22,17 @@ class RegisterStrategyScreen extends StatefulWidget {
 
 class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
   final TextEditingController nomeController = TextEditingController();
-  final TextEditingController codigoController = TextEditingController();
-  final TextEditingController strategyController = TextEditingController();
 
-  final List<String> _urls = [];
+  final List<Token> _urls = [];
   final List<Token> _tokens = [];
+  Token? _selectedCommoditie;
 
   @override
   Widget build(BuildContext context) {
-    final List<String> tokens = [];
-
-    for (final i in _tokens) {
-      tokens.add(i.token);
+    final List<Token> commodities = [];
+    for (final i in Provider.of<UserDataProvider>(context).commodities) {
+      commodities.add(Token(id: i['id'], token: i['name']));
     }
-
     return Scaffold(
       body: Container(
         color: secondaryColor,
@@ -101,7 +101,7 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nome da estratégia ',
+                                        'Nome da estratégia',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
                                       ),
@@ -115,14 +115,15 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Código da commodity',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
                                       SizedBox(height: 5),
-                                      RoundedTextField(
-                                          controller: nomeController),
+                                      TokenSelector(
+                                        tokens: commodities,
+                                        onTokenSelected: (value) {
+                                          setState(() {
+                                            _selectedCommoditie = value;
+                                          });
+                                        },
+                                      ),
                                     ],
                                   ),
                                   SizedBox(height: 15),
@@ -202,13 +203,127 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 30),
+                                  SizedBox(height: 15),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Urls',
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          UrlList(
+                                            strings: _urls,
+                                          ),
+                                          SizedBox(width: 15),
+                                          RoundedAddButton(
+                                            onPressed: () async {
+                                              // Exemplo
+                                              final List<Token> tokenList = [];
+                                              for (final i in Provider.of<
+                                                          UserDataProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .sites) {
+                                                print("Tentando adicionar " +
+                                                    i.toString());
+                                                tokenList.add(
+                                                  Token(
+                                                      id: i['id'],
+                                                      token: i['name']),
+                                                );
+                                              }
+
+                                              final selectedTokens =
+                                                  await showDialog<List<Token>>(
+                                                context: context,
+                                                builder: (context) =>
+                                                    TokenSelectionPopup(
+                                                        tokens: tokenList),
+                                              );
+
+                                              // Faça algo com os tokens selecionados (por exemplo, exibir em um SnackBar)
+                                              if (selectedTokens != null &&
+                                                  selectedTokens.isNotEmpty) {
+                                                setState(() {
+                                                  _urls.addAll(selectedTokens);
+                                                });
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                        "Tokens selecionados: ${selectedTokens.map((t) => t.token).join(', ')}"),
+                                                  ),
+                                                );
+                                              } else if (selectedTokens !=
+                                                      null &&
+                                                  selectedTokens.isEmpty) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                      content: Text(
+                                                          "Nenhum token selecionado.")),
+                                                );
+                                              }
+                                            },
+                                            text: "Novo",
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 15),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
                                       RoundedButton(
-                                        onPressed: () async {},
+                                        onPressed: () async {
+                                          List<dynamic> tokens = [];
+                                          List<dynamic> urls = [];
+                                          for (final i in _urls) {
+                                            urls.add(i.id);
+                                          }
+                                          for (final i in _tokens) {
+                                            tokens.add(i.id);
+                                          }
+                                          await createStrategy(
+                                              name: nomeController.text,
+                                              commodityId:
+                                                  _selectedCommoditie!.id,
+                                              userId: Provider.of<AuthProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .id,
+                                              sitesIds: urls,
+                                              tokensIds: tokens,
+                                              auth: Provider.of<AuthProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .token);
+
+                                          final estrategias =
+                                              await getStrategies(
+                                                  Provider.of<AuthProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .id,
+                                                  Provider.of<AuthProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .token);
+
+                                          Provider.of<UserDataProvider>(context,
+                                                      listen: false)
+                                                  .estrategias =
+                                              estrategias['strategies'];
+                                        },
                                         text: "Salvar",
                                       ),
                                     ],
@@ -240,6 +355,101 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
       // Se não houver ponto, retorna a string inteira
       return input;
     }
+  }
+}
+
+class TokenSelectorDialog extends StatelessWidget {
+  final List<Token> tokens;
+
+  const TokenSelectorDialog({Key? key, required this.tokens}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Selecione um Token"),
+      content: Container(
+        width: double.maxFinite,
+        child: ListView(
+          shrinkWrap: true,
+          children: tokens.map((token) {
+            return ListTile(
+              title: Text(token.token),
+              onTap: () {
+                Navigator.of(context).pop(token);
+              },
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+class TokenSelector extends StatefulWidget {
+  final List<Token> tokens;
+  final ValueChanged<Token?> onTokenSelected;
+
+  const TokenSelector({
+    Key? key,
+    required this.tokens,
+    required this.onTokenSelected,
+  }) : super(key: key);
+
+  @override
+  _TokenSelectorState createState() => _TokenSelectorState();
+}
+
+class _TokenSelectorState extends State<TokenSelector> {
+  Token? selectedToken;
+
+  void _showTokenDialog() async {
+    final Token? result = await showDialog<Token>(
+      context: context,
+      builder: (BuildContext context) =>
+          TokenSelectorDialog(tokens: widget.tokens),
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedToken = result;
+      });
+      widget.onTokenSelected(result); // Chama a função de callback
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Commoditie',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+        SizedBox(height: 5),
+        GestureDetector(
+          onTap: _showTokenDialog,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            decoration: BoxDecoration(
+              color: mainColor,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.white, width: 1),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  selectedToken?.token ?? "Selecione a Commoditie",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                Icon(Icons.arrow_drop_down, color: Colors.white),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
+import 'package:midas/providers/authProvider.dart';
+import 'package:midas/providers/userDataProvider.dart';
+import 'package:midas/services/strategy/deleteStrategy.dart';
+import 'package:midas/services/strategy/getStategy.dart';
+import 'package:provider/provider.dart';
 import '../editStrategy/editStrategy.dart';
+
 class StrategyCard extends StatelessWidget {
   final String commodityName;
   final String price1Week;
@@ -10,15 +16,14 @@ class StrategyCard extends StatelessWidget {
   final String price1Minute;
   final dynamic data;
 
-  StrategyCard({
-    required this.commodityName,
-    required this.price1Week,
-    required this.price24Hours,
-    required this.price6Minutes,
-    required this.price3Minutes,
-    required this.price1Minute,
-    required this.data
-  });
+  StrategyCard(
+      {required this.commodityName,
+      required this.price1Week,
+      required this.price24Hours,
+      required this.price6Minutes,
+      required this.price3Minutes,
+      required this.price1Minute,
+      required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +84,7 @@ class StrategyCard extends StatelessWidget {
                         size: 40,
                         color: mainColor,
                       ),
-                      onPressed: ()async {
-                        
+                      onPressed: () async {
                         // Navegue para a RegisterScreen quando o botão for pressionado
                         Navigator.push(
                           context,
@@ -102,6 +106,33 @@ class StrategyCard extends StatelessWidget {
                             },
                           ),
                         );
+                      },
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        size: 40,
+                        color: Colors.red,
+                      ),
+                      onPressed: () async {
+                        await deleteStrategy(
+                            data['id'],
+                            Provider.of<AuthProvider>(context, listen: false)
+                                .token);
+                        final estrategias = await getStrategies(
+                            Provider.of<AuthProvider>(context, listen: false)
+                                .id,
+                            Provider.of<AuthProvider>(context, listen: false)
+                                .token);
+
+                        Provider.of<UserDataProvider>(context, listen: false)
+                            .estrategias = estrategias['strategies'];
                       },
                     ),
                   ],
