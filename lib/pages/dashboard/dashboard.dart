@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:midas/constants.dart';
+import 'package:midas/model/token.dart';
 import 'package:midas/providers/authProvider.dart';
+import 'package:midas/providers/userDataProvider.dart';
 import 'package:midas/reusableWidgets/product card.dart';
 import 'package:midas/pages/allActivitiesScreens/allBuyActicities.dart';
 import 'package:midas/pages/allActivitiesScreens/allSellActivities.dart';
@@ -12,6 +14,7 @@ import 'package:midas/reusableWidgets/newsCard.dart';
 import 'graphic.dart';
 import 'package:midas/pages/expandedGraphic/expandedGraphic.dart';
 import 'package:provider/provider.dart';
+
 class Dashboard extends StatefulWidget {
   @override
   _DashboardState createState() => _DashboardState();
@@ -28,18 +31,31 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     fetchNews(); // Faz a primeira requisição
-    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
-      fetchNews(); // Requisição periódica a cada 30 segundos
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      // Verifica se o widget ainda está montado antes de chamar fetchNews()
+      if (mounted) {
+        fetchNews(); // Requisição periódica a cada 15 segundos
+      }
     });
   }
 
+  @override
+  void dispose() {
+    _timer?.cancel(); // Cancelar o timer ao descartar o widget
+    super.dispose();
+  }
+
   Future<void> fetchNews() async {
+    final tokens = [];
+    for (final i
+        in Provider.of<UserDataProvider>(context, listen: false).tokens) {
+      tokens.add(i['token']);
+    }
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(
-            ["Rain"]), // Tópicos de exemplo
+        body: jsonEncode(tokens),
       );
 
       if (response.statusCode == 200) {
@@ -59,14 +75,9 @@ class _DashboardState extends State<Dashboard> {
   }
 
   @override
-  void dispose() {
-    _timer?.cancel(); // Cancela o timer ao sair da tela
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: "+Provider.of<AuthProvider>(context,listen: false).email)  ;
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " +
+        Provider.of<AuthProvider>(context, listen: false).email);
 
     return Scaffold(
       backgroundColor: secondaryColor,
@@ -188,7 +199,6 @@ class _DashboardState extends State<Dashboard> {
                   SizedBox(height: 10),
                   Row(
                     children: [
-                      
                       ProductCard(
                         productName: "Açúcar",
                         price: "+36%",

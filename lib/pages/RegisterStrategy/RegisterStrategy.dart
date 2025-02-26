@@ -366,7 +366,7 @@ class TokenSelectorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Selecione um Token"),
+      title: Text("Selecione uma Commoditie"),
       content: Container(
         width: double.maxFinite,
         child: ListView(

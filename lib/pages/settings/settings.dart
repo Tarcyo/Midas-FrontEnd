@@ -113,7 +113,7 @@ class _SettingsState extends State<Settings> {
                 ),
               ],
             ),
-            SizedBox(height: 35),
+            SizedBox(height: 20),
 
             Row(
               children: [
@@ -204,7 +204,7 @@ class _SettingsState extends State<Settings> {
               ],
             ),
             SizedBox(
-              height: 120,
+              height: 40,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

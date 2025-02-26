@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:midas/pages/registerUser/registerUser.dart';
+import 'package:midas/services/group/getGroup.dart';
 import 'package:midas/services/site/getSite.dart';
 import 'package:midas/services/strategy/getStategy.dart';
 import 'package:midas/services/token/getTokens.dart';
@@ -32,8 +33,8 @@ class LoginScreen extends StatelessWidget {
           children: [
             Center(
               child: Container(
-                height: 360, // ajuste conforme necessário
-                width: 360, // ajuste conforme necessário
+                height: 230, // ajuste conforme necessário
+                width: 230, // ajuste conforme necessário
                 child: Padding(
                   padding: EdgeInsets.all(
                     4, // ajuste conforme necessário para o tamanho da borda
@@ -195,6 +196,20 @@ class LoginScreen extends StatelessWidget {
                                    Provider.of<UserDataProvider>(context,
                                           listen: false)
                                       .estrategias=estrategias['strategies'];
+
+
+                                       final grupos = await getGroups(
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .id,
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .token);
+
+
+                                   Provider.of<UserDataProvider>(context,
+                                          listen: false)
+                                      .groups=grupos['groups'];
 
 
 

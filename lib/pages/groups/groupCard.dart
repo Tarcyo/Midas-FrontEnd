@@ -7,9 +7,11 @@ import 'package:midas/pages/editGroup/editGroup.dart';
 class GroupCard extends StatelessWidget {
   final String groupName;
   final int newMessages;
+  final String gropuId;
   final List<Widget> members;
 
   GroupCard({
+    required this.gropuId,
     required this.groupName,
     required this.newMessages,
     required this.members,
@@ -204,7 +206,7 @@ class GroupCard extends StatelessWidget {
                                                 Animation<double> animation,
                                                 Animation<double>
                                                     secondaryAnimation) {
-                                              return EditGroup();
+                                              return EditGroup(id: gropuId,nome: groupName,);
                                             },
                                           ),
                                         );

@@ -6,6 +6,7 @@ class UserDataProvider with ChangeNotifier {
   List<dynamic> _commodities = [];
   List<dynamic> _sites = [];
   List<dynamic> _tokens = [];
+  List<dynamic> _groups = [];
 
   // Getters
   List<dynamic> get variaveis => _variaveis;
@@ -13,6 +14,7 @@ class UserDataProvider with ChangeNotifier {
   List<dynamic> get commodities => _commodities;
   List<dynamic> get sites => _sites;
   List<dynamic> get tokens => _tokens;
+  List<dynamic> get groups => _groups;
 
   // Setters
   set variaveis(List<dynamic> value) {
@@ -37,6 +39,11 @@ class UserDataProvider with ChangeNotifier {
 
   set tokens(List<dynamic> value) {
     _tokens = value;
+    notifyListeners();
+  }
+
+  set groups(List<dynamic> value) {
+    _groups = value;
     notifyListeners();
   }
 
@@ -66,6 +73,11 @@ class UserDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void addGroup(dynamic item) {
+    _groups.add(item);
+    notifyListeners();
+  }
+
   // Métodos para limpar
   void cleanVariaveis() {
     _variaveis.clear();
@@ -89,6 +101,11 @@ class UserDataProvider with ChangeNotifier {
 
   void cleanTokens() {
     _tokens.clear();
+    notifyListeners();
+  }
+
+  void cleanGroups() {
+    _groups.clear();
     notifyListeners();
   }
 }

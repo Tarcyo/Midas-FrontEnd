@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:midas/providers/authProvider.dart';
+import 'package:midas/providers/userDataProvider.dart';
+import 'package:midas/services/group/deleteGroup.dart';
+import 'package:midas/services/group/getGroup.dart';
+import 'package:midas/services/group/updateGroup.dart';
+import 'package:provider/provider.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
 import '../../reusableWidgets/roundedButtom.dart';
 
-
 import 'package:midas/constants.dart';
 
 class EditGroup extends StatefulWidget {
+  final String id;
+  final String nome;
+
+  // Construtor que recebe id e nome
+  EditGroup({required this.id, required this.nome});
+
   @override
   State<EditGroup> createState() => _EditGroupState();
 }
 
 class _EditGroupState extends State<EditGroup> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController strategyController = TextEditingController();
+  final TextEditingController nomeController = TextEditingController();
 
-  //List<String> _urls = [];
-  //List<String> _tokens = [];
+  @override
+  void initState() {
+    nomeController.text = widget.nome;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,31 +106,44 @@ class _EditGroupState extends State<EditGroup> {
                                       ),
                                       SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: strategyController),
-                                    ],
-                                  ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Link de convite',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      RoundedTextField(
-                                          controller: strategyController),
+                                          controller: nomeController),
                                     ],
                                   ),
                                   SizedBox(height: 15),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
                                       Center(
                                         child: RoundedButton(
                                           onPressed: () async {
+                                            print("O id do grupo:" +
+                                                widget.id.toString());
+                                            await updateGroup(
+                                                widget.id,
+                                                Provider.of<AuthProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .id,
+                                                nomeController.text,
+                                                Provider.of<AuthProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .token);
+                                            final grupos = await getGroups(
+                                                Provider.of<AuthProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .id,
+                                                Provider.of<AuthProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .token);
+
+                                            Provider.of<UserDataProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .groups = grupos['groups'];
                                           },
                                           text: "Cadastrar",
                                         ),
@@ -126,7 +151,34 @@ class _EditGroupState extends State<EditGroup> {
                                       Center(
                                         child: RoundedButton(
                                           onPressed: () async {
-                                          
+                                            print("O id do grupo:" +
+                                                widget.id.toString());
+
+                                            await deleteGroup(
+                                                widget.id,
+                                                Provider.of<AuthProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .id,
+                                                Provider.of<AuthProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .token);
+                                            final grupos = await getGroups(
+                                                Provider.of<AuthProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .id,
+                                                Provider.of<AuthProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .token);
+
+                                            Provider.of<UserDataProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .groups = grupos['groups'];
+                                            Navigator.of(context).pop();
                                           },
                                           text: "Excluir",
                                         ),

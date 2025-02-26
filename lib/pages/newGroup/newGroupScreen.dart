@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:midas/providers/authProvider.dart';
+import 'package:midas/providers/userDataProvider.dart';
+import 'package:midas/services/group/createGroup.dart';
+import 'package:midas/services/group/getGroup.dart';
+import 'package:provider/provider.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
 import '../../reusableWidgets/roundedButtom.dart';
@@ -12,9 +17,8 @@ class NewGroup extends StatefulWidget {
 }
 
 class _NewGroupState extends State<NewGroup> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController strategyController = TextEditingController();
+  final TextEditingController nomeController = TextEditingController();
+
 
  // List<String> _urls = [];
   //List<String> _tokens = [];
@@ -94,30 +98,30 @@ class _NewGroupState extends State<NewGroup> {
                                       ),
                                       SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller: strategyController),
+                                          controller:nomeController,)
                                     ],
                                   ),
-                                  SizedBox(height: 15),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Link de convite',
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                      SizedBox(height: 5),
-                                      RoundedTextField(
-                                          controller: strategyController),
-                                    ],
-                                  ),
+                                
                                   SizedBox(height: 15),
                                  
                                   Center(
                                     child: RoundedButton(
                                       onPressed: () async {
-                                       
+
+                                        await createGroup(nomeController.text, Provider.of<AuthProvider>(context,listen: false).id, Provider.of<AuthProvider>(context,listen: false).token);
+                                         final grupos = await getGroups(
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .id,
+                                      Provider.of<AuthProvider>(context,
+                                              listen: false)
+                                          .token);
+
+
+                                   Provider.of<UserDataProvider>(context,
+                                          listen: false)
+                                      .groups=grupos['groups'];
+
                                            
                                     
                                       },

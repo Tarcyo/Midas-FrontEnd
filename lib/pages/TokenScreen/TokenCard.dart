@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:midas/pages/EditToken/EditToken.dart';
+import 'package:midas/pages/editToken/EditToken.dart';
 import 'package:midas/providers/authProvider.dart';
 import 'package:midas/providers/userDataProvider.dart';
 import 'package:midas/services/token/deleToken.dart';
