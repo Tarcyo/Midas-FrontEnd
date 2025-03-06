@@ -1,468 +1,131 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
 import 'package:midas/pages/group/groupScreen.dart';
-import 'package:midas/reusableWidgets/insertCamp.dart';
 import 'package:midas/pages/editGroup/editGroup.dart';
 
 class GroupCard extends StatelessWidget {
   final String groupName;
-  final int newMessages;
-  final String gropuId;
+  final String gropuId; // Mantendo o nome como no código original
   final List<Widget> members;
 
   GroupCard({
     required this.gropuId,
     required this.groupName,
-    required this.newMessages,
     required this.members,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    dynamic exit = await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AddUserDialog();
-                      },
-                    );
-                    print(exit);
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.person,
-                        size: 60,
-                        color: mainColor,
-                      ),
-                      Icon(
-                        Icons.add,
-                        size: 30,
-                        color: mainColor,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 60,
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 1, 1, 1),
-              child: SingleChildScrollView(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(182),
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(180),
-                          border: Border.all(
-                            color: mainColor,
-                            width: 2,
-                          ),
-                        ),
-                        width: double.infinity,
-                        padding: EdgeInsets.all(25),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                      groupName,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: mainColor,
-                                        fontSize: 24.0,
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 2,
-                                      width: 100,
-                                      margin: EdgeInsets.only(top: 5),
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [mainColor, secondaryColor],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(width: 3),
-                              ],
-                            ),
-                            WidgetRow(
-                                nomeGrupo: this.groupName,
-                                widgets: [...members]),
-                            Column(
-                              children: [
-                                Text(
-                                  "$newMessages novas mensagens",
-                                  style:
-                                      TextStyle(fontSize: 20, color: mainColor),
-                                ),
-                                Container(
-                                  height: 2,
-                                  width: 160,
-                                  margin: EdgeInsets.only(top: 5),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [mainColor, secondaryColor],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Conversar",
-                                      style: TextStyle(
-                                        color: mainColor,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.chat,
-                                        size: 40,
-                                        color: mainColor,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          PageRouteBuilder(
-                                            transitionDuration:
-                                                Duration(milliseconds: 1200),
-                                            transitionsBuilder:
-                                                (BuildContext context,
-                                                    Animation<double> animation,
-                                                    Animation<double>
-                                                        secondaryAnimation,
-                                                    Widget child) {
-                                              return FadeTransition(
-                                                opacity: animation,
-                                                child: child,
-                                              );
-                                            },
-                                            pageBuilder: (BuildContext context,
-                                                Animation<double> animation,
-                                                Animation<double>
-                                                    secondaryAnimation) {
-                                              return GroupScreen(groupName);
-                                            },
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.edit,
-                                        size: 40,
-                                        color: mainColor,
-                                      ),
-                                      onPressed: () {
-                                        // Adicione aqui o comportamento de edição, como abrir um diálogo
-
-                                        Navigator.push(
-                                          context,
-                                          PageRouteBuilder(
-                                            transitionDuration:
-                                                Duration(milliseconds: 1200),
-                                            transitionsBuilder:
-                                                (BuildContext context,
-                                                    Animation<double> animation,
-                                                    Animation<double>
-                                                        secondaryAnimation,
-                                                    Widget child) {
-                                              return FadeTransition(
-                                                opacity: animation,
-                                                child: child,
-                                              );
-                                            },
-                                            pageBuilder: (BuildContext context,
-                                                Animation<double> animation,
-                                                Animation<double>
-                                                    secondaryAnimation) {
-                                              return EditGroup(id: gropuId,nome: groupName,);
-                                            },
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 3),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class WidgetRow extends StatefulWidget {
-  final List<Widget> widgets;
-  final String nomeGrupo;
-
-  WidgetRow({required this.widgets, required this.nomeGrupo});
-
-  @override
-  _WidgetRowState createState() => _WidgetRowState();
-}
-
-class _WidgetRowState extends State<WidgetRow> {
-  bool isExpanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> displayedWidgets = [];
-    List<Widget> additionalWidgets = [];
-
-    if (widget.widgets.length <= 5) {
-      displayedWidgets = widget.widgets;
-    } else {
-      displayedWidgets = widget.widgets.sublist(0, 5);
-      additionalWidgets = widget.widgets.sublist(5);
-    }
-
-    return Row(
-      children: [
-        ...displayedWidgets,
-        if (additionalWidgets.isNotEmpty) ...[
-          TextButton(
-            onPressed: () {
-              setState(() {
-                isExpanded = true;
-              });
-              _showAdditionalWidgets(context,
-                  displayedWidgets + additionalWidgets, widget.nomeGrupo);
-            },
-            child: Text(
-              '+${additionalWidgets.length}',
-              style: TextStyle(
-                color: mainColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(2, 4),
           ),
         ],
-      ],
-    );
-  }
-
-  void _showAdditionalWidgets(
-      BuildContext context, List<Widget> additionalWidgets, String grupo) {
-    List<Widget> format = [];
-    for (Widget w in additionalWidgets) {
-      format.add(Row(
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          w,
-          SizedBox(
-            width: 5,
-          ),
-          Text(
-            "Nome",
-            style: TextStyle(
-              fontSize: 20,
-              color: mainColor,
-            ),
-          ),
-        ],
-      ));
-      format.add(Divider(
-        color: Colors.grey,
-      ));
-      format.add(SizedBox(
-        height: 100,
-      ));
-    }
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        widget.nomeGrupo,
-                        style: TextStyle(color: mainColor, fontSize: 30),
-                      ),
-                      Text("Membros:"),
-                    ],
-                  ),
-                  ...format
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    ).then((value) {
-      setState(() {
-        isExpanded = false;
-      });
-    });
-  }
-}
-
-class AddUserDialog extends StatelessWidget {
-  final TextEditingController _newUrlController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: Container(
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Color(0xFF00C2A0), // Definindo a cor de fundo como verde
-          borderRadius: BorderRadius.circular(20), // Raio da borda do Container
-          border: Border.all(
-            // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
-            width: 4.0, // Ajustando a largura da borda conforme necessário
-          ),
-        ),
-        constraints: BoxConstraints(
-            maxWidth: 350, // Definindo o tamanho máximo do Container
-            minWidth: 150, // Definindo um tamanho mínimo opcional
-            maxHeight: 250, // Ajustando a altura máxima conforme necessário
-            minHeight: 250 // Definindo uma altura mínima opcional
-            ), // Reduzindo o tamanho máximo do Container
-        child: contentBox(context),
-      ),
-    );
-  }
-
-  Widget contentBox(context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Center(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+          // Ícone do grupo e informações
+          Row(
             children: [
-              Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 50,
+              CircleAvatar(
+                backgroundColor: mainColor.withOpacity(0.15),
+                radius: 28,
+                child: Icon(Icons.group, color: mainColor, size: 30),
               ),
-              Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 25,
+              const SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    groupName,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[900],
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    height: 4,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      gradient: LinearGradient(
+                        colors: [mainColor, secondaryColor],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Digite o código do usuário',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20, // Definindo a cor do texto como branco
-          ),
-          textAlign: TextAlign.center, // Alinhando o texto centralmente
-        ),
-        SizedBox(height: 20),
-        RoundedTextField(controller: _newUrlController),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
-          children: <Widget>[
-            Expanded(
-              child: TextButton(
+
+          // Ícones dos membros e ações
+          Row(
+            children: [
+              Row(children: members),
+              const SizedBox(width: 16),
+              _actionButton(
+                icon: Icons.chat,
+                color: mainColor,
                 onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(
-                  'Cancelar',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18 // Definindo a cor do texto como branco
-                      ),
-                ),
-              ),
-            ),
-            SizedBox(width: 5), // Adicionando um espaçamento entre os botões
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(_newUrlController.text);
-                },
-                child: Row(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Adicionar',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize:
-                                  18 // Definindo a cor do texto como branco
-                              // Definindo a cor do texto como branco
-                              ),
-                        ),
-                        Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 25,
-                        )
-                      ],
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 300),
+                      transitionsBuilder: (context, animation, _, child) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                      pageBuilder: (_, __, ___) => GroupScreen(groupName),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
-            ),
-          ],
-        ),
-      ],
+              const SizedBox(width: 8),
+              _actionButton(
+                icon: Icons.edit,
+                color: Colors.grey[700]!,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 300),
+                      transitionsBuilder: (context, animation, _, child) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                      pageBuilder: (_, __, ___) => EditGroup(id: gropuId, nome: groupName),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Botão de ação reutilizável
+  Widget _actionButton({required IconData icon, required Color color, required VoidCallback onPressed}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.15),
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        icon: Icon(icon, color: color, size: 28),
+        onPressed: onPressed,
+      ),
     );
   }
 }

@@ -36,8 +36,6 @@ class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
       body: Container(
         color: secondaryColor,
@@ -139,10 +137,12 @@ class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
                                           onPressed: () async {
                                             final userData =
                                                 Provider.of<UserDataProvider>(
-                                                    context,listen: false);
+                                                    context,
+                                                    listen: false);
                                             final auth =
                                                 Provider.of<AuthProvider>(
-                                                    context,listen: false);
+                                                    context,
+                                                    listen: false);
                                             await updateCommodity(
                                                 id: widget.id,
                                                 userId: auth.id,
@@ -156,6 +156,7 @@ class _EditCommoditieScreenState extends State<EditCommoditieScreen> {
                                             userData.commodities =
                                                 commoditiesAtualizadas[
                                                     'commodities'];
+                                            Navigator.pop(context);
                                           },
                                           text: "Salvar",
                                         ),

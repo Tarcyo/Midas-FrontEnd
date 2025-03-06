@@ -7,6 +7,7 @@ class UserDataProvider with ChangeNotifier {
   List<dynamic> _sites = [];
   List<dynamic> _tokens = [];
   List<dynamic> _groups = [];
+  dynamic _activatedStrategy;
 
   // Getters
   List<dynamic> get variaveis => _variaveis;
@@ -15,8 +16,14 @@ class UserDataProvider with ChangeNotifier {
   List<dynamic> get sites => _sites;
   List<dynamic> get tokens => _tokens;
   List<dynamic> get groups => _groups;
+  dynamic get actvatedStrategy => _activatedStrategy;
 
   // Setters
+  set activeStrategy(dynamic value) {
+    _activatedStrategy = value;
+    notifyListeners();
+  }
+
   set variaveis(List<dynamic> value) {
     _variaveis = value;
     notifyListeners();

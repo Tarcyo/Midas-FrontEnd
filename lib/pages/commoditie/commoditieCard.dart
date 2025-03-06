@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:midas/constants.dart';
 import 'package:midas/pages/editCommoditie/editCommoditie.dart';
 import 'package:midas/providers/authProvider.dart';
 import 'package:midas/providers/userDataProvider.dart';
@@ -7,218 +8,178 @@ import 'package:midas/services/commodity/getComodity.dart';
 import 'package:provider/provider.dart';
 
 class CommoditieCard extends StatelessWidget {
-  final String code; // Código da commodity
-  final String name; // Nome da commodity
+  final String code;
+  final String name;
   final String id;
+
   CommoditieCard({required this.code, required this.name, required this.id});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 290, // Largura fixa do cartão
-      height: 100, // Altura fixa do cartão
-      child: Card(
-        elevation: 4, // Sombra do cartão
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment
-                .spaceAround, // Distribui o espaço entre os widgets
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8,
+            offset: Offset(2, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Ícone e Informações da Commodity
+          Row(
             children: [
-              //
+              Icon(Icons.storefront, color: mainColor, size: 32),
+              SizedBox(width: 12),
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 4), // E
                   Text(
                     code,
                     style: TextStyle(
-                      fontSize: 25, // Tamanho da fonte para o código
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black, // Cor do texto
+                      color: Colors.grey[900],
                     ),
                   ),
-                  const SizedBox(
-                      height: 4), // Espaçamento entre o código e o nome
+                  SizedBox(height: 4),
                   Text(
                     name,
                     style: TextStyle(
-                      fontSize: 20, // Tamanho da fonte para o nome
-                      color: Colors.grey[700], // Cor do texto para o nome
+                      fontSize: 16,
+                      color: Colors.grey[700],
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                      size: 30,
-                    ), // Ícone de excluir
-                    onPressed: () async {
-                      // Ação para excluir
-                      final result = await showDialog<bool>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return RemoveTokenDialog();
-                        },
-                      );
-                      if (result == true) {
-                        final auth = Provider.of<AuthProvider>(context,listen: false);
-                        final data = Provider.of<UserDataProvider>(context,listen: false);
-                        print("Estou tentando deletar o id:"+id);
-                        await deleteCommodity(id, auth.token);
-                        final commodities =
-                            await getCommodities(auth.id, auth.token);
-                        data.commodities=commodities['commodities'];
-                      }
-                      print('Excluir $code');
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.edit,
-                      color: Colors.black,
-                      size: 30,
-                    ), // Ícone de editar
-                    onPressed: () {
-                      // Ação para editar
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: Duration(milliseconds: 1200),
-                          transitionsBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation,
-                              Widget child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
-                          pageBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation) {
-                            return EditCommoditieScreen(
-                              codigo: code,
-                              nome: name,
-                              id: id,
-                            );
-                          },
-                        ),
-                      );
-                    },
                   ),
                 ],
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
 
-class RemoveTokenDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: Container(
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Color(0xFF00C2A0), // Definindo a cor de fundo como verde
-          borderRadius: BorderRadius.circular(20), // Raio da borda do Container
-          border: Border.all(
-            // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
-            width: 4.0, // Ajustando a largura da borda conforme necessário
-          ),
-        ),
-        constraints: BoxConstraints(
-          maxWidth: 320, // Ajustando o tamanho máximo do Container
-          minWidth: 100, // Definindo um tamanho mínimo opcional
-          maxHeight: 250, // Ajustando a altura máxima conforme necessário
-          minHeight: 250, // Definindo uma altura mínima opcional
-        ),
-        child: contentBox(context),
-      ),
-    );
-  }
-
-  Widget contentBox(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Icon(
-          Icons.delete,
-          color: Colors.white,
-          size: 50,
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Tem certeza que deseja excluir a Commodity?',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20, // Definindo a cor do texto como branco
-          ),
-          textAlign: TextAlign.center, // Alinhando o texto centralmente
-        ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
-          children: <Widget>[
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(
-                  'Cancelar',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white, // Definindo a cor do texto como branco
-                  ),
-                ),
+          // Botões de Ação
+          Row(
+            children: [
+              _actionButton(
+                icon: Icons.edit,
+                color: mainColor,
+                onTap: () => _editCommodity(context),
               ),
-            ),
-            SizedBox(width: 8), // Adicionando um espaçamento entre os botões
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Row(
+              _actionButton(
+                icon: Icons.delete,
+                color: Colors.redAccent,
+                onTap: () => _confirmDelete(context),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Botão de ação reutilizável
+  Widget _actionButton(
+      {required IconData icon,
+      required Color color,
+      required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 6),
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: color, size: 24),
+      ),
+    );
+  }
+
+  void _editCommodity(BuildContext context) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 500),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return EditCommoditieScreen(
+            codigo: code,
+            nome: name,
+            id: id,
+          );
+        },
+      ),
+    );
+  }
+
+  void _confirmDelete(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.warning_amber_rounded,
+                    color: Colors.redAccent, size: 40),
+                SizedBox(height: 10),
+                Text(
+                  "Excluir Commodity?",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "Tem certeza que deseja excluir esta commodity?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      'Excluir',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors
-                            .white, // Definindo a cor do texto como branco
-                      ),
-                    ),
+                    _dialogButton(
+                        context, "Cancelar", Colors.grey[700]!, false),
+                    _dialogButton(context, "Deletar", Colors.redAccent, true),
                   ],
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _dialogButton(
+      BuildContext context, String text, Color color, bool isConfirm) {
+    return TextButton(
+      onPressed: () async {
+        final auth = Provider.of<AuthProvider>(context, listen: false);
+        final data = Provider.of<UserDataProvider>(context, listen: false);
+        print("Estou tentando deletar o id:" + id);
+        await deleteCommodity(id, auth.token);
+        final commodities = await getCommodities(auth.id, auth.token);
+        data.commodities = commodities['commodities'];
+        Navigator.of(context).pop(isConfirm);
+      },
+      style: TextButton.styleFrom(
+        foregroundColor: color,
+        textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      ),
+      child: Text(text),
     );
   }
 }

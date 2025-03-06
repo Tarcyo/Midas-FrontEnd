@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:midas/pages/RegisterCommoditie/RegisterCommoditie.dart';
 import 'package:midas/providers/userDataProvider.dart';
-import 'commoditieCard.dart'; // Presumindo que você tem um widget para exibir a commodity
+import 'commoditieCard.dart';
 import 'package:midas/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -10,124 +10,122 @@ class CommoditieScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = Provider.of<UserDataProvider>(context);
 
-    final List<Map<String, String>> commodities = [];
-
-    for (final i in p.commodities) {
-      commodities.add(
-        {
-          'code': i['code'] ??'',
-          'name': i['name'] ?? '',
-          'id': i['id'] ?? "",
-        },
-      );
-      print("Exemplo de commodities:" + i.toString());
-    }
+    // Criando a lista de commodities
+    final List<Map<String, String>> commodities =
+        p.commodities.map<Map<String, String>>((i) {
+      return {
+        'code': i['code'] ?? '',
+        'name': i['name'] ?? '',
+        'id': i['id'] ?? "",
+      };
+    }).toList();
 
     return Scaffold(
-      body: Container(
-        color: secondaryColor,
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(height: 50, width: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Nova Commoditie',
-                        style: TextStyle(
-                          color: mainColor,
-                          fontSize: 25.0,
-                        ),
-                      ),
-                      const SizedBox(width: 2),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration: Duration(milliseconds: 1200),
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                );
-                              },
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return RegisterCommoditieScreen();
-                              },
-                            ),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.add_circle_outline,
-                          color: mainColor,
-                          size: 33,
-                        ),
-                      ),
-                      const SizedBox(width: 30),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: commodities.isEmpty
-                    ? Center(
-                        child: Text(
-                          "Nenhuma commodity encontrada",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount:
-                            (commodities.length / 4).ceil(), // Número de linhas
-                        itemBuilder: (context, rowIndex) {
-                          // Calcula os índices dos commodities para a linha atual
-                          int startIndex = rowIndex * 4;
-                          int endIndex = (startIndex + 4 < commodities.length)
-                              ? startIndex + 4
-                              : commodities.length;
-
-                          return Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: List.generate(endIndex - startIndex,
-                                    (index) {
-                                  int commodityIndex = startIndex + index;
-                                  return CommoditieCard(
-                                    code: commodities[commodityIndex]['code'] ??
-                                        '',
-                                    name: commodities[commodityIndex]['name'] ??
-                                        '',
-                                    id: commodities[commodityIndex]['id'] ?? '',
-                                  );
-                                }),
-                              ),
-                              const SizedBox(height: 20), // Espaço entre linhas
-                            ],
-                          );
-                        },
-                      ),
-              )
-            ],
+      backgroundColor: secondaryColor, // ✅ Mantendo o fundo com secondaryColor
+      appBar: AppBar(
+        backgroundColor: mainColor,
+        title: const Text(
+          'Minhas Commodities',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24.0,
+            letterSpacing: 1.2,
+            fontFamily: 'Roboto',
           ),
         ),
+        elevation: 6.0,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+          child: commodities.isEmpty
+              ? Center(
+                  // Usando o widget Center para garantir que o conteúdo fique centralizado
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.inventory_2_outlined,
+                          size: 80, color: Colors.black), // Ícone preto
+                      const SizedBox(height: 16),
+                      Text(
+                        'Nenhuma commodity encontrada!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black, // Texto em preto
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Adicione uma nova commodity clicando no botão abaixo.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black, // Texto em preto
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  itemCount: commodities.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        decoration: BoxDecoration(
+                          color: Colors
+                              .white, // Destaque para os cards no fundo escuro
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: CommoditieCard(
+                          code: commodities[index]['code'] ?? "Sem Código",
+                          name: commodities[index]['name'] ?? "Sem Nome",
+                          id: commodities[index]['id'] ?? "",
+                        ),
+                      ),
+                    );
+                  },
+                ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        heroTag: "5", // Adicione um identificador único
+        backgroundColor: mainColor,
+        icon: const Icon(Icons.add, size: 28, color: Colors.white),
+        label: const Text(
+          "Nova Commoditie",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 300),
+              transitionsBuilder: (context, animation, _, child) {
+                return FadeTransition(opacity: animation, child: child);
+              },
+              pageBuilder: (_, __, ___) => RegisterCommoditieScreen(),
+            ),
+          );
+        },
       ),
     );
   }

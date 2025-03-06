@@ -39,12 +39,12 @@ class HomePage extends StatelessWidget {
           icon: Icons.label_important,
         ),
         PersistentTabItem(
-          title: 'Chat',
+          title: 'Grupos',
           tab: const GroupsScreenTab(),
           icon: Icons.chat,
         ),
         PersistentTabItem(
-          title: 'Settings',
+          title: 'Configurações',
           tab: const SettingsScreenTab(),
           icon: Icons.settings,
         ),

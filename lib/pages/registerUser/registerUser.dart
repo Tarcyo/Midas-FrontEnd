@@ -7,7 +7,8 @@ import 'package:midas/constants.dart';
 import 'package:midas/services/user/userRegister.dart';
 
 class RegisterUser extends StatelessWidget {
-  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -79,7 +80,8 @@ class RegisterUser extends StatelessWidget {
                       Center(
                         child: SizedBox(
                           width: 450,
-                          height: 440,
+                          height:
+                              540, // Aumentei a altura para acomodar mais campos
                           child: Card(
                             color: mainColor,
                             elevation: 5,
@@ -112,23 +114,6 @@ class RegisterUser extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nome completo',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      SizedBox(height: 3),
-                                      RoundedTextField(
-                                          controller: fullNameController),
-                                    ],
-                                  ),
-                                  SizedBox(height: 5),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
                                         'Email',
                                         style: TextStyle(
                                           fontSize: 20,
@@ -140,11 +125,48 @@ class RegisterUser extends StatelessWidget {
                                           controller: emailController),
                                     ],
                                   ),
+                                  SizedBox(height: 10),
+                                  // Campo de Nome
+
                                   SizedBox(height: 5),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Nome',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          SizedBox(height: 3),
+                                          HalfroundedTextField(
+                                              controller: firstNameController),
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
+                                      // Campo de Sobrenome
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Sobrenome',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          SizedBox(height: 3),
+                                          HalfroundedTextField(
+                                              controller: lastNameController),
+                                        ],
+                                      ),
                                       Text(
                                         'Telefone',
                                         style: TextStyle(
@@ -210,13 +232,15 @@ class RegisterUser extends StatelessWidget {
   }
 
   Future<void> _validateAndSubmit(BuildContext context) async {
-    String fullName = fullNameController.text.trim();
+    String firstName = firstNameController.text.trim();
+    String lastName = lastNameController.text.trim();
     String email = emailController.text.trim();
     String phone = phoneController.text.trim();
     String password = passwordController.text.trim();
     String confirmPassword = confirmPasswordController.text.trim();
 
-    if (fullName.isEmpty ||
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
         email.isEmpty ||
         phone.isEmpty ||
         password.isEmpty ||
@@ -231,29 +255,14 @@ class RegisterUser extends StatelessWidget {
     } else if (password != confirmPassword) {
       _showAlertDialog(context, "Erro", "As senhas não coincidem.");
     } else {
-      dynamic registrou = await registerUser(
-          _obterPrimeiroUltimoNome(fullNameController.text)[0],
-          _obterPrimeiroUltimoNome(fullNameController.text).last,
-          emailController.text,
-          phoneController.text,
-          passwordController.text);
+      dynamic registrou = await registerUser(firstName, lastName,
+          emailController.text, phoneController.text, passwordController.text);
 
-      if (registrou==true) {
+      if (registrou == true) {
         _showAlertDialog(context, "Sucesso!", "O usuário foi registrado!");
       } else {
-        _showAlertDialog(context, "Erro!",
-            registrou);
+        _showAlertDialog(context, "Erro!", registrou);
       }
-    }
-  }
-
-  dynamic _obterPrimeiroUltimoNome(String nomeCompleto) {
-    List<String> partes = nomeCompleto.trim().split(' ');
-
-    if (partes.length >= 2) {
-      return partes;
-    } else {
-      return 'Nome inválido';
     }
   }
 
@@ -284,7 +293,7 @@ class RegisterUser extends StatelessWidget {
                 TextButton(
                   child: Text("OK"),
                   onPressed: () {
-                    Navigator.of(context).pop(); // Fechar o diálogo
+                    Navigator.of(context).pop(true); // Fechar o diálogo
                   },
                 ),
               ],
@@ -292,6 +301,10 @@ class RegisterUser extends StatelessWidget {
           ),
         );
       },
-    );
+    ).then((value) {
+      if (value) {
+        Navigator.of(context).pop(true); // Fechar o diálogo
+      }
+    });
   }
 }

@@ -134,6 +134,7 @@ class _RegisterSiteScreenState extends State<RegisterSiteScreen> {
                                         Provider.of<UserDataProvider>(context,
                                                 listen: false)
                                             .sites = sites['sites'];
+                                      Navigator.of(context).pop(0);
                                       },
                                       text: "Cadastrar",
                                     ),

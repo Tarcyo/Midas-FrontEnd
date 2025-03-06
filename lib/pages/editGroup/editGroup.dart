@@ -15,7 +15,6 @@ class EditGroup extends StatefulWidget {
   final String id;
   final String nome;
 
-  // Construtor que recebe id e nome
   EditGroup({required this.id, required this.nome});
 
   @override
@@ -144,8 +143,9 @@ class _EditGroupState extends State<EditGroup> {
                                                     context,
                                                     listen: false)
                                                 .groups = grupos['groups'];
+                                            Navigator.of(context).pop();
                                           },
-                                          text: "Cadastrar",
+                                          text: "Salvar",
                                         ),
                                       ),
                                       Center(
@@ -208,8 +208,7 @@ class RemoveURlDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(20.0), // Ajustando o raio da borda do dialog
+        borderRadius: BorderRadius.circular(20.0),
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -217,20 +216,15 @@ class RemoveURlDialog extends StatelessWidget {
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Color(0xFF00C2A0), // Definindo a cor de fundo como verde
-          borderRadius: BorderRadius.circular(20), // Raio da borda do Container
+          color: Color(0xFF00C2A0),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
-            width: 4.0, // Ajustando a largura da borda conforme necessário
+            color: Colors.white,
+            width: 4.0,
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 350, // Definindo o tamanho máximo do Container
-            minWidth: 150, // Definindo um tamanho mínimo opcional
-            maxHeight: 250, // Ajustando a altura máxima conforme necessário
-            minHeight: 250 // Definindo uma altura mínima opcional
-            ), // Reduzindo o tamanho máximo do Container
+            maxWidth: 350, minWidth: 150, maxHeight: 250, minHeight: 250),
         child: contentBox(context),
       ),
     );
@@ -250,14 +244,13 @@ class RemoveURlDialog extends StatelessWidget {
           'Tem certeza que deseja excluir o site?',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20, // Definindo a cor do texto como branco
+            fontSize: 20,
           ),
-          textAlign: TextAlign.center, // Alinhando o texto centralmente
+          textAlign: TextAlign.center,
         ),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -268,12 +261,12 @@ class RemoveURlDialog extends StatelessWidget {
                   'Cancelar',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white, // Definindo a cor do texto como branco
+                    color: Colors.white,
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 8), // Adicionando um espaçamento entre os botões
+            SizedBox(width: 8),
             Expanded(
               child: TextButton(
                 onPressed: () {
@@ -285,8 +278,7 @@ class RemoveURlDialog extends StatelessWidget {
                       'Excluir',
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors
-                            .white, // Definindo a cor do texto como branco
+                        color: Colors.white,
                       ),
                     ),
                     Icon(
@@ -312,8 +304,7 @@ class AddUserDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
+        borderRadius: BorderRadius.circular(180.0),
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -321,20 +312,15 @@ class AddUserDialog extends StatelessWidget {
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Color(0xFF00C2A0), // Definindo a cor de fundo como verde
-          borderRadius: BorderRadius.circular(20), // Raio da borda do Container
+          color: Color(0xFF00C2A0),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
-            width: 4.0, // Ajustando a largura da borda conforme necessário
+            color: Colors.white,
+            width: 4.0,
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 350, // Definindo o tamanho máximo do Container
-            minWidth: 150, // Definindo um tamanho mínimo opcional
-            maxHeight: 250, // Ajustando a altura máxima conforme necessário
-            minHeight: 250 // Definindo uma altura mínima opcional
-            ), // Reduzindo o tamanho máximo do Container
+            maxWidth: 350, minWidth: 150, maxHeight: 250, minHeight: 250),
         child: contentBox(context),
       ),
     );
@@ -355,16 +341,15 @@ class AddUserDialog extends StatelessWidget {
           'Digite o código do usuário',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20, // Definindo a cor do texto como branco
+            fontSize: 20,
           ),
-          textAlign: TextAlign.center, // Alinhando o texto centralmente
+          textAlign: TextAlign.center,
         ),
         SizedBox(height: 20),
         RoundedTextField(controller: _newUrlController),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -373,14 +358,11 @@ class AddUserDialog extends StatelessWidget {
                 },
                 child: Text(
                   'Cancelar',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18 // Definindo a cor do texto como branco
-                      ),
+                  style: TextStyle(color: Colors.white, fontSize: 18),
                 ),
               ),
             ),
-            SizedBox(width: 5), // Adicionando um espaçamento entre os botões
+            SizedBox(width: 5),
             Expanded(
               child: TextButton(
                 onPressed: () {
@@ -396,7 +378,6 @@ class AddUserDialog extends StatelessWidget {
                               color: Colors.white,
                               fontSize:
                                   18 // Definindo a cor do texto como branco
-                              // Definindo a cor do texto como branco
                               ),
                         ),
                         Icon(
@@ -422,8 +403,7 @@ class RemoveTokenDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
+        borderRadius: BorderRadius.circular(180.0),
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -431,20 +411,18 @@ class RemoveTokenDialog extends StatelessWidget {
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Color(0xFF00C2A0), // Definindo a cor de fundo como verde
-          borderRadius: BorderRadius.circular(20), // Raio da borda do Container
+          color: Color(0xFF00C2A0),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            // Adicionando uma borda ao redor do conteúdo
             color: Colors.white, // Definindo a cor da borda como azul
-            width: 4.0, // Ajustando a largura da borda conforme necessário
+            width: 4.0,
           ),
         ),
         constraints: BoxConstraints(
-            maxWidth: 350, // Definindo o tamanho máximo do Container
-            minWidth: 150, // Definindo um tamanho mínimo opcional
-            maxHeight: 250, // Ajustando a altura máxima conforme necessário
-            minHeight: 250 // Definindo uma altura mínima opcional
-            ), // Reduzindo o tamanho máximo do Container
+          maxWidth: 350,
+          minWidth: 150,
+          maxHeight: 250,
+        ),
         child: contentBox(context),
       ),
     );
@@ -464,14 +442,13 @@ class RemoveTokenDialog extends StatelessWidget {
           'Tem certeza que deseja sair excluir o token?',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20, // Definindo a cor do texto como branco
+            fontSize: 20,
           ),
-          textAlign: TextAlign.center, // Alinhando o texto centralmente
+          textAlign: TextAlign.center,
         ),
         SizedBox(height: 20),
         Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Expanded(
               child: TextButton(
@@ -481,12 +458,12 @@ class RemoveTokenDialog extends StatelessWidget {
                 child: Text(
                   'Cancelar',
                   style: TextStyle(
-                    color: Colors.white, // Definindo a cor do texto como branco
+                    color: Colors.white,
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 8), // Adicionando um espaçamento entre os botões
+            SizedBox(width: 8),
             Expanded(
               child: TextButton(
                 onPressed: () {
@@ -497,8 +474,7 @@ class RemoveTokenDialog extends StatelessWidget {
                     Text(
                       'Excluir',
                       style: TextStyle(
-                        color: Colors
-                            .white, // Definindo a cor do texto como branco
+                        color: Colors.white,
                       ),
                     ),
                     Icon(
@@ -524,8 +500,7 @@ class AddTokenDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
+        borderRadius: BorderRadius.circular(180.0),
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -533,12 +508,11 @@ class AddTokenDialog extends StatelessWidget {
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Color(0xFF00C2A0), // Definindo a cor de fundo como verde
-          borderRadius: BorderRadius.circular(20), // Raio da borda do Container
+          color: Color(0xFF00C2A0),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
-            width: 4.0, // Ajustando a largura da borda conforme necessário
+            color: Colors.white,
+            width: 4.0,
           ),
         ),
         constraints: BoxConstraints(

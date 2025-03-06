@@ -3,7 +3,7 @@ import 'package:midas/model/token.dart';
 import 'package:midas/providers/authProvider.dart';
 import 'package:midas/providers/userDataProvider.dart';
 import 'package:midas/services/strategy/createstrategy.dart';
-import 'package:midas/services/strategy/getStategy.dart';
+import 'package:midas/services/strategy/fetchStrategy.dart';
 
 import '../../reusableWidgets/insertCamp.dart';
 
@@ -197,7 +197,7 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                                 );
                                               }
                                             },
-                                            text: "Novo",
+                                            text: "Selecionar",
                                           ),
                                         ],
                                       ),
@@ -272,7 +272,7 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                                 );
                                               }
                                             },
-                                            text: "Novo",
+                                            text: "Selecionar",
                                           ),
                                         ],
                                       ),
@@ -323,6 +323,8 @@ class _RegisterStrategyScreenState extends State<RegisterStrategyScreen> {
                                                       listen: false)
                                                   .estrategias =
                                               estrategias['strategies'];
+
+                                          Navigator.pop(context);
                                         },
                                         text: "Salvar",
                                       ),

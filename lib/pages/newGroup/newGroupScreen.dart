@@ -3,11 +3,11 @@ import 'package:midas/providers/authProvider.dart';
 import 'package:midas/providers/userDataProvider.dart';
 import 'package:midas/services/group/createGroup.dart';
 import 'package:midas/services/group/getGroup.dart';
+import 'package:midas/services/socket/socketService.dart';
 import 'package:provider/provider.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
 import '../../reusableWidgets/roundedButtom.dart';
-
 
 import 'package:midas/constants.dart';
 
@@ -18,10 +18,26 @@ class NewGroup extends StatefulWidget {
 
 class _NewGroupState extends State<NewGroup> {
   final TextEditingController nomeController = TextEditingController();
-
-
- // List<String> _urls = [];
+  late final SocketService socketService;
+  @override
+  void initState() {
+    super.initState();
+    socketService = Provider.of<SocketService>(context, listen: false);
+  }
+  // List<String> _urls = [];
   //List<String> _tokens = [];
+
+  void _handleCreateGroup(
+      BuildContext context, TextEditingController nomeController) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userDataProvider =
+        Provider.of<UserDataProvider>(context, listen: false);
+
+    await createGroup(nomeController.text, authProvider.id, authProvider.token);
+    socketService.createRoom(nomeController.text);
+    final grupos = await getGroups(authProvider.id, authProvider.token);
+    userDataProvider.groups = grupos['groups'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,32 +114,17 @@ class _NewGroupState extends State<NewGroup> {
                                       ),
                                       SizedBox(height: 5),
                                       RoundedTextField(
-                                          controller:nomeController,)
+                                        controller: nomeController,
+                                      ),
                                     ],
                                   ),
-                                
                                   SizedBox(height: 15),
-                                 
                                   Center(
                                     child: RoundedButton(
-                                      onPressed: () async {
-
-                                        await createGroup(nomeController.text, Provider.of<AuthProvider>(context,listen: false).id, Provider.of<AuthProvider>(context,listen: false).token);
-                                         final grupos = await getGroups(
-                                      Provider.of<AuthProvider>(context,
-                                              listen: false)
-                                          .id,
-                                      Provider.of<AuthProvider>(context,
-                                              listen: false)
-                                          .token);
-
-
-                                   Provider.of<UserDataProvider>(context,
-                                          listen: false)
-                                      .groups=grupos['groups'];
-
-                                           
-                                    
+                                      onPressed: () {
+                                        _handleCreateGroup(
+                                            context, nomeController);
+                                        Navigator.pop(context);
                                       },
                                       text: "Cadastrar",
                                     ),

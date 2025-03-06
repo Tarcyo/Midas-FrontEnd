@@ -28,6 +28,7 @@ class _EditSiteScreenState extends State<EditSiteScreen> {
   void initState() {
     // TODO: implement initState
     nomeController.text = widget.nome;
+    urlController.text=widget.url;
     super.initState();
   }
 
@@ -158,8 +159,9 @@ class _EditSiteScreenState extends State<EditSiteScreen> {
                                                     context,
                                                     listen: false)
                                                 .sites = sites['sites'];
+                                           Navigator.pop(context);
                                           },
-                                          text: "Cadastrar",
+                                          text: "Salvar",
                                         ),
                                       ),
                                     ],

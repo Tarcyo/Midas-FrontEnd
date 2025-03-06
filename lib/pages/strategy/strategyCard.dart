@@ -1,193 +1,239 @@
 import 'package:flutter/material.dart';
 import 'package:midas/constants.dart';
+import 'package:midas/model/token.dart';
 import 'package:midas/providers/authProvider.dart';
 import 'package:midas/providers/userDataProvider.dart';
+import 'package:midas/services/commodity/fetchCommotie.dart';
+import 'package:midas/services/strategy/activateStrategy.dart';
 import 'package:midas/services/strategy/deleteStrategy.dart';
-import 'package:midas/services/strategy/getStategy.dart';
+import 'package:midas/services/strategy/fetchStrategy.dart';
+import 'package:midas/services/strategy/getActiveStrategy.dart';
+import 'package:midas/services/strategy/getStratégies.dart';
 import 'package:provider/provider.dart';
 import '../editStrategy/editStrategy.dart';
 
 class StrategyCard extends StatelessWidget {
   final String commodityName;
-  final String price1Week;
-  final String price24Hours;
-  final String price6Minutes;
-  final String price3Minutes;
-  final String price1Minute;
   final dynamic data;
 
-  StrategyCard(
-      {required this.commodityName,
-      required this.price1Week,
-      required this.price24Hours,
-      required this.price6Minutes,
-      required this.price3Minutes,
-      required this.price1Minute,
-      required this.data});
+  StrategyCard({required this.commodityName, required this.data});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-          10, 10, 19, 10), // Adiciona preenchimento à direita
-      child: SingleChildScrollView(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(182), // Define o raio dos cantos
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white, // Cor de fundo branca
-              borderRadius: BorderRadius.circular(180), // Retângulo arredondado
-              border: Border.all(
-                color: mainColor, // Cor da borda
-                width: 2, // Largura da borda
-              ),
-            ),
-            width: double.infinity, // Para preencher toda a largura da tela
-            padding: EdgeInsets.all(25),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      commodityName,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 24.0), // Aumenta o tamanho do texto
-                    ),
-                    Container(
-                      height: 5,
-                      width:
-                          50, // Defina o comprimento da linha conforme necessário
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(180),
-                          color: mainColor
-                              .withOpacity(0.7) // Define o raio da borda
-                          ),
-                    ),
-                  ],
-                ),
-                // Espaçamento entre o nome da commodity e os valores
-                _buildInfo("1 sem", price1Week + "%"),
-                _buildInfo("24 h", price24Hours + "%"),
-                _buildInfo("6 min", price6Minutes + "%"),
-                _buildInfo("3 min", price3Minutes + "%"),
-                _buildInfo("1 min", price1Minute + "%"),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.edit_document,
-                        size: 40,
-                        color: mainColor,
-                      ),
-                      onPressed: () async {
-                        // Navegue para a RegisterScreen quando o botão for pressionado
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            transitionDuration: Duration(milliseconds: 1200),
-                            transitionsBuilder: (BuildContext context,
-                                Animation<double> animation,
-                                Animation<double> secondaryAnimation,
-                                Widget child) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              );
-                            },
-                            pageBuilder: (BuildContext context,
-                                Animation<double> animation,
-                                Animation<double> secondaryAnimation) {
-                              return EditStrategy(data);
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        size: 40,
-                        color: Colors.red,
-                      ),
-                      onPressed: () async {
-                        await deleteStrategy(
-                            data['id'],
-                            Provider.of<AuthProvider>(context, listen: false)
-                                .token);
-                        final estrategias = await getStrategies(
-                            Provider.of<AuthProvider>(context, listen: false)
-                                .id,
-                            Provider.of<AuthProvider>(context, listen: false)
-                                .token);
+    Color buttonColor = Colors.green;
+    IconData icon = Icons.play_arrow;
+    if (Provider.of<UserDataProvider>(context).actvatedStrategy == null) {
+    } else {
+      if (data['id'] ==
+          Provider.of<UserDataProvider>(context).actvatedStrategy['id']) {
+        buttonColor = Colors.red;
+        icon = Icons.pause;
+      }
+    }
 
-                        Provider.of<UserDataProvider>(context, listen: false)
-                            .estrategias = estrategias['strategies'];
-                      },
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8,
+            offset: Offset(2, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.show_chart, color: mainColor, size: 32),
+              SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    commodityName,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[900],
                     ),
+                  ),
+                  SizedBox(height: 4),
+                  Container(
+                    height: 4,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(180),
+                      color: mainColor.withOpacity(0.7),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              _actionButton(
+                  icon: icon,
+                  color: buttonColor,
+                  onTap: () async {
+                    await _activateStrategy(context);
+                  }),
+              _actionButton(
+                icon: Icons.edit,
+                color: mainColor,
+                onTap: () => _editStrategy(context),
+              ),
+              _actionButton(
+                icon: Icons.delete,
+                color: Colors.redAccent,
+                onTap: () => _showDeleteConfirmation(context),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _actionButton(
+      {required IconData icon,
+      required Color color,
+      required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 6),
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: color, size: 24),
+      ),
+    );
+  }
+
+  void _editStrategy(BuildContext context) async {
+    final strategyData = await fetchStrategy(
+      data['id'],
+      Provider.of<AuthProvider>(context, listen: false).token,
+    );
+    final commodityData = await fetchCommodity(
+      strategyData['commodity_id'],
+      Provider.of<AuthProvider>(context, listen: false).token,
+    );
+    final commodity = Token(
+      id: commodityData['id'],
+      token: commodityData['name'],
+    );
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 500),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return EditStrategy(strategyData, commodity);
+        },
+      ),
+    );
+  }
+
+  Future<void> _activateStrategy(BuildContext context) async {
+    await activateStrategy(
+        data['id'],
+        Provider.of<AuthProvider>(context, listen: false).id,
+        Provider.of<AuthProvider>(context, listen: false).token);
+
+    final activeStrategy = await getActiveStrategy(
+      Provider.of<AuthProvider>(context, listen: false).id,
+      Provider.of<AuthProvider>(context, listen: false).token,
+    );
+
+    Provider.of<UserDataProvider>(context, listen: false).activeStrategy =
+        activeStrategy;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "Estratégia ${data['name']} ativada!",
+          style: TextStyle(fontWeight: FontWeight.w800),
+        ),
+        backgroundColor: Colors.teal.shade900,
+      ),
+    );
+  }
+
+  void _showDeleteConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.warning_amber_rounded,
+                    color: Colors.redAccent, size: 40),
+                SizedBox(height: 10),
+                Text(
+                  "Excluir Estratégia?",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "Tem certeza que deseja excluir esta estratégia?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14, color: Colors.black54),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _dialogButton(
+                        context, "Cancelar", Colors.grey[700]!, false),
+                    _dialogButton(context, "Deletar", Colors.redAccent, true),
                   ],
                 ),
               ],
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildInfo(String timeFrame, String price) {
-    // Verifica se o preço é negativo
-    bool isNegative = price.startsWith('-');
+  Widget _dialogButton(
+      BuildContext context, String text, Color color, bool isConfirm) {
+    return TextButton(
+      onPressed: () async {
+        if (isConfirm) {
+          await deleteStrategy(data['id'],
+              Provider.of<AuthProvider>(context, listen: false).token);
+          final estrategias = await getStrategies(
+              Provider.of<AuthProvider>(context, listen: false).id,
+              Provider.of<AuthProvider>(context, listen: false).token);
 
-    Color lineColor = isNegative == false ? mainColor : Colors.red[800]!;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          "$timeFrame:",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18.0,
-          ),
-        ),
-        SizedBox(height: 10),
-        Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            Text(
-              price,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-                fontSize: 16.0,
-              ),
-            ),
-            // Adiciona a linha verde embaixo da cotação se o preço for negativo
-          ],
-        ),
-        SizedBox(
-          height: 2,
-        ),
-        Container(
-          height: 5,
-          width: 50, // Defina o comprimento da linha conforme necessário
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(180),
-              color: lineColor.withOpacity(0.7) // Define o raio da borda
-              ),
-        ),
-      ],
+          Provider.of<UserDataProvider>(context, listen: false).estrategias =
+              estrategias['strategies'];
+        }
+        Navigator.of(context).pop();
+      },
+      style: TextButton.styleFrom(
+        foregroundColor: color,
+        textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      ),
+      child: Text(text),
     );
   }
 }

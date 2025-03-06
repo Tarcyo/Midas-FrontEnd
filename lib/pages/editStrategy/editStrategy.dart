@@ -3,7 +3,8 @@ import 'package:midas/model/token.dart';
 import 'package:midas/providers/authProvider.dart';
 import 'package:midas/providers/userDataProvider.dart';
 import 'package:midas/reusableWidgets/URLList.dart';
-import 'package:midas/services/strategy/createstrategy.dart';
+import 'package:midas/services/strategy/fetchStrategy.dart';
+import 'package:midas/services/strategy/updateStrategy.dart';
 import 'package:provider/provider.dart';
 import '../../reusableWidgets/insertCamp.dart';
 
@@ -14,18 +15,28 @@ import 'package:midas/constants.dart';
 
 class EditStrategy extends StatefulWidget {
   final dynamic _data;
-  EditStrategy(this._data);
+  final Token _commoditie;
+  EditStrategy(this._data, this._commoditie);
   @override
   State<EditStrategy> createState() => _EditStrategyState();
 }
-class _EditStrategyState extends State<EditStrategy> {
 
+class _EditStrategyState extends State<EditStrategy> {
   @override
   void initState() {
-    // TODO: implement initState
-    nomeController.text=widget._data['name'];
+    print("Os dados dessa estratégia são:" + widget._data.toString());
+    print("A commoditie da estratégia é "+widget._commoditie.toString());
+    nomeController.text = widget._data['name'];
+    for (final i in widget._data['tokens']) {
+      _tokens.add(Token(id: i['id'], token: i['token']));
+    }
+    for (final i in widget._data['sites']) {
+      _urls.add(Token(id: i['id'], token: i['url']));
+    }
+    _selectedCommoditie=widget._commoditie;
     super.initState();
   }
+
   final TextEditingController nomeController = TextEditingController();
 
   final List<Token> _urls = [];
@@ -122,6 +133,7 @@ class _EditStrategyState extends State<EditStrategy> {
                                     children: [
                                       SizedBox(height: 5),
                                       TokenSelector(
+                                        initialValue: widget._commoditie,
                                         tokens: commodities,
                                         onTokenSelected: (value) {
                                           setState(() {
@@ -202,7 +214,7 @@ class _EditStrategyState extends State<EditStrategy> {
                                                 );
                                               }
                                             },
-                                            text: "Novo",
+                                            text: "Selecionar",
                                           ),
                                         ],
                                       ),
@@ -229,6 +241,7 @@ class _EditStrategyState extends State<EditStrategy> {
                                           SizedBox(width: 15),
                                           RoundedAddButton(
                                             onPressed: () async {
+                                              
                                               // Exemplo
                                               final List<Token> tokenList = [];
                                               for (final i in Provider.of<
@@ -277,7 +290,7 @@ class _EditStrategyState extends State<EditStrategy> {
                                                 );
                                               }
                                             },
-                                            text: "Novo",
+                                            text: "Selecionar",
                                           ),
                                         ],
                                       ),
@@ -298,18 +311,26 @@ class _EditStrategyState extends State<EditStrategy> {
                                           for (final i in _tokens) {
                                             tokens.add(i.id);
                                           }
-                                          await createStrategy(
-                                              name: nomeController.text,
-                                              commodityId:
-                                                  _selectedCommoditie!.id,
-                                              userId: Provider.of<AuthProvider>(
-                                                      context,listen: false)
-                                                  .id,
-                                              sitesIds: urls,
-                                              tokensIds: tokens,
-                                              auth: Provider.of<AuthProvider>(
-                                                      context,listen: false)
-                                                  .token);
+                                          await updateStrategy(widget._data['id'], Provider.of<AuthProvider>(context,listen: false).id,  Provider.of<AuthProvider>(context,listen: false).token, nomeController.text, _selectedCommoditie!.id, urls, tokens);
+                                          
+                                          final estrategias =
+                                              await getStrategies(
+                                                  Provider.of<AuthProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .id,
+                                                  Provider.of<AuthProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .token);
+
+                                          Provider.of<UserDataProvider>(context,
+                                                      listen: false)
+                                                  .estrategias =
+                                              estrategias['strategies'];
+
+                                         Navigator.of(context).pop(0);
+                                        
                                         },
                                         text: "Salvar",
                                       ),
@@ -375,20 +396,27 @@ class TokenSelectorDialog extends StatelessWidget {
 class TokenSelector extends StatefulWidget {
   final List<Token> tokens;
   final ValueChanged<Token?> onTokenSelected;
+  final Token initialValue;
 
   const TokenSelector({
     Key? key,
     required this.tokens,
+    required this.initialValue,
     required this.onTokenSelected,
   }) : super(key: key);
 
   @override
-  _TokenSelectorState createState() => _TokenSelectorState();
+  _TokenSelectorState createState() => _TokenSelectorState(initialValue);
 }
 
 class _TokenSelectorState extends State<TokenSelector> {
   Token? selectedToken;
 
+  _TokenSelectorState(final initialValue) {
+    
+    selectedToken=initialValue;
+
+  }
   void _showTokenDialog() async {
     final Token? result = await showDialog<Token>(
       context: context,

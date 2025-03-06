@@ -12,231 +12,131 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: secondaryColor,
-      body: Padding(
-        padding: const EdgeInsets.only(
-            left: 35, top: 20, right: 40), // Adiciona um padding
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Configurações",
-              style: TextStyle(fontSize: 25, color: mainColor),
-            ),
-            const SizedBox(
-                height: 50), // Adiciona um espaço entre o texto e o FixedCamp
-            Row(
-              children: [
-                FixedCamp(
-                  text: "Notificações",
-                  color: mainColor,
-                  icon: Icons.notifications,
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Center(
-                  child: DropdownButton<String>(
-                    value: 'Compra e Venda', // Valor inicial
-                    onChanged: (String? newValue) {
-                      // Implemente o que deseja fazer quando uma opção for selecionada
-                      print(newValue);
-                    },
-                    items: <String>['Compra e Venda', '2', '3']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                SizedBox(height: 35),
-              ],
-            ),
-            SizedBox(height: 35),
-
-            Row(
-              children: [
-                FixedCamp(
-                  text: "Periodo de analise",
-                  color: mainColor,
-                  icon: Icons.analytics,
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Center(
-                  child: DropdownButton<String>(
-                    value: '3 dias', // Valor inicial
-                    onChanged: (String? newValue) {
-                      // Implemente o que deseja fazer quando uma opção for selecionada
-                      print(newValue);
-                    },
-                    items: <String>['3 dias', '2', '3']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 35),
-
-            Row(
-              children: [
-                FixedCamp(
-                  text: "Periodo das notícias",
-                  color: mainColor,
-                  icon: Icons.newspaper,
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Center(
-                  child: DropdownButton<String>(
-                    value: '1 Semana', // Valor inicial
-                    onChanged: (String? newValue) {
-                      // Implemente o que deseja fazer quando uma opção for selecionada
-                      print(newValue);
-                    },
-                    items: <String>['1 Semana', '2', '3']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-
-            Row(
-              children: [
-                FixedCamp(
-                  text: "Sites de notícias",
-                  color: mainColor,
-                  icon: Icons.language,
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Center(
-                  child: DropdownButton<String>(
-                    value: 'Minha Lista', // Valor inicial
-                    onChanged: (String? newValue) {
-                      // Implemente o que deseja fazer quando uma opção for selecionada
-                      print(newValue);
-                    },
-                    items: <String>['Minha Lista', '2', '3']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 35),
-
-            Row(
-              children: [
-                FixedCamp(
-                  text: "Notificação dos grupos",
-                  color: mainColor,
-                  icon: Icons.group,
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Center(
-                  child: DropdownButton<String>(
-                    value: 'Ativado', // Valor inicial
-                    onChanged: (String? newValue) {
-                      // Implemente o que deseja fazer quando uma opção for selecionada
-                      print(newValue);
-                    },
-                    items: <String>['Ativado', '2', '3']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 35),
-
-            Row(
-              children: [
-                FixedCamp(
-                  text: "Adição em grupo",
-                  color: mainColor,
-                  icon: Icons.add,
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Center(
-                  child: DropdownButton<String>(
-                    value: 'Permitir', // Valor inicial
-                    onChanged: (String? newValue) {
-                      // Implemente o que deseja fazer quando uma opção for selecionada
-                      print(newValue);
-                    },
-                    items: <String>['Permitir', '2', '3']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Adicione a lógica para restaurar os padrões aqui
-                    print('Restaurar padrões');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(20.0), // Borda arredondada
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal: 30,
-                    ), // Espaçamento interno do botão
-                    backgroundColor: mainColor, // Cor de fundo do botão
-                  ),
-                  child: Text(
-                    'Restaurar Padrões',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+      appBar: AppBar(
+        backgroundColor: mainColor,
+        title: const Text(
+          'Configurações',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24.0,
+            letterSpacing: 1.2,
+            fontFamily: 'Roboto',
+          ),
         ),
+        elevation: 6.0,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          child: SingleChildScrollView( // Permite rolar a tela se necessário
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildSettingRow("Notificações", Icons.notifications, 'Compra e Venda'),
+                const SizedBox(height: 25),
+
+                buildSettingRow("Período de análise", Icons.analytics, '3 dias'),
+                const SizedBox(height: 25),
+
+                buildSettingRow("Período das notícias", Icons.newspaper, '1 Semana'),
+                const SizedBox(height: 25),
+
+                buildSettingRow("Sites de notícias", Icons.language, 'Minha Lista'),
+                const SizedBox(height: 25),
+
+                buildSettingRow("Notificação dos grupos", Icons.group, 'Ativado'),
+                const SizedBox(height: 25),
+
+                buildSettingRow("Adição em grupo", Icons.add, 'Permitir'),
+                const SizedBox(height: 35),
+
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print('Restaurar padrões');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0), // Borda arredondada
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
+                      backgroundColor: mainColor, // Cor de fundo do botão
+                      shadowColor: Colors.black.withOpacity(0.2),
+                      elevation: 8.0,
+                    ),
+                    child: Text(
+                      'Restaurar Padrões',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Método para gerar uma linha de configuração com FixedCamp e Dropdown
+  Widget buildSettingRow(String text, IconData icon, String dropdownValue) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 3), // Sombra suave
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          FixedCamp(
+            text: text,
+            color: mainColor,
+            icon: icon,
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: DropdownButton<String>(
+              value: dropdownValue,
+              onChanged: (String? newValue) {
+                print(newValue);
+              },
+              items: <String>[
+                'Compra e Venda', '2', '3', '3 dias', '1 Semana', 'Minha Lista', 'Ativado', 'Permitir'
+              ] 
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                      color: mainColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                );
+              }).toList(),
+              style: TextStyle(
+                color: mainColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              iconEnabledColor: mainColor, // Cor do ícone
+              dropdownColor: Colors.white, // Cor de fundo do dropdown
+            ),
+          ),
+        ],
       ),
     );
   }

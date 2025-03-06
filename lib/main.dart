@@ -4,13 +4,20 @@ import 'package:provider/provider.dart'; // Importe o pacote provider
 import 'pages/login/login.dart';
 import 'providers/authProvider.dart'; // Importe o AuthProvider
 import 'providers/userDataProvider.dart'; // Importe o AuthProvider
+import 'constants.dart';
+import './services/socket/socketService.dart';
 
 void main() {
-  runApp(const App());
+  final socketService =
+      SocketService(AuthProvider()); 
+
+  runApp(App(socketService: socketService));
 }
 
 class App extends StatelessWidget {
-  const App({super.key});
+  final SocketService socketService;
+
+  const App({super.key, required this.socketService});
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +36,15 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserDataProvider()),
-        ChangeNotifierProvider(
-            create: (context) =>
-                AuthProvider()), // Cria o provider de autenticação
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => SocketService(AuthProvider())),
+        // Provider(create: (context) => SocketService(AuthProvider())),
       ],
       child: MaterialApp(
         title: 'M.I.D.A.S',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Colors.green,
+          primaryColor: mainColor,
           fontFamily: "Quicksand",
         ),
         home: LoginScreen(), // Sua tela de login

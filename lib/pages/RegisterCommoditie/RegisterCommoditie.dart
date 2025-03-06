@@ -124,15 +124,17 @@ class _RegisterCommoditieScreenState extends State<RegisterCommoditieScreen> {
                                             Provider.of<AuthProvider>(context,listen: false)
                                                 .id,Provider.of<AuthProvider>(context,listen: false)
                                                 .token  );
-                                        if (r) {
-                                          _showAlertDialog(context, "Sucesso",
-                                              "Commoditie Registrada");
-                                        } else {
-                                          _showAlertDialog(context, "Erro",
-                                              "Erro ao registrar a commoditie");
-                                        }
+                                      //  if (r) {
+                                         // _showAlertDialog(context, "Sucesso",
+                                          //    "Commoditie Registrada");
+                                   //     } else {
+                                     //     _showAlertDialog(context, "Erro",
+                                    //          "Erro ao registrar a commoditie");
+                                  //     }
                                         final f= await getCommodities(Provider.of<AuthProvider>(context,listen: false).id, Provider.of<AuthProvider>(context,listen: false).token );
                                         Provider.of<UserDataProvider>(context,listen: false).commodities=f['commodities'];
+                                       Navigator.pop(context);
+                                        
                                       },
                                       text: "Cadastrar",
                                     ),

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:midas/pages/registerUser/registerUser.dart';
 import 'package:midas/services/group/getGroup.dart';
 import 'package:midas/services/site/getSite.dart';
-import 'package:midas/services/strategy/getStategy.dart';
+import 'package:midas/services/strategy/fetchStrategy.dart';
+import 'package:midas/services/strategy/getActiveStrategy.dart';
 import 'package:midas/services/token/getTokens.dart';
 import '../../reusableWidgets/insertCamp.dart';
 import 'package:midas/services/auth/login.dart';
@@ -192,13 +193,11 @@ class LoginScreen extends StatelessWidget {
                                               listen: false)
                                           .token);
 
-
-                                   Provider.of<UserDataProvider>(context,
+                                  Provider.of<UserDataProvider>(context,
                                           listen: false)
-                                      .estrategias=estrategias['strategies'];
+                                      .estrategias = estrategias['strategies'];
 
-
-                                       final grupos = await getGroups(
+                                  final grupos = await getGroups(
                                       Provider.of<AuthProvider>(context,
                                               listen: false)
                                           .id,
@@ -206,21 +205,29 @@ class LoginScreen extends StatelessWidget {
                                               listen: false)
                                           .token);
 
-
-                                   Provider.of<UserDataProvider>(context,
+                                  Provider.of<UserDataProvider>(context,
                                           listen: false)
-                                      .groups=grupos['groups'];
+                                      .groups = grupos['groups'];
 
+                                  final activeStrategy =
+                                      await getActiveStrategy(
+                                    Provider.of<AuthProvider>(context,
+                                            listen: false)
+                                        .id,
+                                    Provider.of<AuthProvider>(context,
+                                            listen: false)
+                                        .token,
+                                  );
 
-
-
-
+                                  Provider.of<UserDataProvider>(context,
+                                          listen: false)
+                                      .activeStrategy = activeStrategy;
 
                                   Navigator.push(
                                     context,
                                     PageRouteBuilder(
                                       transitionDuration:
-                                          Duration(milliseconds: 1000),
+                                          Duration(milliseconds: 300),
                                       transitionsBuilder: (BuildContext context,
                                           Animation<double> animation,
                                           Animation<double> secondaryAnimation,
@@ -257,7 +264,7 @@ class LoginScreen extends StatelessWidget {
                                           context,
                                           PageRouteBuilder(
                                             transitionDuration:
-                                                Duration(milliseconds: 1200),
+                                                Duration(milliseconds: 300),
                                             transitionsBuilder:
                                                 (BuildContext context,
                                                     Animation<double> animation,
@@ -290,7 +297,7 @@ class LoginScreen extends StatelessWidget {
                                           context,
                                           PageRouteBuilder(
                                             transitionDuration:
-                                                Duration(milliseconds: 1200),
+                                                Duration(milliseconds: 300),
                                             transitionsBuilder:
                                                 (BuildContext context,
                                                     Animation<double> animation,

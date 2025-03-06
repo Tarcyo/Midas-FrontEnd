@@ -30,6 +30,19 @@ class _TabBarControllerState extends State<TabBarController> {
     _pageController = PageController(initialPage: _selectedTab);
   }
 
+  Future<void> _onExit() async {
+    dynamic exit = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ExitConfirmationDialog();
+      },
+    );
+
+    if (exit == true) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> items = widget.items
@@ -50,21 +63,19 @@ class _TabBarControllerState extends State<TabBarController> {
               }
             },
             child: Container(
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.symmetric(
-                  vertical: 8), // Aumenta a distância vertical entre os botões
+              padding: EdgeInsets.all(6),
+              margin: EdgeInsets.symmetric(vertical: 6),
               decoration: BoxDecoration(
                 color: entry.key == _selectedTab && _menuExpanded
                     ? Colors.white
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(
-                    180), // Define bordas arredondadas para o quadrado branco
+                borderRadius: BorderRadius.circular(160),
               ),
               child: Row(
                 children: [
                   Container(
-                    width: 56, // Diminui o tamanho da bola branca
-                    height: 56, // Diminui o tamanho da bola branca
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color:
@@ -72,12 +83,12 @@ class _TabBarControllerState extends State<TabBarController> {
                     ),
                     child: Icon(
                       entry.value.icon,
-                      size: 32, // Ajusta o tamanho do ícone
+                      size: 24,
                       color:
                           entry.key != _selectedTab ? Colors.white : mainColor,
                     ),
                   ),
-                  SizedBox(width: 8),
+                  SizedBox(width: 6),
                   Expanded(
                     child: Visibility(
                       visible: _menuExpanded,
@@ -87,9 +98,8 @@ class _TabBarControllerState extends State<TabBarController> {
                             color: entry.key == _selectedTab
                                 ? mainColor
                                 : Colors.white,
-                            fontSize: 18),
-                        overflow: TextOverflow
-                            .ellipsis, // Define o comportamento de overflow
+                            fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
@@ -99,199 +109,87 @@ class _TabBarControllerState extends State<TabBarController> {
           ),
         )
         .toList();
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (canPopNow) async {
-        if (_navigatorKeys[_selectedTab].currentState?.canPop() ?? false) {
-          _navigatorKeys[_selectedTab].currentState?.pop();
-          return;
-        }
-      },
-      child: Scaffold(
-        body: Row(
-          children: [
-            AnimatedContainer(
-              duration: Duration(milliseconds: 350), // Duração da animação
-              width: _menuExpanded ? 250 : 100,
-              color: mainColor,
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ...items,
-                    GestureDetector(
-                      onTap: () async {
-                        dynamic exit = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return ExitConfirmationDialog();
-                          },
-                        );
-
-                        print(exit);
-
-                        if (exit != null && exit) {
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(16),
-                        margin: EdgeInsets.symmetric(
-                            vertical:
-                                8), // Aumenta a distância vertical entre os botões
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(
-                              180), // Define bordas arredondadas para o quadrado branco
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 56, // Diminui o tamanho da bola branca
-                              height: 56, // Diminui o tamanho da bola branca
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.transparent,
-                              ),
-                              child: Icon(
-                                Icons.logout,
-                                size: 40, // Ajusta o tamanho do ícone
-                                color: Colors.white,
+    return Scaffold(
+      body: Row(
+        children: [
+          AnimatedContainer(
+            duration: Duration(milliseconds: 350),
+            width: _menuExpanded ? 200 : 80,
+            color: mainColor,
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ...items,
+                  GestureDetector(
+                    onTap: _onExit,
+                    child: Container(
+                      padding: EdgeInsets.all(12),
+                      margin: EdgeInsets.symmetric(vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(160),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.transparent,
+                            ),
+                            child: Icon(
+                              Icons.logout,
+                              size: 24,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(width: 6),
+                          Expanded(
+                            child: Visibility(
+                              visible: _menuExpanded,
+                              child: Text(
+                                "Sair",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: Visibility(
-                                visible: _menuExpanded,
-                                child: Text(
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 25),
-                                  "Sair",
-                                  overflow: TextOverflow
-                                      .ellipsis, // Define o comportamento de overflow
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                physics: NeverScrollableScrollPhysics(),
-                onPageChanged: (index) {
-                  setState(() {
-                    _selectedTab = index;
-                  });
-                },
-                children: List.generate(
-                  widget.items.length,
-                  (index) => Navigator(
-                    key: _navigatorKeys[index],
-                    onGenerateRoute: (routeSettings) {
-                      return MaterialPageRoute(
-                        builder: (context) => widget.items[index].tab,
-                      );
-                    },
                   ),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ExitConfirmationDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.circular(180.0), // Ajustando o raio da borda do dialog
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: Container(
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Color(0xFF00C2A0), // Definindo a cor de fundo como verde
-          borderRadius: BorderRadius.circular(20), // Raio da borda do Container
-          border: Border.all(
-            // Adicionando uma borda ao redor do conteúdo
-            color: Colors.white, // Definindo a cor da borda como azul
-            width: 4.0, // Ajustando a largura da borda conforme necessário
           ),
-        ),
-        constraints: BoxConstraints(
-            maxWidth: 300), // Reduzindo o tamanho máximo do Container
-        child: contentBox(context),
-      ),
-    );
-  }
-
-  Widget contentBox(context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Icon(
-          Icons.error,
-          color: Colors.white,
-          size: 50,
-        ),
-        SizedBox(height: 20),
-        Text(
-          'Tem certeza que deseja sair do aplicativo?',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20, // Definindo a cor do texto como branco
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              physics: NeverScrollableScrollPhysics(),
+              onPageChanged: (index) {
+                setState(() {
+                  _selectedTab = index;
+                });
+              },
+              children: List.generate(
+                widget.items.length,
+                (index) => Navigator(
+                  key: _navigatorKeys[index],
+                  onGenerateRoute: (routeSettings) {
+                    return MaterialPageRoute(
+                      builder: (context) => widget.items[index].tab,
+                    );
+                  },
+                ),
+              ),
+            ),
           ),
-          textAlign: TextAlign.center, // Alinhando o texto centralmente
-        ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment
-              .spaceBetween, // Alinhando os botões nos cantos opostos
-          children: <Widget>[
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(
-                  'Cancelar',
-                  style: TextStyle(
-                    color: Colors.white, // Definindo a cor do texto como branco
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 10), // Adicionando um espaçamento entre os botões
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text(
-                  'Sair',
-                  style: TextStyle(
-                    color: Colors.white, // Definindo a cor do texto como branco
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -308,4 +206,59 @@ class PersistentTabItem {
     required this.title,
     required this.icon,
   });
+}
+
+class ExitConfirmationDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Container(
+        margin: EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Color(0xFF00C2A0),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white, width: 4.0),
+        ),
+        constraints: BoxConstraints(maxWidth: 300),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(Icons.error, color: Colors.white, size: 50),
+            SizedBox(height: 20),
+            Text(
+              'Tem certeza que deseja sair do aplicativo?',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child:
+                        Text('Cancelar', style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: Text('Sair', style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

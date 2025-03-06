@@ -4,110 +4,119 @@ import 'package:provider/provider.dart';
 import 'strategyCard.dart';
 import '../RegisterStrategy/RegisterStrategy.dart';
 import 'package:midas/constants.dart';
-
 class StrategyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strategies = Provider.of<UserDataProvider>(context).estrategias;
 
-    final listaWidget = strategies.isNotEmpty
-        ? strategies.map((i) => StrategyCard(
-              commodityName: i['name'],
-              price1Week: "+2",
-              price24Hours: "-3",
-              price6Minutes: "+2",
-              price3Minutes: "-1",
-              price1Minute: "+1",
-              data: i,
-            )).toList()
-        : [
-            Expanded(
-              child: Center(
-                child: Text(
-                  "Nenhuma estratégia encontrada",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18.0,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ];
-
     return Scaffold(
-      body: Container(
-        color: secondaryColor,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 50,
-              width: 50,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Nova Estratégia',
-                      style: TextStyle(
-                        color: Color(0xFF00C2A0),
-                        fontSize: 25.0,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration:
-                                  Duration(milliseconds: 1200),
-                              transitionsBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation,
-                                  Widget child) {
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: child,
-                                );
-                              },
-                              pageBuilder: (BuildContext context,
-                                  Animation<double> animation,
-                                  Animation<double> secondaryAnimation) {
-                                return RegisterStrategyScreen();
-                              },
-                            ),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.add_circle_outline,
-                          color: mainColor,
-                          size: 33,
-                        )),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: listaWidget,
-              ),
-            ),
-          ],
+      backgroundColor: secondaryColor, // ✅ Mantendo o fundo com secondaryColor
+      appBar: AppBar(
+        backgroundColor: mainColor,
+        title: const Text(
+          'Minhas Estratégias',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24.0,
+            letterSpacing: 1.2,
+            fontFamily: 'Roboto',
+          ),
         ),
+        elevation: 6.0,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+          child: strategies.isEmpty
+              ? Center( // Centralizando todo o conteúdo
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center, // Centralizando verticalmente
+                    crossAxisAlignment: CrossAxisAlignment.center, // Centralizando horizontalmente
+                    children: [
+                      Icon(
+                        Icons.lightbulb_outline,
+                        size: 80,
+                        color: Colors.black.withOpacity(0.6), // Ícone em preto com opacidade
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Nenhuma estratégia encontrada!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black, // Cor preta para o texto
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Crie uma nova estratégia clicando no botão abaixo.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black, // Cor preta para o texto
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  itemCount: strategies.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: StrategyCard(
+                          commodityName:
+                              strategies[index]['name'] ?? "Sem Nome",
+                          data: strategies[index],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        heroTag: "1", // Adicione um identificador único
+        backgroundColor: mainColor,
+        icon: const Icon(Icons.add, size: 28, color: Colors.white),
+        label: const Text(
+          "Nova Estratégia",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 300),
+              transitionsBuilder: (context, animation, _, child) {
+                return FadeTransition(opacity: animation, child: child);
+              },
+              pageBuilder: (_, __, ___) => RegisterStrategyScreen(),
+            ),
+          );
+        },
       ),
     );
   }

@@ -118,6 +118,8 @@ class _RegisterTokenState extends State<RegisterToken> {
                                         Provider.of<UserDataProvider>(context,
                                                 listen: false)
                                             .tokens = tokens['tokens'];
+                                          Navigator.pop(context);
+
                                       },
                                       text: "Cadastrar",
                                     ),

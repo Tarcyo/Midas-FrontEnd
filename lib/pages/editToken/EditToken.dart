@@ -132,8 +132,9 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
                                                     context,
                                                     listen: false)
                                                 .tokens = tokens['tokens'];
+                                            Navigator.of(context).pop();
                                           },
-                                          text: "Cadastrar",
+                                          text: "Salvar",
                                         ),
                                       ),
                                     ],
