@@ -1,10 +1,20 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:midas/constants.dart';
 import 'package:midas/pages/newPassword/NewPasswordScreen.dart';
+import 'package:midas/services/resetPassword/validate_code.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 
-
 class ResetPasswordScreen extends StatefulWidget {
+  final String codigoRecuperacao;
+  final String email;
+
+  const ResetPasswordScreen({
+    Key? key,
+    required this.codigoRecuperacao,
+    required this.email,
+  }) : super(key: key);
+
   @override
   _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
 }
@@ -16,7 +26,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController codeController4 = TextEditingController();
 
   Timer? _timer;
-  int _secondsRemaining = 120; // 1 minuto em segundos
+  int _secondsRemaining = 120;
 
   @override
   void initState() {
@@ -42,6 +52,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         });
       } else {
         print("Acabou o tempo!");
+        Navigator.of(context).pop("Acabou o tempo!");
         timer.cancel();
       }
     });
@@ -135,11 +146,42 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           ),
                           SizedBox(height: 20),
                           RoundedButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              final recoveryCode = codeController1.text +
+                                  codeController2.text +
+                                  codeController3.text +
+                                  codeController4.text;
+
+                              final response = await validarCodigoRecuperacao(
+                                  widget.email, recoveryCode);
+
+                              if (response == false) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Alerta'),
+                                      content: Text('Código incorreto!'),
+                                      actions: [
+                                        TextButton(
+                                          child: Text('Fechar'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+
+                                return;
+                              }
+
                               Navigator.push(
                                 context,
                                 PageRouteBuilder(
-                                  transitionDuration: Duration(milliseconds: 1200),
+                                  transitionDuration:
+                                      Duration(milliseconds: 1200),
                                   transitionsBuilder: (BuildContext context,
                                       Animation<double> animation,
                                       Animation<double> secondaryAnimation,
@@ -152,10 +194,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                   pageBuilder: (BuildContext context,
                                       Animation<double> animation,
                                       Animation<double> secondaryAnimation) {
-                                    return NewPasswordScreen();
+                                    return NewPasswordScreen(
+                                      verificationToken: response,
+                                      email: widget.email,
+                                    );
                                   },
                                 ),
-                              );
+                              ).then((value) {
+                                if(value){
+                                  Navigator.of(context).pop(value);
+                                }
+                              });
                             },
                             text: "Verificar",
                           ),

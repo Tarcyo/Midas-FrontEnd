@@ -13,6 +13,7 @@ import 'package:midas/services/strategy/getActiveStrategy.dart';
 import 'graphic.dart';
 import 'package:midas/pages/expandedGraphic/expandedGraphic.dart';
 import 'package:provider/provider.dart';
+import 'package:midas/reusableWidgets/alertWidget.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -21,6 +22,11 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   Timer? _timer;
+
+  Color alertColor = Colors.blue;
+  IconData alertIcon = Icons.pending;
+  String alertText = "Nenhum alerta sobre sua estratégia";
+
   List<String> _newsTitles = [];
   List<dynamic> _urls = [];
   List<dynamic> _images = [];
@@ -28,18 +34,17 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    fetchNews(); // Faz a primeira requisição
-    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
-      // Verifica se o widget ainda está montado antes de chamar fetchNews()
+    fetchNews();
+    _timer = Timer.periodic(Duration(seconds: 15), (timer) {
       if (mounted) {
-        fetchNews(); // Requisição periódica a cada 15 segundos
+        fetchNews();
       }
     });
   }
 
   @override
   void dispose() {
-    _timer?.cancel(); // Cancelar o timer ao descartar o widget
+    _timer?.cancel(); 
     super.dispose();
   }
 
@@ -71,17 +76,97 @@ class _DashboardState extends State<Dashboard> {
 
     print("OS tokens são: " + tokens);
 
-    final String apiUrl = "http://localhost:3000/search-news?tokens=" + tokens;
+     final String apiUrl = "http://localhost:3000/search-news?tokens=" + tokens;
 
     try {
-      final response = await http.get(
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        final response = await http.get(
+         headers: {
+    'Content-Type': 'application/json',
+          },
         Uri.parse(apiUrl),
       );
 
-      final data = json.decode(response.body)['data'];
+   /*   const String jsonData = '''
+{
+    "data": [
+        {
+            "description": "Caso isso não aconteça, presidente afirmou que deve caber ao Supremo Tribunal Federal deliberar sobre a questão\\nO post Lula pede regulamentação das redes sociais no Congresso apareceu primeiro em Olhar Digital.",
+            "publishedAt": "06/02/2025",
+            "title": "Lula pede regulamentação das redes sociais no Congresso",
+            "url": "https://olhardigital.com.br/2025/02/06/internet-e-redes-sociais/lula-pede-regulamentacao-das-redes-sociais-no-congresso/",
+            "urlToImage": "https://olhardigital.com.br/wp-content/uploads/2024/09/redes-sociais.jpg"
+        },
+        {
+            "description": "A regulamentação das redes sociais é tratada como muito importante pelo presidente Luiz Inácio Lula da Silva. Saiba tudo sobre o tema\\nO post O que é a regulamentação das redes sociais? apareceu primeiro em Olhar Digital.",
+            "publishedAt": "12/02/2025",
+            "title": "O que é a regulamentação das redes sociais?",
+            "url": "https://olhardigital.com.br/2025/02/12/internet-e-redes-sociais/o-que-e-a-regulamentacao-das-redes-sociais/",
+            "urlToImage": "https://img.odcdn.com.br/wp-content/uploads/2025/02/Regulamentao-das-redes-sociais.png"
+        },
+        {
+            "description": "O ex-presidente Jair Bolsonaro declarou usar chip hormonal para melhorar desempenho sexual. Entenda o que é a reposição de testosterona\\nO post Chip hormonal: o que é e como funciona o tratamento feito por Bolsonaro apareceu primeiro em Olhar Digital.",
+            "publishedAt": "02/03/2025",
+            "title": "Chip hormonal: o que é e como funciona o tratamento feito por Bolsonaro",
+            "url": "https://olhardigital.com.br/2025/03/01/medicina-e-saude/chip-hormonal-o-que-e-e-como-funciona-o-tratamento-feito-por-bolsonaro/",
+            "urlToImage": "https://img.odcdn.com.br/wp-content/uploads/2025/01/Bolsonaro-1-1.jpg"
+        },
+        {
+            "description": "Entre implicados estão ex-presidente Jair Bolsonaro; ex-ministro e ex-vice na chapa de Bolsonaro, general Braga Netto; e ex-ajudante de ordens Mauro Cid.",
+            "publishedAt": "19/02/2025",
+            "title": "Veja quem são os 34 denunciados pela PGR por suposta tentativa de golpe de Estado",
+            "url": "https://www.bbc.com/portuguese/articles/czrng030730o",
+            "urlToImage": "https://ichef.bbci.co.uk/news/1024/branded_portuguese/139d/live/3b5eb7e0-eeb1-11ef-9a8e-416411b7ae51.jpg"
+        },
+        {
+            "description": "Segundo a PGR, uma organização criminosa foi criada e era liderada pelo ex-presidente.",
+            "publishedAt": "20/02/2025",
+            "title": "Bolsonaro denunciado: ex-presidente pode ser preso?",
+            "url": "https://www.bbc.com/portuguese/articles/cgj542l3d03o",
+            "urlToImage": "https://ichef.bbci.co.uk/news/1024/branded_portuguese/6430/live/d17f1010-ef67-11ef-bd1b-d536627785f2.jpg"
+        },
+        {
+            "description": "Casa Branca vai renegociar os prêmios previstos no programa CHIPS and Science Act, criado pela gestão Joe Biden\\nO post Guerra dos Chips: Trump pode mudar programa dos EUA apareceu primeiro em Olhar Digital.",
+            "publishedAt": "14/02/2025",
+            "title": "Guerra dos Chips: Trump pode mudar programa dos EUA",
+            "url": "https://olhardigital.com.br/2025/02/14/pro/guerra-dos-chips-trump-pode-mudar-programa-dos-eua/",
+            "urlToImage": "https://olhardigital.com.br/wp-content/uploads/2025/02/shutterstock_2566586537-1-scaled.jpg"
+        },
+        {
+            "description": "Presidente dos EUA afirma que governo Biden perseguiu membros da igreja, citando manifestações antiaborto; Críticos falam em ameaça à liberdade religiosa",
+            "publishedAt": "07/02/2025",
+            "title": "Trump anuncia criação de força-tarefa para combater ‘viés anticristão’",
+            "url": "https://veja.abril.com.br/mundo/trump-anuncia-criacao-de-forca-tarefa-para-combater-vies-anticristao",
+            "urlToImage": "https://veja.abril.com.br/wp-content/uploads/2025/02/000_36X84VG.jpg?quality=70&strip=info&crop=1&resize=1080,565"
+        }
+    ],
+    "feeling_data": {
+        "mean_score": 0.9631587266921997,
+        "most_common_label": "NEGATIVE"
+    }
+}''';
+*/
+      final map=json.decode(response.body);
+      final data = map['data'];
+
+      final feel = map['feeling_data'];
+
+      if (feel['mean_score'] > 0.79) {
+        if (feel['most_common_label'] == 'NEGATIVE') {
+          alertColor = Colors.red;
+          alertIcon = Icons.sell;
+          alertText = "Momento ideal de venda!";
+        } else {
+          alertColor = mainColor;
+          alertIcon = Icons.storefront_rounded;
+          alertText = "Momento ideal de compra!";
+        }
+      } else {
+        alertColor = Colors.blue;
+        alertIcon = Icons.pending;
+        alertText = "Nenhum alerta sobre sua estratégia no momento";
+      }
+
+      //   final data = json.decode(response.body)['data'];
 
       List<String> titles = [];
 
@@ -94,15 +179,15 @@ class _DashboardState extends State<Dashboard> {
         images.add(i['urlToImage']);
       }
 
-      if (response.statusCode == 200) {
-        setState(() {
-          _newsTitles = titles;
-          _urls = urls;
-          _images = images;
-        });
-      } else {
-        print("Erro ao buscar notícias: ${response.statusCode}");
-      }
+      // if (response.statusCode == 200) {
+      setState(() {
+        _newsTitles = titles;
+        _urls = urls;
+        _images = images;
+      });
+      //   } else {
+      //     print("Erro ao buscar notícias: ${response.statusCode}");
+      //   }
     } catch (e) {
       print("Erro ao conectar à API: $e");
     }
@@ -137,41 +222,26 @@ class _DashboardState extends State<Dashboard> {
                     CrossAxisAlignment.center, // Centraliza todos os itens
                 children: [
                   // Título principal com fundo colorido
-                  _buildTitleWithBackground("PAINEL DE SUGESTÃO"),
+                  _buildTitleWithBackground("PAINEL DE ALERTA"),
 
                   SizedBox(
                       height:
                           30), // Aumentei o espaço entre o título e o conteúdo
 
-                  // Seção de "Comprar"
-                  FixedCamp(
-                    text: "Comprar",
-                    color: mainColor,
-                    icon: Icons.notifications,
+                  Center(
+                    child: BigCardWidget(
+                      baseColor: alertColor,
+                      icon: alertIcon,
+                      text: alertText,
+                    ),
                   ),
-                  SizedBox(height: 15),
-                  _buildProductSection(
-                      "Comprar", mainColor, AllBuyActivitiesScreen()),
 
-                  SizedBox(height: 40),
+                  SizedBox(height: 30),
+                  // Título "Notícias" com fundo colorido
+                  _buildTitleWithBackground("NOTÍCIAS"),
 
-                  // Seção de "Vender"
-                  FixedCamp(
-                    text: "Vender",
-                    color: Colors.red[900]!,
-                    icon: Icons.warning,
-                  ),
-                  SizedBox(height: 15),
-                  _buildProductSection(
-                      "Vender", Colors.red[900]!, AllSellActivitiesScreen()),
-
-                  SizedBox(height: 40),
-
-                  // Título "Ativos Sugeridos" com fundo colorido
-                  _buildTitleWithBackground("ATIVOS SUGERIDOS"),
-
-                  SizedBox(height: 15),
-                  _buildSuggestedAssets(),
+                  SizedBox(height: 10),
+                  _buildNewsSection(),
 
                   SizedBox(height: 50),
 
@@ -180,14 +250,6 @@ class _DashboardState extends State<Dashboard> {
 
                   SizedBox(height: 10),
                   _buildGraphSection(),
-
-                  SizedBox(height: 30),
-
-                  // Título "Notícias" com fundo colorido
-                  _buildTitleWithBackground("NOTÍCIAS"),
-
-                  SizedBox(height: 10),
-                  _buildNewsSection(),
                 ],
               );
             },

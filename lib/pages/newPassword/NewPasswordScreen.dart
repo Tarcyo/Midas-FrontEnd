@@ -1,12 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:midas/constants.dart';
 import '../../reusableWidgets/roundedButtom.dart';
 import '../../reusableWidgets/insertCampPassword.dart';
-
-Color mainColor = Color(0xFF00C2A0);
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class NewPasswordScreen extends StatelessWidget {
+  final String verificationToken;
+  final String email;
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+
+  NewPasswordScreen({
+    Key? key,
+    required this.verificationToken,
+    required this.email,
+  }) : super(key: key);
+
+  Future<void> changePassword(BuildContext context) async {
+    final Uri url = Uri.parse('http://localhost:8080/auth/change-password?recoverToken=$verificationToken');
+
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    final Map<String, dynamic> body = {
+      'email': email,
+      'new_password': newPasswordController.text,
+      'confirm_password': confirmPasswordController.text,
+    };
+
+    try {
+      final response = await http.patch(
+        url,
+        headers: headers,
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Senha alterada com sucesso!')),
+        );
+        Navigator.of(context).pop(true);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro: ${jsonDecode(response.body)['error']}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao conectar com o servidor: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +62,6 @@ class NewPasswordScreen extends StatelessWidget {
         color: mainColor,
         child: Stack(
           children: [
-            // Botão Voltar no canto superior esquerdo
             Positioned(
               top: 40,
               left: 16,
@@ -43,7 +89,6 @@ class NewPasswordScreen extends StatelessWidget {
                 ),
               ),
             ),
-            // Conteúdo principal
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -102,8 +147,8 @@ class NewPasswordScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 30),
                             RoundedButton(
-                              onPressed: () {
-                                // Adicione aqui a lógica de redefinição de senha
+                              onPressed: () async {
+                                await changePassword(context);
                               },
                               text: "Confirmar",
                             ),
